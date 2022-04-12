@@ -1,8 +1,8 @@
 NAME = libft.a
 
-CC = @gcc
+CC = @gcc -c
 
-FLAGS = 
+FLAGS = -Wall -Wextra -Werror
 
 AR = ar rc
 
@@ -54,26 +54,17 @@ FILES_BONUS = ft_lstnew_bonus.c\
 			  ft_lstmap_bonus.c
 
 
-objets = $(FILES:.c=.o)
-objets_b = $(FILES_BONUS:.c=.o)
-
-# Colors
-C_RED = \033[1;31m
-C_GREEN = \033[1;32m
-C_L_GREEN = \033[1;32m
-C_BLUE = \033[1;34m
-C_L_BLUE = \033[1;34m
-C_WHITE = \033[1;37m
-C_RES = \033[0m
+objets = 	$(FILES:.c=.o)
+objets_b =	$(FILES_BONUS:.c=.o)
 
 #  github bigin
 
-ADD = git add .
+ADD = 	git add .
 
-read :=	@read -p "-> " enter \
-		&& git commit -m $${enter}
+read :=		@read -p "-> " enter \
+			&& git commit -m $${enter}
 
-PU = git push
+PU =	git push
 
 #  Syntax
 
@@ -81,57 +72,35 @@ PU = git push
 all :$(NAME)
 
 
-$(NAME):$(objets)
-	@$(AR) $(NAME) $(objets)
-	@echo "\n\n${C_GREEN}              ---> $(NAME) created <---${C_RES}"
+$(NAME):	$(objets)
+			@$(AR) $(NAME) $(objets)
+			@echo "\033[0;92m{LIBFT} PROJECT FILE CREATED ✅"
 
 $(objets):$(FILES)
-	$(flag)
-	$(CC) -c $(FLAGS) $(FILES)
+	$(CC) $(FLAGS) $(FILES)
 	
 clean :
-	@$(RM) $(objets) $(objets_b)
-	@echo "${C_RED}                    ---> Object is Removed <---${C_RES}"
+			@$(RM) $(objets) $(objets_b)
+			@echo "\033[0;93m{LIBFT} OBJECTS DELETED ❌"
 
-fclean : clean
-	@$(RM) $(NAME)
-	@echo "${C_RED}                    ---> $(NAME) is Removed <---${C_RES}"
+fclean :	clean
+			@$(RM) $(NAME)
+			@echo "\033[0;93m{LIBFT} PROJECT File DELETED ❌"
 
-re : fclean all
+re :		fclean all
 
-bonus: $(objets_b)
+bonus:		$(objets_b)
 
-$(objets_b):$(FILES_BONUS)
-	$(flagB)
-	$(CC) -c $(FLAGS) $(FILES_BONUS)
-	@$(AR) $(NAME) $(objets_b)
-	@echo "\n\n${C_GREEN}              ---> $(NAME) with bonus created <---${C_RES}"
+$(objets_b):	$(FILES_BONUS)
+				$(CC)  $(FLAGS) $(FILES_BONUS)
+				@$(AR) $(NAME) $(objets_b)
+				@echo "\033[0;92m{LIBFT} BONUS CREATED ✅"
 
 
-rebonus : fclean bonus
+rebonus :	fclean bonus
 
 push :
-	$(ADD)
-	@echo "${C_GREEN}Add Commit Plz !!${C_RES}"
-	$(read)
-	$(PU)
-
-flag := @echo  "\n${C_L_BLUE}         +                   *                   +          ${C_RES}"\
-			"\n${C_L_BLUE} +  --         --------   -------    --------   --------   ${C_RES}"\
-		    "\n${C_L_BLUE}   |  |       |__    __| |   --   \ |   _____| |__    __| *${C_RES}"\
-			"\n${C_L_BLUE}   |  |  *       |  |    |  |__|  | |  |_____     |  |     ${C_RES}"\
-			"\n${C_L_BLUE}   |  |          |  |    |       /  |   _____| +  |  |     ${C_RES}"\
-			"\n${C_L_BLUE}   |  |      +   |  | *  |   --  |  |  |          |  |    *${C_RES}"\
-			"\n${C_L_BLUE} * |  |_____   __|  |__  |  |__|  \ |  |          |  |     ${C_RES}"\
-			"\n${C_L_BLUE}   |________| |________| |_______ / |__|     *    |__|     ${C_RES}"\
-			"\n${C_L_BLUE}        +                                               *   ${C_RES}"\
-
-flagB := @echo  "\n${C_L_BLUE}         +                   *                   +          ${C_RES}"\
-			"\n${C_L_BLUE} +  --         --------   -------    --------   -------- ${C_RES} ${C_GREEN} -------    * ${C_RES}"\
-		    "\n${C_L_BLUE}   |  |       |__    __| |   --   \ |   _____| |__    __|${C_RES} ${C_GREEN}|   --   \  ${C_RES}"\
-			"\n${C_L_BLUE}   |  |  *       |  |    |  |__|  | |  |_____     |  |   ${C_RES} ${C_GREEN}|  |__|  | ${C_RES}"\
-			"\n${C_L_BLUE}   |  |          |  |    |       /  |   _____| +  |  |   ${C_RES} ${C_GREEN}|       / ${C_RES}"\
-			"\n${C_L_BLUE}   |  |      +   |  | *  |   --  |  |  |          |  |   ${C_RES} ${C_GREEN}|   --  |    *${C_RES}"\
-			"\n${C_L_BLUE} * |  |_____   __|  |__  |  |__|  \ |  |          |  |   ${C_RES} ${C_GREEN}|  |__|  \ ${C_RES}"\
-			"\n${C_L_BLUE}   |________| |________| |_______ / |__|     *    |__|   ${C_RES} ${C_GREEN}|_______ / ${C_RES}"\
-			"\n${C_L_BLUE}        +                                               *${C_RES}"\
+			$(ADD)
+			@echo "${C_GREEN}Add Commit Plz !!${C_RES}"
+			$(read)
+			$(PU)

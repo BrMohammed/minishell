@@ -19,7 +19,7 @@ void PrintTokens(char* all)
 {
     
     t_lexer *lexer;
-    t_token *token;
+    // t_token *token;
     
     lexer = init_lexer(all);
     GetNextToken(lexer);
@@ -29,6 +29,10 @@ int main(int argc, char** argv, char** envp)
 {
     char    *all;
 
+     if(envp == NULL)
+        return (0);
+    if(argv == NULL)
+        return (0);
     if(argc == 1)
     {
         while (1)
