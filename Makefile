@@ -25,3 +25,20 @@ fclean:
 			$(RM) $(NAME)
 			@echo "\033[0;31mMINISHELL DELETED 🗑"
 re:			fclean all
+
+#  github bigin
+# git pull --rebase origin main
+ADD = git add .
+
+read :=		@read -p "-> " enter \
+			&& git commit -m $${enter}
+
+PU =	git push
+
+commit = git log --graph --oneline --decorate HEAD^..HEAD
+
+push :
+	@$(commit)
+	@$(ADD)
+	$(read)
+	$(PU)

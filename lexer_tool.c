@@ -16,6 +16,7 @@ t_lexer* init_lexer(char* src)
 
     lexer = malloc(sizeof(t_lexer));
     lexer->src = src;
+    lexer->size = ft_strlen(src);
     lexer->i = 0;
     lexer->c = src[lexer->i];
     return (lexer);

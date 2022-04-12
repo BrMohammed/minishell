@@ -57,18 +57,6 @@ FILES_BONUS = ft_lstnew_bonus.c\
 objets = 	$(FILES:.c=.o)
 objets_b =	$(FILES_BONUS:.c=.o)
 
-#  github bigin
-
-ADD = 	git add .
-
-read :=		@read -p "-> " enter \
-			&& git commit -m $${enter}
-
-PU =	git push
-
-#  Syntax
-
-
 all :$(NAME)
 
 
@@ -98,9 +86,3 @@ $(objets_b):	$(FILES_BONUS)
 
 
 rebonus :	fclean bonus
-
-push :
-			$(ADD)
-			@echo "${C_GREEN}Add Commit Plz !!${C_RES}"
-			$(read)
-			$(PU)

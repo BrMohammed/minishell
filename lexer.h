@@ -20,15 +20,17 @@ typedef struct s_token
         TYPE_AND,
         TYPE_OR,
         TYPE_EOF,
-
+        TYPE_ERROR,
     }type;
 }t_token;
 
 typedef struct s_lexer
 {
     char* src;
-    char c;
+    unsigned int size;
     unsigned int i;
+    char c;
+
 }t_lexer;
 
 t_token* init_token(char* value,int type);
