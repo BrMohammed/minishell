@@ -44,7 +44,7 @@ char* token_type(t_lexer *lexer, int *type)
 	char* text;
 	char *Temp_Char;
 
-	text = malloc(2);
+	text = malloc(1);
 	text[0] = '\0';
 	Temp_Char = malloc(2);
 	Temp_Char[0] = lexer->c;
@@ -60,7 +60,8 @@ char* token_type(t_lexer *lexer, int *type)
 	else if(lexer->c == '|' && lexer->src[lexer->i + 1] == '|')
 	{
 		AgrimNextToken(lexer);
-		text = ft_strjoin(Temp_Char,&lexer->c);
+		text[0] = lexer->c;
+		text = ft_strjoin(Temp_Char,text);
 		*type = TYPE_DPIPE;
 		AgrimNextToken(lexer);
 	}
@@ -69,15 +70,17 @@ char* token_type(t_lexer *lexer, int *type)
 	else if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 	{
 		AgrimNextToken(lexer);
-		text = ft_strjoin(Temp_Char,&lexer->c);
+		text[0] = lexer->c;
+		text = ft_strjoin(Temp_Char,text);
 		*type = TYPE_DLredirection;
 		AgrimNextToken(lexer);
 	}
 	else if(lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
 	{
 		AgrimNextToken(lexer);
+		text[0] = lexer->c;
+		text = ft_strjoin(Temp_Char,text);
 		*type = TYPE_DRredirection;
-		text = ft_strjoin(Temp_Char,&lexer->c);
 		AgrimNextToken(lexer);
 	}
 	else if(lexer->c == '<')
