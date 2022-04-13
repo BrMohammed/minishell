@@ -17,6 +17,7 @@ typedef struct s_token
         TYPE_RPARENT,
         TYPE_LPARENT,
         TYPE_PIPE,
+        TYPE_DPIPE,
         TYPE_AND,
         TYPE_OR,
         TYPE_EOF,

@@ -2,9 +2,10 @@ NAME = minishell
 
 SRC_P = lexer.c lexer_tool.c\
 
-CC = @gcc
+CC = @gcc 
 
-CFLAGS = -lreadline -Wall -Wextra -Werror
+CFLAGS = -lreadline -Wall -Wextra -Werror -g -fsanitize=address
+
 
 LIBFT = libft/libft.a
 
@@ -36,6 +37,9 @@ read :=		@read -p "-> " enter \
 PU =	git push
 
 commit = git log --graph --oneline --decorate HEAD^..HEAD
+
+t:	all
+	./minishell
 
 push :
 	@$(commit)
