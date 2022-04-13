@@ -44,8 +44,9 @@ char* token_type(t_lexer *lexer, int *type)
 	char* text;
 	char *Temp_Char;
 
-	text = malloc(1);
+	text = malloc(2);
 	text[0] = '\0';
+	text[1] = '\0';
 	Temp_Char = malloc(2);
 	Temp_Char[0] = lexer->c;
 	Temp_Char[1] = '\0';
@@ -94,7 +95,7 @@ char* token_type(t_lexer *lexer, int *type)
 	}
 	if(text[0] == '\0')
 	{
-		text = ft_strdup(Temp_Char);
+		text[0] = lexer->c;
 		if(lexer->i <= lexer->size)
 			AgrimNextToken(lexer);
 	}
