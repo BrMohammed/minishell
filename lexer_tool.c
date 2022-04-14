@@ -4,6 +4,8 @@
 t_token* init_token(char* value,int type)
 {
     t_token *token;
+
+    token = NULL;
     token = malloc(sizeof(t_token));
     token->value = value;
     token->type = type;

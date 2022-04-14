@@ -7,8 +7,13 @@ void AgrimNextToken(t_lexer* lexer)
 	lexer->c = lexer->src[lexer->i];
 }
 
-
-void string_join(t_lexer *lexer, char **text)
+/**
+ * @brief 
+ * 
+ * @param lexer 
+ * @param text 
+ */
+void string_join(t_lexer *lexer, char **text,int *type)
 {
 	char quat;
 	char *Temp_Char;
@@ -31,11 +36,15 @@ void string_join(t_lexer *lexer, char **text)
 			quat = '"';
 		*text = ft_strjoin(*text,Temp_Char);
 		AgrimNextToken(lexer);
-		if((lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' 
-		|| lexer->c == '>' || lexer->c == '<') || ((lexer->c == '\n' || lexer->c  == '\t' 
+		if(((lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' 
+		|| lexer->c == '>' || lexer->c == '<') && ( quat == '\0')) || ((lexer->c == '\n' || lexer->c  == '\t' 
 		|| lexer->c  == 32) && ( quat == '\0')))
 			break;
 	}
+	if (lexer->i > lexer->size && ((quat == '\'' && lexer->src[lexer->i - 1] != '\'') || (quat == '"' && lexer->src[lexer->i - 1] !='"')))
+		*type = TYPE_ERROR;
+	else
+		*type = TYPE_TEXT;
 	free(Temp_Char);
 }
 
@@ -47,11 +56,11 @@ char* token_type(t_lexer *lexer, int *type)
 	text = malloc(2);
 	text[0] = '\0';
 	text[1] = '\0';
+	while((lexer->i <= lexer->size ) && (lexer->c == '\n' || lexer->c  == '\t' || lexer->c  == 32))
+		AgrimNextToken(lexer);
 	Temp_Char = malloc(2);
 	Temp_Char[0] = lexer->c;
 	Temp_Char[1] = '\0';
-	while((lexer->i <= lexer->size ) && (lexer->c == '\n' || lexer->c  == '\t' || lexer->c  == 32))
-		AgrimNextToken(lexer);
 	if(lexer->c == '(')
 		*type = TYPE_LPARENT;
 	else if(lexer->c == ')')
@@ -60,9 +69,10 @@ char* token_type(t_lexer *lexer, int *type)
 		*type = TYPE_AND;
 	else if(lexer->c == '|' && lexer->src[lexer->i + 1] == '|')
 	{
-		AgrimNextToken(lexer);
 		text[0] = lexer->c;
-		text = ft_strjoin(Temp_Char,text);
+		AgrimNextToken(lexer);
+		Temp_Char[0] = lexer->c;
+		text = ft_strjoin(text,Temp_Char);
 		*type = TYPE_DPIPE;
 		AgrimNextToken(lexer);
 	}
@@ -70,17 +80,19 @@ char* token_type(t_lexer *lexer, int *type)
 		*type = TYPE_PIPE;
 	else if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 	{
-		AgrimNextToken(lexer);
 		text[0] = lexer->c;
-		text = ft_strjoin(Temp_Char,text);
+		AgrimNextToken(lexer);
+		Temp_Char[0] = lexer->c;
+		text = ft_strjoin(text,Temp_Char);
 		*type = TYPE_DLredirection;
 		AgrimNextToken(lexer);
 	}
 	else if(lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
 	{
-		AgrimNextToken(lexer);
 		text[0] = lexer->c;
-		text = ft_strjoin(Temp_Char,text);
+		AgrimNextToken(lexer);
+		Temp_Char[0] = lexer->c;
+		text = ft_strjoin(text,Temp_Char);
 		*type = TYPE_DRredirection;
 		AgrimNextToken(lexer);
 	}
@@ -89,10 +101,7 @@ char* token_type(t_lexer *lexer, int *type)
 	else if(lexer->c == '>')
 		*type = TYPE_Rredirection;
 	else
-	{
-		string_join(lexer, &text);
-		*type = TYPE_TEXT;
-	}
+		string_join(lexer, &text, type);
 	if(text[0] == '\0')
 	{
 		text[0] = lexer->c;
@@ -101,6 +110,7 @@ char* token_type(t_lexer *lexer, int *type)
 	}
 	if(text[0] == '\0')
 		*type = TYPE_EOF;
+	free(Temp_Char);
 	return(text);
 }
 
@@ -112,9 +122,13 @@ void GetNextToken(t_lexer *lexer)
 	
 	type = TYPE_TEXT;
 	temp_text = token_type(lexer, &type);
+	
 	token = init_token(temp_text,type);
+	
 	if(type != TYPE_EOF)
 		printf("%s\t%d\n",token->value,token->type);
+	free(temp_text);
+	free(token);
 }
 
 void PrintTokens(char* all)
