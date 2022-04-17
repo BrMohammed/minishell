@@ -34,6 +34,26 @@ typedef struct s_lexer
 
 }t_lexer;
 
+
+typedef struct s_childe
+{
+    t_token *token;
+    struct s_childe *next;
+    struct s_childe *prev;
+
+}t_childe;
+
+typedef struct s_tree
+{
+    t_childe *childe;
+    struct s_tree *Left;
+    struct s_tree *Right;
+    struct s_tree *prev;
+    
+}t_tree;
+
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
+t_token *GetNextToken(t_lexer *lexer);
+void MakeTree(char* all);
 #endif

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "minishell.h"
 # include "libft/libft.h"
 
 void AgrimNextToken(t_lexer* lexer)
@@ -7,12 +7,6 @@ void AgrimNextToken(t_lexer* lexer)
 	lexer->c = lexer->src[lexer->i];
 }
 
-/**
- * @brief 
- * 
- * @param lexer 
- * @param text 
- */
 void string_join(t_lexer *lexer, char **text,int *type)
 {
 	char quat;
@@ -109,37 +103,26 @@ char* token_type(t_lexer *lexer, int *type)
 			AgrimNextToken(lexer);
 	}
 	if(text[0] == '\0')
+	{
 		*type = TYPE_EOF;
+		text = NULL;
+	}
+		
 	free(Temp_Char);
 	return(text);
 }
 
-void GetNextToken(t_lexer *lexer)
+t_token *GetNextToken(t_lexer *lexer)
 {
 	t_token *token;
 	char* temp_text;
 	int type;
-	
+
 	type = TYPE_TEXT;
 	temp_text = token_type(lexer, &type);
-	
 	token = init_token(temp_text,type);
-	
-	if(type != TYPE_EOF)
-		printf("%s\t%d\n",token->value,token->type);
 	free(temp_text);
-	free(token);
-}
-
-void PrintTokens(char* all)
-{
-	
-	t_lexer *lexer;
-	
-	lexer = init_lexer(all);
-	while(lexer->i <= lexer->size)
-		GetNextToken(lexer);
-	free(lexer);
+	return(token);
 }
 
 int main(int argc, char** argv, char** envp)
@@ -153,7 +136,7 @@ int main(int argc, char** argv, char** envp)
 		while (1)
 		{
 			all = readline("minishell ");
-			PrintTokens(all);
+			MakeTree(all);
 			free(all);
 		}
 	}

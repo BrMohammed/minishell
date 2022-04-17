@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC_P = lexer.c lexer_tool.c\
+SRC_P = lexer.c tree.c lexer_tool.c\
 
 CC = @gcc 
 
