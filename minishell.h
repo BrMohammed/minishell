@@ -29,15 +29,10 @@ typedef struct s_lexer
 
 }t_lexer;
 
-typedef struct s_derections
-{
-    char** derections;
-}t_derections;
-
 typedef struct s_Mlist
 {
-    char** data;
-    int type;
+    char*** text;
+    char*** derections;
     struct s_Mlist *next;
     struct s_Mlist *prev;
 }t_Mlist;
