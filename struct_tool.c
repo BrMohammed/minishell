@@ -24,22 +24,15 @@ t_lexer* init_lexer(char* src)
     return (lexer);
 }
 
-t_childe* init_childe(t_token* token)
+t_Mlist* init_list(t_token* token)
 {
-    t_childe* childe;
-    childe = malloc(sizeof(t_childe));
-    childe->token = token;
-    return(childe);
+    t_Mlist* list;
+
+    list = malloc(sizeof(t_Mlist));
+    list->data = token->value;
+    list->type = token->type;
+    list->next = NULL;
+    list->prev = NULL;
 }
 
-t_tree* tree(t_childe* childe)
-{
-    t_tree  *tree;
-    
-    tree = malloc(sizeof(t_tree));
-    tree->childe = childe;
-    tree->Left = NULL;
-    tree->Right = NULL;
-    tree->prev = NULL;
-    return (tree);
-}
+

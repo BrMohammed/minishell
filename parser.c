@@ -10,6 +10,9 @@ void MakeTree(char* all)
 	while(lexer->i <= lexer->size)
 	{
 		token = GetNextToken(lexer); //<<<<< token have avery time type and value
+
+		
+
 		//for printing
 		if(token->value != NULL)
 			printf("%s    %d\n", token->value,token->type);

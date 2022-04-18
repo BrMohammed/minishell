@@ -14,12 +14,7 @@ typedef struct s_token
         TYPE_DRredirection,
         TYPE_Lredirection,
         TYPE_Rredirection,
-        TYPE_RPARENT,
-        TYPE_LPARENT,
         TYPE_PIPE,
-        TYPE_DPIPE,
-        TYPE_AND,
-        TYPE_OR,
         TYPE_EOF,
         TYPE_ERROR,
     }type;
@@ -34,23 +29,18 @@ typedef struct s_lexer
 
 }t_lexer;
 
-
-typedef struct s_childe
+typedef struct s_derections
 {
-    t_token *token;
-    struct s_childe *next;
-    struct s_childe *prev;
+    char** derections;
+}t_derections;
 
-}t_childe;
-
-typedef struct s_tree
+typedef struct s_Mlist
 {
-    t_childe *childe;
-    struct s_tree *Left;
-    struct s_tree *Right;
-    struct s_tree *prev;
-    
-}t_tree;
+    char** data;
+    int type;
+    struct s_Mlist *next;
+    struct s_Mlist *prev;
+}t_Mlist;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
