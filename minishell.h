@@ -44,24 +44,21 @@ typedef struct s_derections
 
 typedef struct s_Mlist
 {
-    t_text *text;
-    t_derections *derections;
+    void *text;
+    void *derections;
 }t_Mlist;
 
 typedef struct s_template
 {
-    void *content;
-    struct s_template *next;
-    struct s_template *prev;
+    void    *content;
+    struct  s_template *next;
+    struct  s_template *prev;
 }t_template;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
 t_token *GetNextToken(t_lexer *lexer);
-t_Mlist* new_list();
-t_derections *new_derections();
-t_text *new_text();
+void	lstadd_back(t_template **lst, t_template *new);
+t_template	*lstlast(t_template *lst);
 void Makelist(char* all);
-void	*lstlast(void *lst);
-void	lstadd_back(void **lst, void *new);
 #endif

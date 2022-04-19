@@ -31,8 +31,6 @@ t_Mlist* new_list( t_text* text,t_derections* derections)
     list = malloc(sizeof(t_Mlist));
     list->text = text;
     list->derections = derections;
-    list->next = NULL;
-    list->prev = NULL;
     return(list);
 }
 
@@ -44,8 +42,6 @@ t_derections *new_derections(char *file,int type)
     derections->file = file;
     derections->type = type;
     derections->order = 0;
-    derections->next = NULL;
-    derections->prev = NULL;
     return(derections);
 }
 
@@ -56,25 +52,23 @@ t_text *new_text(char *data)
     text = malloc(sizeof(t_text));
     text->data = data;
     text->order = 0;
-    text->next = NULL;
-    text->prev = NULL;
     return(text);
 }
 
-void	lstadd_back(t_Mlist **lst, t_Mlist *new)
+void	lstadd_back(t_template **lst, t_template *new)
 {
-	t_Mlist	*temp;
+	t_template	*temp;
 
 	if (*lst)
 	{	
-		temp = stlast(*lst);
+		temp = ft_lstlast(*lst);
 		temp->next = new;
 	}
 	else
 		*lst = new;
 }
 
-t_Mlist	*lstlast(t_Mlist *lst)
+t_template	*lstlast(t_template *lst)
 {
 	if (lst)
 	{
@@ -84,5 +78,19 @@ t_Mlist	*lstlast(t_Mlist *lst)
 		}
 	}
 	return (lst);
+}
+
+
+t_template	*new_template(void *content)
+{
+	t_template	*index;
+
+	index = (t_template *)malloc(sizeof(t_template));
+	if (!index)
+		return (NULL);
+	index->content = content;
+	index->next = NULL;
+    index->prev = NULL;
+	return (index);
 }
 
