@@ -55,7 +55,8 @@ void Makelist(char* all)
 	list = NULL;
 	lexer = init_lexer(all);
 	list = rec_of_list(lexer,&list,text,derections);
-	printf("%s\n",((t_text *)((t_Mlist *)list->content)->text->content)->data);
+	if(list)
+		printf("%s\n",((t_text *)((t_Mlist *)list->content)->text->content)->data);
 	free(lexer);
 }
 
