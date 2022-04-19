@@ -24,12 +24,10 @@ t_lexer* init_lexer(char* src)
     return (lexer);
 }
 
-t_Mlist* init_list()
+t_Mlist* new_list( t_text* text,t_derections* derections)
 {
     t_Mlist* list;
-    t_text* text;
-    t_derections* derections;
-
+   
     list = malloc(sizeof(t_Mlist));
     list->text = text;
     list->derections = derections;
@@ -38,25 +36,25 @@ t_Mlist* init_list()
     return(list);
 }
 
-t_derections *init_derections()
+t_derections *new_derections(char *file,int type)
 {
     t_derections *derections;
 
     derections = malloc(sizeof(t_derections));
-    derections->derections = NULL;
-    derections->type = 0;
+    derections->file = file;
+    derections->type = type;
     derections->order = 0;
     derections->next = NULL;
     derections->prev = NULL;
     return(derections);
 }
 
-t_text *init_text()
+t_text *new_text(char *data)
 {
     t_text *text;
 
     text = malloc(sizeof(t_text));
-    text->data = NULL;
+    text->data = data;
     text->order = 0;
     text->next = NULL;
     text->prev = NULL;

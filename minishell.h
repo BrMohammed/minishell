@@ -31,7 +31,7 @@ typedef struct s_lexer
 
 typedef struct s_text
 {
-    char **data;
+    char *data;
     int order;
     struct s_text *next;
     struct s_text *prev;
@@ -39,15 +39,9 @@ typedef struct s_text
 
 typedef struct s_derections
 {
-    char **derections;
+    char *file;
     int order;
-     enum
-    { 
-        TYPE_DLredirection,
-        TYPE_DRredirection,
-        TYPE_Lredirection,
-        TYPE_Rredirection,
-    }type;
+    int type;
     struct s_derections *next;
     struct s_derections *prev;
 }t_derections;
@@ -63,8 +57,8 @@ typedef struct s_Mlist
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
 t_token *GetNextToken(t_lexer *lexer);
-t_Mlist* init_list();
-t_derections *init_derections();
-t_text *init_text();
-void MakelistMM(char* all);
+t_Mlist* new_list();
+t_derections *new_derections();
+t_text *new_text();
+void Makelist(char* all);
 #endif

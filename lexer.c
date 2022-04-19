@@ -55,24 +55,8 @@ char* token_type(t_lexer *lexer, int *type)
 	Temp_Char = malloc(2);
 	Temp_Char[0] = lexer->c;
 	Temp_Char[1] = '\0';
-	if(lexer->c == '(')
-		*type = TYPE_LPARENT;
-	else if(lexer->c == ')')
-		*type = TYPE_RPARENT;
-	else if(lexer->c == '&')
-		*type = TYPE_AND;
-	else if(lexer->c == '|' && lexer->src[lexer->i + 1] == '|')
-	{
-		text[0] = lexer->c;
-		AgrimNextToken(lexer);
-		Temp_Char[0] = lexer->c;
-		text = ft_strjoin(text,Temp_Char);
-		*type = TYPE_DPIPE;
-		AgrimNextToken(lexer);
-	}
-	else if(lexer->c == '|')
-		*type = TYPE_PIPE;
-	else if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
+	
+	if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 	{
 		text[0] = lexer->c;
 		AgrimNextToken(lexer);
@@ -136,7 +120,7 @@ int main(int argc, char** argv, char** envp)
 		while (1)
 		{
 			all = readline("minishell ");
-			MakeTree(all);
+			Makelist(all);
 			free(all);
 		}
 	}
