@@ -39,7 +39,7 @@ t_derections *new_derections(char *file,int type)
     t_derections *derections;
 
     derections = malloc(sizeof(t_derections));
-    derections->file = file;
+    derections->file = ft_strdup(file);
     derections->type = type;
     derections->order = 0;
     return(derections);
@@ -50,7 +50,7 @@ t_text *new_text(char *data)
     t_text *text;
 
     text = malloc(sizeof(t_text));
-    text->data = data;
+    text->data = ft_strdup(data);
     text->order = 0;
     return(text);
 }

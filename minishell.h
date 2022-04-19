@@ -4,6 +4,13 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
+typedef struct s_template
+{
+    void    *content;
+    struct  s_template *next;
+    struct  s_template *prev;
+}t_template;
+
 typedef struct s_token
 {
     char* value;
@@ -44,16 +51,11 @@ typedef struct s_derections
 
 typedef struct s_Mlist
 {
-    void *text;
-    void *derections;
+    t_template *text;
+    t_template *derections;
 }t_Mlist;
 
-typedef struct s_template
-{
-    void    *content;
-    struct  s_template *next;
-    struct  s_template *prev;
-}t_template;
+
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
