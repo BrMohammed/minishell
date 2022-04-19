@@ -58,7 +58,14 @@ typedef struct s_template
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
 t_token *GetNextToken(t_lexer *lexer);
+
+t_template	*new_template(void *content);
 void	lstadd_back(t_template **lst, t_template *new);
 t_template	*lstlast(t_template *lst);
+
+t_Mlist* new_list( t_template* text,t_template* derections);
+t_derections *new_derections(char *file,int type);
+t_text *new_text(char *data);
+
 void Makelist(char* all);
 #endif

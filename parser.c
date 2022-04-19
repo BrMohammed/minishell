@@ -15,17 +15,17 @@ t_template *rec_of_list(t_lexer *lexer, t_template **list,t_template *text,t_tem
 		derections = NULL;
 		while (token->type == TYPE_TEXT)
 		{
-			lstadd_back(&text, new_template((void*)new_text(token->type)));
+			lstadd_back(&text, new_template((void*)new_text(token->value)));
 			token = GetNextToken(lexer);
 		}
 		while(token->type != TYPE_TEXT && token->type != TYPE_PIPE && token->type == TYPE_EOF)
 		{
-			lstadd_back(&derections,new_template((void*)new_derections(token->type,GetNextToken(lexer)->value)));
+			lstadd_back(&derections,new_template((void*)new_derections(GetNextToken(lexer)->value,token->type)));
 			token = GetNextToken(lexer);
 		}
 		if(token->type == TYPE_PIPE)
 		{
-			lstadd_back(&list,new_template((void*)new_list(text,derections)));
+			lstadd_back(list,new_template((void*)new_list(text,derections)));
 		}
 		else
 		{

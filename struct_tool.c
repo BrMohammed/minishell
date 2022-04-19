@@ -24,7 +24,7 @@ t_lexer* init_lexer(char* src)
     return (lexer);
 }
 
-t_Mlist* new_list( t_text* text,t_derections* derections)
+t_Mlist* new_list( t_template* text,t_template* derections)
 {
     t_Mlist* list;
    
@@ -61,7 +61,7 @@ void	lstadd_back(t_template **lst, t_template *new)
 
 	if (*lst)
 	{	
-		temp = ft_lstlast(*lst);
+		temp = lstlast(*lst);
 		temp->next = new;
 	}
 	else
