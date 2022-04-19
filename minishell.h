@@ -61,8 +61,10 @@ typedef struct s_Mlist
 }t_Mlist;
 
 t_token* init_token(char* value,int type);
-t_Mlist* init_list(t_token* token);
 t_lexer* init_lexer(char* src);
 t_token *GetNextToken(t_lexer *lexer);
+t_Mlist* init_list();
+t_derections *init_derections();
+t_text *init_text();
 void MakelistMM(char* all);
 #endif
