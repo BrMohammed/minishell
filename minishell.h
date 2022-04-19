@@ -33,12 +33,23 @@ typedef struct s_text
 {
     char **data;
     int order;
+    struct s_text *next;
+    struct s_text *prev;
 }t_text;
 
 typedef struct s_derections
 {
     char **derections;
     int order;
+     enum
+    { 
+        TYPE_DLredirection,
+        TYPE_DRredirection,
+        TYPE_Lredirection,
+        TYPE_Rredirection,
+    }type;
+    struct s_derections *next;
+    struct s_derections *prev;
 }t_derections;
 
 typedef struct s_Mlist
@@ -50,7 +61,8 @@ typedef struct s_Mlist
 }t_Mlist;
 
 t_token* init_token(char* value,int type);
+t_Mlist* init_list(t_token* token);
 t_lexer* init_lexer(char* src);
 t_token *GetNextToken(t_lexer *lexer);
-void MakeTree(char* all);
+void MakelistMM(char* all);
 #endif

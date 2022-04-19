@@ -24,15 +24,43 @@ t_lexer* init_lexer(char* src)
     return (lexer);
 }
 
-t_Mlist* init_list(t_token* token)
+t_Mlist* init_list()
 {
     t_Mlist* list;
+    t_text* text;
+    t_derections* derections;
 
     list = malloc(sizeof(t_Mlist));
-    list->data = token->value;
-    list->type = token->type;
+    list->text = text;
+    list->derections = derections;
     list->next = NULL;
     list->prev = NULL;
+    return(list);
+}
+
+t_derections *init_derections()
+{
+    t_derections *derections;
+
+    derections = malloc(sizeof(t_derections));
+    derections->derections = NULL;
+    derections->type = 0;
+    derections->order = 0;
+    derections->next = NULL;
+    derections->prev = NULL;
+    return(derections);
+}
+
+t_text *init_text()
+{
+    t_text *text;
+
+    text = malloc(sizeof(t_text));
+    text->data = NULL;
+    text->order = 0;
+    text->next = NULL;
+    text->prev = NULL;
+    return(text);
 }
 
 
