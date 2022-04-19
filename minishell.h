@@ -33,8 +33,6 @@ typedef struct s_text
 {
     char *data;
     int order;
-    struct s_text *next;
-    struct s_text *prev;
 }t_text;
 
 typedef struct s_derections
@@ -42,17 +40,20 @@ typedef struct s_derections
     char *file;
     int order;
     int type;
-    struct s_derections *next;
-    struct s_derections *prev;
 }t_derections;
 
 typedef struct s_Mlist
 {
     t_text *text;
     t_derections *derections;
-    struct s_Mlist *next;
-    struct s_Mlist *prev;
 }t_Mlist;
+
+typedef struct s_template
+{
+    void *content;
+    struct s_template *next;
+    struct s_template *prev;
+}t_template;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
@@ -61,4 +62,6 @@ t_Mlist* new_list();
 t_derections *new_derections();
 t_text *new_text();
 void Makelist(char* all);
+void	*lstlast(void *lst);
+void	lstadd_back(void **lst, void *new);
 #endif

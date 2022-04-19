@@ -61,4 +61,28 @@ t_text *new_text(char *data)
     return(text);
 }
 
+void	lstadd_back(t_Mlist **lst, t_Mlist *new)
+{
+	t_Mlist	*temp;
+
+	if (*lst)
+	{	
+		temp = stlast(*lst);
+		temp->next = new;
+	}
+	else
+		*lst = new;
+}
+
+t_Mlist	*lstlast(t_Mlist *lst)
+{
+	if (lst)
+	{
+		while (lst->next != NULL)
+		{
+			lst = lst->next;
+		}
+	}
+	return (lst);
+}
 
