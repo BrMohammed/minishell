@@ -94,3 +94,14 @@ t_template	*new_template(void *content)
 	return (index);
 }
 
+
+void	lstiter(t_template *lst, void (*f)(void *))
+{
+	if (!f)
+		return ;
+	while (lst)
+	{
+		(*f)(lst->content);
+		lst = lst->next;
+	}
+}

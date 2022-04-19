@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC_P = lexer.c parser.c struct_tool.c\
+SRC_P = lexer.c parser.c printing.c struct_tool.c\
 
 CC = @gcc 
 

@@ -56,30 +56,6 @@ void Makelist(char* all)
 	lexer = init_lexer(all);
 	list = rec_of_list(lexer,&list,text,derections);
 	if(list)
-		printf("%s\n",((t_text *)((t_Mlist *)list->content)->text->content)->data);
+		pMlist(list);
 	free(lexer);
 }
-
-// pMlist(void* content)
-// {
-// 	iter(text,pText)
-// 	iter(redor, predir)
-// }
-
-
-
-// pText(void* content)
-// {
-// 	while (args)
-// 	{
-// 		/* code */
-// 	}
-	
-// }
-
-
-// pRedit(void* content)
-// {
-// 	if (asf>> ><<<)
-// 	asdas
-// }

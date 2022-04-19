@@ -64,10 +64,12 @@ t_token *GetNextToken(t_lexer *lexer);
 t_template	*new_template(void *content);
 void	lstadd_back(t_template **lst, t_template *new);
 t_template	*lstlast(t_template *lst);
+void	lstiter(t_template *lst, void (*f)(void *));
 
 t_Mlist* new_list( t_template* text,t_template* derections);
 t_derections *new_derections(char *file,int type);
 t_text *new_text(char *data);
 
 void Makelist(char* all);
+void pMlist(void* content);
 #endif
