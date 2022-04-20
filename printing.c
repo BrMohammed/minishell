@@ -1,23 +1,19 @@
 # include "minishell.h"
 # include "libft/libft.h"
 
-void pText(void *t)
+void pText(void *content)
 {
-	while (((t_text *)t)->data)
-	{
-		printf("%s\n", ((t_text *)((t_Mlist *)t)->text->content)->data);
-	}
+    printf("%s\n",((t_text*)content)->data);
 }
 
-// void pRedit(void* content)
-// {
-// 	// if (asf>> ><<<)
-// 	//     asdas
-// }
+void pDerections(void* content)
+{
+    if(((t_derections*)content)->file && ((t_derections*)content)->type)
+	    printf("|%s, %d|\n",((t_derections*)content)->file,((t_derections*)content)->type);
+}
 
 void pMlist(void* content)
 {
-	lstiter(content,pText);
-	//lstiter(redor, pRedit);
-    //printf("%s\n",((t_text *)((t_Mlist *)list->content)->text->content)->data);
+	lstiter(((t_Mlist *)content)->text,pText);
+	lstiter(((t_Mlist *)content)->derections,pDerections);
 }

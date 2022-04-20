@@ -56,6 +56,6 @@ void Makelist(char* all)
 	lexer = init_lexer(all);
 	list = rec_of_list(lexer,&list,text,derections);
 	if(list)
-		pMlist(list);
+		lstiter(list,pMlist);
 	free(lexer);
 }
