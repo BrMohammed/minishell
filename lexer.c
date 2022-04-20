@@ -74,6 +74,8 @@ char* token_type(t_lexer *lexer, int *type)
 		*type = TYPE_DRredirection;
 		AgrimNextToken(lexer);
 	}
+	else if(lexer->c == '|')
+		*type = TYPE_PIPE;
 	else if(lexer->c == '<')
 		*type = TYPE_Lredirection;
 	else if(lexer->c == '>')
