@@ -14,7 +14,8 @@ void pDerections(void* content)
 
 void pMlist(void* content)
 {
-	lstiter(((t_Mlist *)content)->text,pText);
+    if(((t_Mlist *)content)->text)
+	    lstiter(((t_Mlist *)content)->text,pText);
     if(((t_Mlist *)content)->derections)
 	    lstiter(((t_Mlist *)content)->derections,pDerections);
 }
