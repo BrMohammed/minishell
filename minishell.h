@@ -82,6 +82,6 @@ t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
 
 void minishell(char* all);
-void pMlist(void* content);
-void RMlist(void* content);
+void pMlist(t_template* lst);
+void RMlist(t_template* lst);
 #endif

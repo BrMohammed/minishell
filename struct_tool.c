@@ -64,6 +64,7 @@ void	lstadd_back(t_template **lst, t_template *new)
 	if (*lst)
 	{	
 		temp = lstlast(*lst);
+        new->prev = temp;
 		temp->next = new;
 	}
 	else

@@ -77,8 +77,8 @@ void minishell(char* all)
 	error = list;
 	g_global.g_i = 1;
 	if(error)
-		lstiter(error,RMlist);
+		RMlist(error);
 	if(list)
-		lstiter(list,pMlist);
+		pMlist(list);
 	free(lexer);
 }

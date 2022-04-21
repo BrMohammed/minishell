@@ -9,14 +9,11 @@ void Perror()
 }
 void RText(t_template *lst,t_template *Mlst)
 {
+    (void)Mlst;
     while (lst)
 	{
         if(((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1)
             Perror();
-        // if (Mlst->next == NULL )
-        // {
-        //     printf("hi");
-        // }
         
         if(Mlst->next == NULL && ((t_text*)lst->content)->data[0] == '|' )
             Perror();
@@ -34,12 +31,16 @@ void RDerections(t_template* lst)
 	}
 }
 
-void RMlist(void* content)
+void RMlist(t_template* lst)
 {
-    if(((t_Mlist *)content)->text)
-	    RText(((t_Mlist *)content)->text,(t_template *)content);
-    if(((t_Mlist *)content)->derections)
-	    RDerections(((t_Mlist *)content)->derections);
+    while(lst)
+    {
+        if(((t_Mlist *)lst->content)->text)
+	        RText(((t_Mlist *)lst->content)->text,lst);
+        if(((t_Mlist *)lst->content)->derections)
+	        RDerections(((t_Mlist *)lst->content)->derections);
+        lst = lst->next;
+    }
 }
 
 /***** PRINTING *****/
@@ -62,12 +63,16 @@ void pDerections(t_template* lst)
 	}
 }
 
-void pMlist(void* content)
+void pMlist(t_template* lst)
 {
-    if(((t_Mlist *)content)->text)
-	    pText(((t_Mlist *)content)->text);
-    if(((t_Mlist *)content)->derections)
-	    pDerections(((t_Mlist *)content)->derections);
+    while(lst)
+    {
+        if(((t_Mlist *)lst->content)->text)
+	        pText(((t_Mlist *)lst->content)->text);
+        if(((t_Mlist *)lst->content)->derections)
+	        pDerections(((t_Mlist *)lst->content)->derections);
+        lst = lst->next;
+    }
     printf("\n");
 }
 
