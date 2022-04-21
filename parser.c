@@ -64,7 +64,7 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 	return(*list);
 }
 
-void minishell(char* all)
+void *minishell(char* all)
 {
 	
 	t_lexer *lexer;
@@ -77,8 +77,12 @@ void minishell(char* all)
 	error = list;
 	g_global.g_i = 1;
 	if(error)
-		RMlist(error);
+	{
+		if(RMlist(error) == 1)
+			return(0);
+	}
 	if(list)
 		pMlist(list);
 	free(lexer);
+	return(0);
 }

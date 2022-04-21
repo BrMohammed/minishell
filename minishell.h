@@ -81,7 +81,7 @@ t_Mlist* new_list( t_template* text,t_template* derections, int order);
 t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
 
-void minishell(char* all);
+void *minishell(char* all);
 void pMlist(t_template* lst);
-void RMlist(t_template* lst);
+int RMlist(t_template* lst);
 #endif

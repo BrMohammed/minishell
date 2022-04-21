@@ -2,45 +2,55 @@
 # include "libft/libft.h"
 
 /***** ERROR *****/
-void Perror()
+void Perror(char* error)
 {
-    printf("ERROR\n");
-    exit(0);
+    printf("minishael :syntax error near unexpected token '%s'\n",error);
 }
-void RText(t_template *lst,t_template *Mlst)
+int RText(t_template *lst,t_template *Mlst)
 {
-    (void)Mlst;
     while (lst)
 	{
-        if(((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1)
-            Perror();
-        
-        if(Mlst->next == NULL && ((t_text*)lst->content)->data[0] == '|' )
-            Perror();
+        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (Mlst->next == NULL && ((t_text*)lst->content)->data[0] == '|'))
+        {
+            Perror("|");
+            return(1);
+        }
 		lst = lst->next;
 	}
+    return(0);
 }
 
-void RDerections(t_template* lst)
+int RDerections(t_template* lst)
 {
     while (lst)
 	{
          if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
-            Perror();
+         {
+            Perror(">");
+            return(1);
+         }
+            
 		lst = lst->next;
 	}
+    return(0);
 }
 
-void RMlist(t_template* lst)
+int RMlist(t_template* lst)
 {
+    int r;
+
+    r = 0;
     while(lst)
     {
+        if (r == 1)
+            return(1);
         if(((t_Mlist *)lst->content)->text)
-	        RText(((t_Mlist *)lst->content)->text,lst);
+	        r = RText(((t_Mlist *)lst->content)->text,lst);
         if(((t_Mlist *)lst->content)->derections)
-	        RDerections(((t_Mlist *)lst->content)->derections);
+	       r =  RDerections(((t_Mlist *)lst->content)->derections);
         lst = lst->next;
     }
+    return(0);
 }
 
 /***** PRINTING *****/
