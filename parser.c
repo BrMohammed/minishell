@@ -2,11 +2,13 @@
 # include "libft/libft.h"
 
 
-t_template *rec_of_list(t_lexer *lexer, t_template **list,t_template *text,t_template *derections)
+t_template *Makelist(t_lexer *lexer, t_template **list,t_global *g_global)
 {
 	t_token *token;
+	t_template *text;
+	t_template *derections;
 	int i = 0;
-
+	(void)g_global;
 	token = GetNextToken(lexer); //<<<<< token have avery time type and value
 	if(token->type == TYPE_EOF)
 		return(0);
@@ -47,19 +49,20 @@ t_template *rec_of_list(t_lexer *lexer, t_template **list,t_template *text,t_tem
 	return(*list);
 }
 
-void Makelist(char* all)
+void minishell(char* all,t_global *g_global)
 {
 	
 	t_lexer *lexer;
 	t_template *list;
-	t_template *text;
-	t_template *derections;
+	t_template *error;
 
-	text = NULL;
-	derections = NULL;
+
 	list = NULL;
 	lexer = init_lexer(all);
-	list = rec_of_list(lexer,&list,text,derections);
+	list = Makelist(lexer,&list,g_global);
+	error = list;
+	if(error)
+		lstiter(list,RMlist);
 	if(list)
 		lstiter(list,pMlist);
 	free(lexer);

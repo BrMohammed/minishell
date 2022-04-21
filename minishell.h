@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
+typedef struct s_global
+{
+    char **envp;
+}t_global;
+
 typedef struct s_template
 {
     void    *content;
@@ -71,6 +76,7 @@ t_Mlist* new_list( t_template* text,t_template* derections);
 t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
 
-void Makelist(char* all);
+void minishell(char* all,t_global *g_global);
 void pMlist(void* content);
+void RMlist(void* content);
 #endif
