@@ -4,10 +4,14 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
+
 typedef struct s_global
 {
     char **envp;
+    int g_i;
 }t_global;
+
+t_global g_global;
 
 typedef struct s_template
 {
@@ -59,6 +63,7 @@ typedef struct s_Mlist
 {
     t_template *text;
     t_template *derections;
+    int order;
 }t_Mlist;
 
 
@@ -72,11 +77,11 @@ void	lstadd_back(t_template **lst, t_template *new);
 t_template	*lstlast(t_template *lst);
 void	lstiter(t_template *lst, void (*f)(void *));
 
-t_Mlist* new_list( t_template* text,t_template* derections);
+t_Mlist* new_list( t_template* text,t_template* derections, int order);
 t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
 
-void minishell(char* all,t_global *g_global);
+void minishell(char* all);
 void pMlist(void* content);
 void RMlist(void* content);
 #endif

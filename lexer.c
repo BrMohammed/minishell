@@ -1,7 +1,6 @@
 #include "minishell.h"
 # include "libft/libft.h"
 
-t_global g_global;
 
 
 void AgrimNextToken(t_lexer* lexer)
@@ -126,7 +125,7 @@ int main(int argc, char** argv, char** envp)
 		while (1)
 		{
 			all = readline("minishell ");
-			minishell(all,&g_global);
+			minishell(all);
 			free(all);
 		}
 	}

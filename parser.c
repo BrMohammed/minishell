@@ -2,13 +2,14 @@
 # include "libft/libft.h"
 
 
-t_template *Makelist(t_lexer *lexer, t_template **list,t_global *g_global)
+t_template *Makelist(t_lexer *lexer, t_template **list)
 {
 	t_token *token;
 	t_template *text;
 	t_template *derections;
 	int i = 0;
-	(void)g_global;
+	int i2 = 0;
+	
 	token = GetNextToken(lexer); //<<<<< token have avery time type and value
 	if(token->type == TYPE_EOF)
 		return(0);
@@ -16,17 +17,25 @@ t_template *Makelist(t_lexer *lexer, t_template **list,t_global *g_global)
 	{
 		text = NULL;
 		derections = NULL;
+		//int pipe = 0;
 		while (token->type != TYPE_PIPE || token->type != TYPE_EOF || token->type != TYPE_ERROR)
 		{
-			if(token->type == TYPE_TEXT)
+			if (token->type == TYPE_PIPE)
 			{
-
+				//pipe = TYPE_PIPE;
+				i++;
+				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
+			}
+			if(token->type == TYPE_TEXT || token->type == TYPE_ERROR)
+			{
+				i++;
 				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
 				token = GetNextToken(lexer);
 				
 			}
 			else if(token->type == TYPE_DLredirection || token->type == TYPE_DRredirection || token->type == TYPE_Lredirection || token->type == TYPE_Rredirection)
 			{
+				i++;
 				int temp = token->type;
 				token = GetNextToken(lexer);
 				char *temp2 = token->value;
@@ -41,28 +50,34 @@ t_template *Makelist(t_lexer *lexer, t_template **list,t_global *g_global)
 			else
 				break;
 		}
-		lstadd_back(list,new_template((void*)new_list(text,derections)));
+		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
 		token = GetNextToken(lexer);
-		i++;
+		// if(pipe == TYPE_PIPE && token->type == TYPE_EOF)
+		// {
+		// 	printf("ERROR\n");
+		// 	exit(0);
+		// }
+		i2++;
 	}
+
 	free(token);
 	return(*list);
 }
 
-void minishell(char* all,t_global *g_global)
+void minishell(char* all)
 {
 	
 	t_lexer *lexer;
 	t_template *list;
 	t_template *error;
 
-
 	list = NULL;
 	lexer = init_lexer(all);
-	list = Makelist(lexer,&list,g_global);
+	list = Makelist(lexer,&list);
 	error = list;
+	g_global.g_i = 1;
 	if(error)
-		lstiter(list,RMlist);
+		lstiter(error,RMlist);
 	if(list)
 		lstiter(list,pMlist);
 	free(lexer);

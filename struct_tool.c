@@ -24,13 +24,14 @@ t_lexer* init_lexer(char* src)
     return (lexer);
 }
 
-t_Mlist* new_list( t_template* text,t_template* derections)
+t_Mlist* new_list( t_template* text,t_template* derections, int order)
 {
     t_Mlist* list;
    
     list = malloc(sizeof(t_Mlist));
     list->text = text;
     list->derections = derections;
+    list->order =  order;
     return(list);
 }
 

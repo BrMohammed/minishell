@@ -2,43 +2,73 @@
 # include "libft/libft.h"
 
 /***** ERROR *****/
-void RText(void *content)
+void Perror()
 {
-    printf("%s -> %d -> %d\n",((t_text*)content)->data, ((t_text*)content)->type,((t_text*)content)->order) ;
+    printf("ERROR\n");
+    exit(0);
+}
+void RText(t_template *lst,t_template *Mlst)
+{
+    while (lst)
+	{
+        if(((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1)
+            Perror();
+        // if (Mlst->next == NULL )
+        // {
+        //     printf("hi");
+        // }
+        
+        if(Mlst->next == NULL && ((t_text*)lst->content)->data[0] == '|' )
+            Perror();
+		lst = lst->next;
+	}
 }
 
-void RDerections(void* content)
+void RDerections(t_template* lst)
 {
-    if(((t_derections*)content)->file && ((t_derections*)content)->type)
-	    printf("|%s, %d , %d|\n",((t_derections*)content)->file,((t_derections*)content)->type,((t_derections*)content)->order);
+    while (lst)
+	{
+         if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
+            Perror();
+		lst = lst->next;
+	}
 }
 
 void RMlist(void* content)
 {
     if(((t_Mlist *)content)->text)
-	    lstiter(((t_Mlist *)content)->text,RText);
+	    RText(((t_Mlist *)content)->text,(t_template *)content);
     if(((t_Mlist *)content)->derections)
-	    lstiter(((t_Mlist *)content)->derections,RDerections);
+	    RDerections(((t_Mlist *)content)->derections);
 }
 
 /***** PRINTING *****/
-void pText(void *content)
+void pText(t_template* lst)
 {
-    printf("%s -> %d -> %d\n",((t_text*)content)->data, ((t_text*)content)->type,((t_text*)content)->order) ;
+    while (lst)
+	{
+        printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+		lst = lst->next;
+	}
 }
 
-void pDerections(void* content)
+void pDerections(t_template* lst)
 {
-    if(((t_derections*)content)->file && ((t_derections*)content)->type)
-	    printf("|%s, %d , %d|\n",((t_derections*)content)->file,((t_derections*)content)->type,((t_derections*)content)->order);
+    while (lst)
+	{
+         if(((t_derections*)lst->content)->file && ((t_derections*)lst->content)->type)
+	        printf(" |%s, %d , %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order);
+		lst = lst->next;
+	}
 }
 
 void pMlist(void* content)
 {
     if(((t_Mlist *)content)->text)
-	    lstiter(((t_Mlist *)content)->text,pText);
+	    pText(((t_Mlist *)content)->text);
     if(((t_Mlist *)content)->derections)
-	    lstiter(((t_Mlist *)content)->derections,pDerections);
+	    pDerections(((t_Mlist *)content)->derections);
+    printf("\n");
 }
 
 

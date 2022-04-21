@@ -1,0 +1,15 @@
+BluePrint.tldr
+Makefile
+f
+hhhh
+hhhhhh
+jjjjj
+lexer.c
+libft
+ls
+minishell
+minishell.dSYM
+minishell.h
+parser.c
+printing.c
+struct_tool.c
