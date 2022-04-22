@@ -8,9 +8,10 @@ void Perror(char* error)
 }
 int RText(t_template *lst,t_template *Mlst)
 {
+    (void)Mlst;
     while (lst)
 	{
-        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (Mlst->next == NULL && ((t_text*)lst->content)->data[0] == '|'))
+        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
         {
             Perror("|");
             return(1);
@@ -22,14 +23,25 @@ int RText(t_template *lst,t_template *Mlst)
 
 int RDerections(t_template* lst)
 {
+    char* t_temp;
+
+
+    
     while (lst)
 	{
-         if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
-         {
-            Perror(">");
+        if(((t_derections*)lst->content)->type == TYPE_Lredirection)
+            t_temp = "<";
+        if(((t_derections*)lst->content)->type == TYPE_Rredirection)
+            t_temp = ">";
+        if(((t_derections*)lst->content)->type == TYPE_DLredirection)
+            t_temp = "<<";
+        if(((t_derections*)lst->content)->type == TYPE_DRredirection)
+            t_temp = ">>";
+        if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
+        {
+            Perror(t_temp);
             return(1);
-         }
-            
+        }
 		lst = lst->next;
 	}
     return(0);
@@ -42,13 +54,13 @@ int RMlist(t_template* lst)
     r = 0;
     while(lst)
     {
-        if (r == 1)
-            return(1);
         if(((t_Mlist *)lst->content)->text)
 	        r = RText(((t_Mlist *)lst->content)->text,lst);
         if(((t_Mlist *)lst->content)->derections)
 	       r =  RDerections(((t_Mlist *)lst->content)->derections);
         lst = lst->next;
+        if (r == 1)
+            return(1);
     }
     return(0);
 }
@@ -82,8 +94,8 @@ void pMlist(t_template* lst)
         if(((t_Mlist *)lst->content)->derections)
 	        pDerections(((t_Mlist *)lst->content)->derections);
         lst = lst->next;
+        printf("\n");
     }
-    printf("\n");
 }
 
 

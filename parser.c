@@ -17,21 +17,25 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 	{
 		text = NULL;
 		derections = NULL;
-		//int pipe = 0;
-		while (token->type != TYPE_PIPE || token->type != TYPE_EOF || token->type != TYPE_ERROR)
+		if (token->type == TYPE_PIPE)
 		{
-			if (token->type == TYPE_PIPE)
-			{
-				//pipe = TYPE_PIPE;
-				i++;
-				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
-			}
+			i++;
+			lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
+			token = GetNextToken(lexer);
+		}
+		while (token->type != TYPE_PIPE && token->type != TYPE_EOF)
+		{
+			// if (token->type == TYPE_PIPE)
+			// {
+			// 	i++;
+			// 	lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
+			// 	//token = GetNextToken(lexer);
+			// }
 			if(token->type == TYPE_TEXT || token->type == TYPE_ERROR)
 			{
 				i++;
 				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
 				token = GetNextToken(lexer);
-				
 			}
 			else if(token->type == TYPE_DLredirection || token->type == TYPE_DRredirection || token->type == TYPE_Lredirection || token->type == TYPE_Rredirection)
 			{
@@ -47,16 +51,9 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 				lstadd_back(&derections,new_template((void*)new_derections(temp2,temp,i)));
 				token = GetNextToken(lexer);
 			}
-			else
-				break;
 		}
 		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
-		token = GetNextToken(lexer);
-		// if(pipe == TYPE_PIPE && token->type == TYPE_EOF)
-		// {
-		// 	printf("ERROR\n");
-		// 	exit(0);
-		// }
+		
 		i2++;
 	}
 
