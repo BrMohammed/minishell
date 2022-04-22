@@ -16,6 +16,12 @@ int RText(t_template *lst,t_template *Mlst)
             Perror("|");
             return(1);
         }
+        if(((t_text*)lst->content)->type == TYPE_ERROR)
+        {
+            printf("Syntax Error\n");
+            return(1);
+        }
+
 		lst = lst->next;
 	}
     return(0);
@@ -68,8 +74,45 @@ int RMlist(t_template* lst)
 /***** PRINTING *****/
 void pText(t_template* lst)
 {
+    int i = 0;
+    int j = 0;
+    char **env = NULL;
+    char	*en;
+    char *e;
+
+    e = ft_strdup("");
     while (lst)
 	{
+        if(((t_text*)lst->content)->data[0] == '$' && ((t_text*)lst->content)->data[1] != '\0')
+        {
+            env = ft_split(((t_text*)lst->content)->data,'$');
+            while(env[j])
+            {
+                env[j] = ft_strjoin(env[j],"=");
+                j++;
+            }
+            j = 0;
+            while (env[j])
+            {
+                while(g_global.envp[i] && en == NULL)
+                {
+                    en = ft_strnstr(g_global.envp[i], env[j],ft_strlen(env[j]));///>>>>addd strstr
+                    if(en != NULL)
+                    {
+                        e = ft_strjoin(e,en);
+                        en = NULL;
+                        i = 0;
+                        break;
+                    }
+                    i++;
+                }
+                j++;
+            }
+		    if(e)
+            {
+                ((t_text*)lst->content)->data = ft_strdup(e);
+            }
+        }
         printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
 		lst = lst->next;
 	}

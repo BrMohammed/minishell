@@ -13,6 +13,7 @@ void string_join(t_lexer *lexer, char **text,int *type)
 {
 	char quat;
 	char *Temp_Char;
+	int ii = 0;
 
 	Temp_Char = malloc(2);
 	Temp_Char[1] = '\0';
@@ -21,23 +22,27 @@ void string_join(t_lexer *lexer, char **text,int *type)
 	{
 		Temp_Char[0] = lexer->c;
 		if((quat == '\'' && lexer->c == '\'') || (quat == '"' && lexer->c == '"'))
-		{
-			*text = ft_strjoin(*text,Temp_Char);
-			AgrimNextToken(lexer);
-			break;
+		{	
+			ii++;
+			quat = '\0';
 		}
-		if(lexer->c == '\'' && quat == '\0')
+		else if(lexer->c == '\'' && quat == '\0')
+		{
 			quat = '\'';
+			ii++;
+		}
 		else if(lexer->c == '"' && quat == '\0')
+		{
 			quat = '"';
+			ii++;
+		}
 		*text = ft_strjoin(*text,Temp_Char);
 		AgrimNextToken(lexer);
-		if(((lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' 
-		|| lexer->c == '>' || lexer->c == '<') && ( quat == '\0')) || ((lexer->c == '\n' || lexer->c  == '\t' 
-		|| lexer->c  == 32) && ( quat == '\0')))
+		if(lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' || lexer->c == '>' || lexer->c == '<' 
+		|| lexer->c == '\n' || lexer->c  == '\t' || lexer->c  == 32)
 			break;
 	}
-	if (lexer->i > lexer->size && ((quat == '\'' && lexer->src[lexer->i - 1] != '\'') || (quat == '"' && lexer->src[lexer->i - 1] !='"')))
+	if (lexer->i > lexer->size && ii % 2 != 0)
 		*type = TYPE_ERROR;
 	else
 		*type = TYPE_TEXT;
