@@ -10,6 +10,7 @@ char* MaleKeyOfDlar(char *data)
     char* temp;
     char* key;
     char quat;
+    char *for_expand;
 
     i = 0;
     j = 0;
@@ -19,6 +20,9 @@ char* MaleKeyOfDlar(char *data)
         temp = malloc(2);
         temp[0] = '\0';
         temp[1] = '\0';
+        for_expand = malloc(2);
+        for_expand[0] = '\0';
+        for_expand[1] = '\0';
         if(data[i] != '$' && data[i])
         {
             if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
@@ -61,7 +65,21 @@ char* MaleKeyOfDlar(char *data)
                 temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
                 i++; 
             }
-            e = ft_strjoin(e,temp);
+            free(key);
+            key = ft_strdup("");
+            while(temp[i] != '\0')
+            {
+                for_expand[0] = temp[i];
+                 if(quat != '"')
+                {
+                    if((temp[i] == 32 && temp[i + 1] != 32 ) || temp[i] != 32)
+                        key = ft_strjoin(key,for_expand);
+                }
+                else
+                    key = ft_strjoin(key,for_expand);
+                i++;
+            }
+            e = ft_strjoin(e,key);
             if(e == NULL)
                 e = ft_strdup("");
             temp = NULL;

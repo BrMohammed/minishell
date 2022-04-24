@@ -46,3 +46,10 @@ push :
 	@$(ADD)
 	$(read)
 	$(PU)
+
+
+# 	bash-3.2$ echo $h
+# dddddd dddd 'gggg '
+
+# bash-3.2$ echo "$h"
+# dddddd       dddd 'gggg   '
