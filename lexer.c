@@ -39,8 +39,9 @@ void string_join(t_lexer *lexer, char **text,int *type)
 		}
 		*text = ft_strjoin(*text,Temp_Char);
 		AgrimNextToken(lexer);
-		if(lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' || lexer->c == '>' || lexer->c == '<' 
-		|| lexer->c == '\n' || lexer->c  == '\t' || lexer->c  == 32)
+		if(((lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' 
+		|| lexer->c == '>' || lexer->c == '<') && ( quat == '\0')) || ((lexer->c == '\n' || lexer->c  == '\t' 
+		|| lexer->c  == 32) && ( quat == '\0')))
 			break;
 	}
 	if (lexer->i > lexer->size && ii % 2 != 0)
