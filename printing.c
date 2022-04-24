@@ -22,17 +22,11 @@ char* MaleKeyOfDlar(char *data)
         if(data[i] != '$' && data[i])
         {
             if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
-            {	
                 quat = '\0';
-            }
-            if(data[i] == '\'' && quat != '"')
-            {
+            else if(data[i] == '\'' && quat != '"')
                 quat = '\'';
-            }
             else if(data[i] == '"' && quat != '\'')
-            {
                 quat = '"';
-            }
             else
             {
                 temp[0] = data[i]; 
