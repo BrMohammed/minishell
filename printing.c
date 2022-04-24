@@ -11,10 +11,13 @@ char* MaleKeyOfDlar(char *data)
     char* key;
     char quat;
     char *for_expand;
+    t_template *expand;
+    char* key_ex;
 
     i = 0;
     j = 0;
     e = ft_strdup("");
+    expand = NULL;
     while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
@@ -55,7 +58,8 @@ char* MaleKeyOfDlar(char *data)
                 j++;
             }
             if(data[j] == '$')
-                j--;
+                j--; 
+            key_ex = strdup(key);
             key = ft_strjoin(key,"=");
             i = 0;
             free(temp);
@@ -67,19 +71,27 @@ char* MaleKeyOfDlar(char *data)
             }
             free(key);
             key = ft_strdup("");
-            if(quat != '"' && temp != NULL)
+            while(temp[i] != '\0')
             {
-                while(temp[i] != '\0')
+                for_expand[0] = temp[i];
+                key = ft_strjoin(key,for_expand);
+                i++;
+            }
+            temp = ft_strdup("");
+            if(quat != '"' && key != NULL)
+            {
+                i = 0;
+                while(key[i] != '\0')
                 {
-                    for_expand[0] = temp[i];
-                    if((temp[i] == 32 && temp[i + 1] != 32 ) || temp[i] != 32)
-                        key = ft_strjoin(key,for_expand);
+                    for_expand[0] = key[i];
+                    if((key[i] == 32 && key[i + 1] != 32 ) || key[i] != 32)
+                        temp = ft_strjoin(temp,for_expand);
                     i++;
                 }
-                e = ft_strjoin(e,key);
+                lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
             }
             else
-                e = ft_strjoin(e,temp);
+                e = ft_strjoin(e,key);
             if(e == NULL)
                 e = ft_strdup("");
             temp = NULL;
@@ -100,6 +112,7 @@ void Perror(char* error)
 int RText(t_template *lst,t_template *Mlst)
 {
     (void)Mlst;
+    char *data;
     while (lst)
 	{
         if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
@@ -112,7 +125,10 @@ int RText(t_template *lst,t_template *Mlst)
             printf("Syntax Error\n");
             return(1);
         }
-
+        data = MaleKeyOfDlar(((t_text*)lst->content)->data);
+        if(data == NULL)
+            data = ft_strdup("");
+        ((t_text*)lst->content)->data = ft_strdup(data);
 		lst = lst->next;
 	}
     return(0);
@@ -165,14 +181,8 @@ int RMlist(t_template* lst)
 /***** PRINTING *****/
 void pText(t_template* lst)
 {
-    char *data;
-
     while (lst)
 	{
-        data = MaleKeyOfDlar(((t_text*)lst->content)->data);
-        if(data == NULL)
-            data = ft_strdup("");
-        ((t_text*)lst->content)->data = ft_strdup(data);
         printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
 		lst = lst->next;
 	}
