@@ -26,7 +26,7 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 		}
 		while (token->type != TYPE_PIPE && token->type != TYPE_EOF)
 		{
-			if(token->type == TYPE_TEXT || token->type == TYPE_ERROR)
+			if(token->type == TYPE_TEXT || token->type == TYPE_ERROR || token->type == TYPE_QUOTE)
 			{
 				i++;
 				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));

@@ -13,7 +13,7 @@ char* MaleKeyOfDlar(char *data)
     i = 0;
     j = 0;
     e = ft_strdup("");
-    while(data[j])
+    while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
         temp[0] = '\0';

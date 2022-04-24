@@ -29,6 +29,7 @@ void string_join(t_lexer *lexer, char **text,int *type)
 		else if(lexer->c == '\'' && quat == '\0')
 		{
 			quat = '\'';
+			*type = TYPE_QUOTE;
 			ii++;
 		}
 		else if(lexer->c == '"' && quat == '\0')
@@ -44,6 +45,8 @@ void string_join(t_lexer *lexer, char **text,int *type)
 	}
 	if (lexer->i > lexer->size && ii % 2 != 0)
 		*type = TYPE_ERROR;
+	else if(ii > 0)
+		*type = TYPE_QUOTE;
 	else
 		*type = TYPE_TEXT;
 	free(Temp_Char);

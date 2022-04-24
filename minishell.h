@@ -26,6 +26,7 @@ typedef struct s_token
     enum
     { 
         TYPE_TEXT ,
+        TYPE_QUOTE,
         TYPE_DLredirection,
         TYPE_DRredirection,
         TYPE_Lredirection,
