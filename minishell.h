@@ -46,9 +46,16 @@ typedef struct s_lexer
 
 }t_lexer;
 
+typedef struct s_ExpandData
+{
+    char** expan_data;
+    char* key;
+}t_ExpandData;
+
 typedef struct s_text
 {
     char *data;
+    t_template *expand;
     int order;
     int type;
 }t_text;
@@ -81,6 +88,7 @@ void	lstiter(t_template *lst, void (*f)(void *));
 t_Mlist* new_list( t_template* text,t_template* derections, int order);
 t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
+t_ExpandData *new_xpand();
 
 void *minishell(char* all);
 void pMlist(t_template* lst);

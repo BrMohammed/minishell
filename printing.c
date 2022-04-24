@@ -67,19 +67,19 @@ char* MaleKeyOfDlar(char *data)
             }
             free(key);
             key = ft_strdup("");
-            while(temp[i] != '\0')
+            if(quat != '"' && temp != NULL)
             {
-                for_expand[0] = temp[i];
-                 if(quat != '"')
+                while(temp[i] != '\0')
                 {
+                    for_expand[0] = temp[i];
                     if((temp[i] == 32 && temp[i + 1] != 32 ) || temp[i] != 32)
                         key = ft_strjoin(key,for_expand);
+                    i++;
                 }
-                else
-                    key = ft_strjoin(key,for_expand);
-                i++;
+                e = ft_strjoin(e,key);
             }
-            e = ft_strjoin(e,key);
+            else
+                e = ft_strjoin(e,temp);
             if(e == NULL)
                 e = ft_strdup("");
             temp = NULL;

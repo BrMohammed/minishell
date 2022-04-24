@@ -57,6 +57,17 @@ t_text *new_text(char *data,int type,int i)
     return(text);
 }
 
+
+t_ExpandData *new_xpand(char** expand_data, char*key)
+{
+    t_ExpandData *expand;
+
+    expand = malloc(sizeof(t_ExpandData));
+    expand->expan_data = expand_data;
+    expand->key = key;
+    return(expand);
+}
+
 void	lstadd_back(t_template **lst, t_template *new)
 {
 	t_template	*temp;
@@ -83,7 +94,6 @@ t_template	*lstlast(t_template *lst)
 	return (lst);
 }
 
-
 t_template	*new_template(void *content)
 {
 	t_template	*index;
@@ -96,7 +106,6 @@ t_template	*new_template(void *content)
     index->prev = NULL;
 	return (index);
 }
-
 
 void	lstiter(t_template *lst, void (*f)(void *))
 {
