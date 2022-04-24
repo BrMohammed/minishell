@@ -85,6 +85,7 @@ void pText(t_template* lst)
     while (lst)
 	{
         temp = malloc(2);
+        temp[0] = '\0';
         temp[1] = '\0';
         e = ft_strdup("");
         en = NULL;
@@ -93,7 +94,11 @@ void pText(t_template* lst)
         t = 0;
         while(((t_text*)lst->content)->data[i])
         {
-            if(((t_text*)lst->content)->data[i] != '$')
+            en = NULL;
+            temp = malloc(2);
+            temp[0] = '\0';
+            temp[1] = '\0';
+            if(((t_text*)lst->content)->data[i] != '$' && ((t_text*)lst->content)->data[i])
             {
                 temp[0] = ((t_text*)lst->content)->data[i]; 
                 e = ft_strjoin(e,temp);
@@ -102,16 +107,13 @@ void pText(t_template* lst)
             {
                 i++;
                 j = i;
-                while(((t_text*)lst->content)->data[j] && ((t_text*)lst->content)->data[j]!= '$')
+                while(((t_text*)lst->content)->data[j] && ((t_text*)lst->content)->data[j] != '$')
                     j++;
-                   
                 if(((t_text*)lst->content)->data[j] == '$')
                     j--;
                 strncpy(temp,((t_text*)lst->content)->data + i,j);//ad to lib
                 temp = ft_strjoin(temp,"=");
                 t = 0;
-                if(((t_text*)lst->content)->data[j + 1] == '$')
-                   j++;
                 while (g_global.envp[t] && en == NULL)
                 {
                     en = ft_strnstr(g_global.envp[t], temp,ft_strlen(temp));
@@ -119,6 +121,7 @@ void pText(t_template* lst)
                 }
 		        e = ft_strjoin(e,en);
                 i = j;
+                //free(temp);
             }
             i++;
         }
