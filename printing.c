@@ -76,43 +76,58 @@ void pText(t_template* lst)
 {
     int i = 0;
     int j = 0;
-    char **env = NULL;
+    int t;
     char	*en;
     char *e;
+    char* temp;
 
-    e = ft_strdup("");
+    
     while (lst)
 	{
-        if(((t_text*)lst->content)->data[0] == '$' && ((t_text*)lst->content)->data[1] != '\0')
+        temp = malloc(2);
+        temp[1] = '\0';
+        e = ft_strdup("");
+        en = NULL;
+        i = 0;
+        j= 0;
+        t = 0;
+        while(((t_text*)lst->content)->data[i])
         {
-            env = ft_split(((t_text*)lst->content)->data,'$');
-            while(env[j])
+            if(((t_text*)lst->content)->data[i] != '$')
             {
-                env[j] = ft_strjoin(env[j],"=");
-                j++;
+                temp[0] = ((t_text*)lst->content)->data[i]; 
+                e = ft_strjoin(e,temp);
             }
-            j = 0;
-            while (env[j])
+            else if(((t_text*)lst->content)->data[i] == '$')
             {
-                while(g_global.envp[i] && en == NULL)
+                i++;
+                j = i;
+                while(((t_text*)lst->content)->data[j] && ((t_text*)lst->content)->data[j]!= '$')
+                    j++;
+                   
+                if(((t_text*)lst->content)->data[j] == '$')
+                    j--;
+                strncpy(temp,((t_text*)lst->content)->data + i,j);//ad to lib
+                temp = ft_strjoin(temp,"=");
+                t = 0;
+                if(((t_text*)lst->content)->data[j + 1] == '$')
+                   j++;
+                while (g_global.envp[t] && en == NULL)
                 {
-                    en = ft_strnstr(g_global.envp[i], env[j],ft_strlen(env[j]));///>>>>addd strstr
-                    if(en != NULL)
-                    {
-                        e = ft_strjoin(e,en);
-                        en = NULL;
-                        i = 0;
-                        break;
-                    }
-                    i++;
+                    en = ft_strnstr(g_global.envp[t], temp,ft_strlen(temp));
+                    t++;
                 }
-                j++;
+		        e = ft_strjoin(e,en);
+                i = j;
             }
-		    if(e)
-            {
-                ((t_text*)lst->content)->data = ft_strdup(e);
-            }
+            i++;
         }
+        if(e)
+        {
+            ((t_text*)lst->content)->data = ft_strdup(e);
+        }
+        free(temp);
+        free(e);
         printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
 		lst = lst->next;
 	}
