@@ -48,7 +48,7 @@ char* MaleKeyOfDlar(char *data)
             i++;
             j = i;
             while(data[j] && data[j] != '$'  && ((data[j] >= 'a' && data[j] <= 'z') || (data[j] >= 'A' && data[j] <= 'Z')
-		                || (data[j] >= '0' && data[j] <= '9') || data[j] == '-'))
+		        || (data[j] >= '0' && data[j] <= '9') || data[j] == '-'))
             {
                 temp[0] = data[j];
                 key = ft_strjoin(key,temp);
