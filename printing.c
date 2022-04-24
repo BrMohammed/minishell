@@ -1,6 +1,63 @@
 # include "minishell.h"
 # include "libft/libft.h"
 
+
+char* MaleKeyOfDlar(char *data)
+{
+    int i = 0;
+    int j = 0;
+    char *e;
+    char* temp;
+    char* key;
+
+    i = 0;
+    j = 0;
+    e = ft_strdup("");
+    while(data[j])
+    {
+        temp = malloc(2);
+        temp[0] = '\0';
+        temp[1] = '\0';
+        if(data[i] != '$' && data[i])
+        {
+            temp[0] = data[i]; 
+            e = ft_strjoin(e,temp);
+        }
+        else if(data[i] == '$')
+        {
+            key = ft_strdup("");
+            i++;
+            j = i;
+            while(data[j] && data[j] != '$')
+            {
+                temp[0] = data[j];
+                key = ft_strjoin(key,temp);
+                j++;
+            }
+            if(data[j] == '$')
+                j--;
+            key = ft_strjoin(key,"=");
+            i = 0;
+            free(temp);
+            temp = NULL;
+            while (g_global.envp[i] && temp == NULL)
+            {
+                temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
+                i++;
+            }
+            e = ft_strjoin(e,temp);
+            if(e == NULL)
+                e = ft_strdup("");
+            temp = NULL;
+            i = j;
+            free(key);
+        }
+        i++;
+    }
+    
+	return(e);
+}
+
 /***** ERROR *****/
 void Perror(char* error)
 {
@@ -74,63 +131,14 @@ int RMlist(t_template* lst)
 /***** PRINTING *****/
 void pText(t_template* lst)
 {
-    int i = 0;
-    int j = 0;
-    int t;
-    char	*en;
-    char *e;
-    char* temp;
+    char *data;
 
-    
     while (lst)
 	{
-        temp = malloc(2);
-        temp[0] = '\0';
-        temp[1] = '\0';
-        e = ft_strdup("");
-        en = NULL;
-        i = 0;
-        j= 0;
-        t = 0;
-        while(((t_text*)lst->content)->data[i])
-        {
-            en = NULL;
-            temp = malloc(2);
-            temp[0] = '\0';
-            temp[1] = '\0';
-            if(((t_text*)lst->content)->data[i] != '$' && ((t_text*)lst->content)->data[i])
-            {
-                temp[0] = ((t_text*)lst->content)->data[i]; 
-                e = ft_strjoin(e,temp);
-            }
-            else if(((t_text*)lst->content)->data[i] == '$')
-            {
-                i++;
-                j = i;
-                while(((t_text*)lst->content)->data[j] && ((t_text*)lst->content)->data[j] != '$')
-                    j++;
-                if(((t_text*)lst->content)->data[j] == '$')
-                    j--;
-                strncpy(temp,((t_text*)lst->content)->data + i,j);//ad to lib
-                temp = ft_strjoin(temp,"=");
-                t = 0;
-                while (g_global.envp[t] && en == NULL)
-                {
-                    en = ft_strnstr(g_global.envp[t], temp,ft_strlen(temp));
-                    t++;
-                }
-		        e = ft_strjoin(e,en);
-                i = j;
-                //free(temp);
-            }
-            i++;
-        }
-        if(e)
-        {
-            ((t_text*)lst->content)->data = ft_strdup(e);
-        }
-        free(temp);
-        free(e);
+        data = MaleKeyOfDlar(((t_text*)lst->content)->data);
+        if(data == NULL)
+            data = ft_strdup("");
+        ((t_text*)lst->content)->data = ft_strdup(data);
         printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
 		lst = lst->next;
 	}
