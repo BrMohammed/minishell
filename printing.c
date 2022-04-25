@@ -28,6 +28,7 @@ char* MaleKeyOfDlar(char *data,t_template **text,int branch)
         for_expand[1] = '\0';
         if(data[i] != '$' && data[i])
         {
+            /* quat set*/
             if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
                 quat = '\0';
             else if(data[i] == '\'' && quat != '"')
@@ -40,32 +41,32 @@ char* MaleKeyOfDlar(char *data,t_template **text,int branch)
                 e = ft_strjoin(e,temp);
             }
         }
-        else if(data[i] == '$' && quat == '\'')
+        else if(data[i] == '$' && quat == '\'') /*when singelquet and dolar exest sqiping the key*/
         {
             temp[0] = data[i]; 
             e = ft_strjoin(e,temp);
         }
-        if(data[i] == '$'  && quat != '\'')
+        if(data[i] == '$' && quat != '\'')/*dolar in text or inter of doublequet*/
         {
             
             key = ft_strdup("");
             i++;
             j = i;
-            while(data[j] && data[j] != '$'  && ((data[j] >= 'a' && data[j] <= 'z') || (data[j] >= 'A' && data[j] <= 'Z')
+            while(data[j] && data[j] != '$' && ((data[j] >= 'a' && data[j] <= 'z') || (data[j] >= 'A' && data[j] <= 'Z') /*continue join when dejet or alpha or - */
 		        || (data[j] >= '0' && data[j] <= '9') || data[j] == '-'))
             {
                 temp[0] = data[j];
                 key = ft_strjoin(key,temp);
                 j++;
             }
-            if(data[j] == '$')
+            if(data[j] == '$') /* if char is dolar*/
                 j--; 
             key_ex = strdup(key);
             key = ft_strjoin(key,"=");
             i = 0;
             free(temp);
             temp = NULL;
-            while (g_global.envp[i] && temp == NULL)
+            while (g_global.envp[i] && temp == NULL) /*serch in env */
             {
                 temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
                 i++; 
@@ -73,7 +74,7 @@ char* MaleKeyOfDlar(char *data,t_template **text,int branch)
             free(key);
             key = ft_strdup("");
             i--;
-            if(temp == NULL)
+            if(temp == NULL) /* key is null*/
             {
                 e = ft_strdup("");
                 temp = NULL;
@@ -166,6 +167,7 @@ int RDerections(t_template* lst)
             t_temp = "<<";
         if(((t_derections*)lst->content)->type == TYPE_DRredirection)
             t_temp = ">>";
+      
         if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
         {
             Perror(t_temp);
@@ -176,6 +178,10 @@ int RDerections(t_template* lst)
         if(data == NULL)
             data = ft_strdup("");
         ((t_derections*)lst->content)->file = ft_strdup(data);
+          if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
+          {
+              ((t_derections*)lst->content)->fd = open(data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+          }
 		lst = lst->next;
 	}
     return(0);
@@ -210,7 +216,7 @@ void pText(t_template* lst)
         if(((t_text*)lst->content)->data != NULL)
             printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
        
-        while(exp)
+        while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             i = 0;
             while(((t_ExpandData*)exp->content)->expan_data[i])
@@ -232,8 +238,9 @@ void pDerections(t_template* lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
          if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type)
-	        printf(" |%s, %d , %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order);
-        while(exp)
+	        printf(" |%s, type : %d , ord : %d , fd : %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
+
+        while(exp)/*>>>>>   for looping in the expanded link of node derections*/
         { 
             i = 0;
             while(((t_ExpandData*)exp->content)->expan_data[i])
@@ -259,5 +266,3 @@ void pMlist(t_template* lst)
         printf("\n");
     }
 }
-
-

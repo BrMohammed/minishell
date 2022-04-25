@@ -69,6 +69,7 @@ typedef struct s_derections
     t_template *expand;
     int order;
     int type;
+    int fd;
 }t_derections;
 
 typedef struct s_Mlist

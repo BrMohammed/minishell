@@ -44,6 +44,7 @@ t_derections *new_derections(char *file,int type,int i)
     derections->expand = NULL;
     derections->type = type;
     derections->order = i;
+    derections->fd = 1;
     return(derections);
 }
 
