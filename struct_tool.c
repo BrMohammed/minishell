@@ -53,6 +53,7 @@ t_text *new_text(char *data,int type,int i)
     text = malloc(sizeof(t_text));
     text->data = ft_strdup(data);
     text->type = type;
+    text->expand = NULL;
     text->order = i;
     return(text);
 }

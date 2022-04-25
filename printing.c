@@ -101,8 +101,8 @@ char* MaleKeyOfDlar(char *data,t_template **text)
         }
         i++;
     }
-    //lstadd_back(text,new_template((void*)new_list(text,derections,i2)));
-    // printf("%s",((t_ExpandData*)expand->content)->expan_data[0]);
+    ((t_text*)(*text)->content)->expand = expand ;
+    // printf("%s",((t_ExpandData*)((t_text*)(*text)->content)->expand->content)->expan_data[0]);
 	return(e);
 }
 
@@ -127,7 +127,7 @@ int RText(t_template *lst,t_template *Mlst)
             printf("Syntax Error\n");
             return(1);
         }
-        data = MaleKeyOfDlar(((t_text*)lst->content)->data);
+        data = MaleKeyOfDlar(((t_text*)lst->content)->data,&lst);
         if(data == NULL)
             data = ft_strdup("");
         ((t_text*)lst->content)->data = ft_strdup(data);
@@ -187,9 +187,15 @@ void pText(t_template* lst)
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
-        printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
-        if(exp)
-            printf("%s",((t_ExpandData*)exp->content)->expan_data[0]);
+        if(ft_strncmp(((t_text*)lst->content)->data,"",1) != 0)
+            printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+        while(exp != NULL)
+        {
+            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[0],((t_ExpandData*)exp->content)->key);
+            exp = exp->next;
+        }
+            
+            //printf("%s",((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data[0]);
         // if(((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data)
         // ((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data
 		lst = lst->next;
