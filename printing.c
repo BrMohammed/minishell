@@ -2,7 +2,7 @@
 # include "libft/libft.h"
 
 
-char* MaleKeyOfDlar(char *data)
+char* MaleKeyOfDlar(char *data,t_template **text)
 {
     int i = 0;
     int j = 0;
@@ -89,6 +89,7 @@ char* MaleKeyOfDlar(char *data)
                     i++;
                 }
                 lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
+                
             }
             else
                 e = ft_strjoin(e,key);
@@ -100,7 +101,8 @@ char* MaleKeyOfDlar(char *data)
         }
         i++;
     }
-    
+    //lstadd_back(text,new_template((void*)new_list(text,derections,i2)));
+    // printf("%s",((t_ExpandData*)expand->content)->expan_data[0]);
 	return(e);
 }
 
@@ -181,9 +183,15 @@ int RMlist(t_template* lst)
 /***** PRINTING *****/
 void pText(t_template* lst)
 {
+    t_template *exp;
     while (lst)
 	{
+        exp = ((t_text*)lst->content)->expand;
         printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+        if(exp)
+            printf("%s",((t_ExpandData*)exp->content)->expan_data[0]);
+        // if(((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data)
+        // ((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data
 		lst = lst->next;
 	}
 }
