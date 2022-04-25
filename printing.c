@@ -71,6 +71,7 @@ char* MaleKeyOfDlar(char *data,t_template **text)
             }
             free(key);
             key = ft_strdup("");
+            i--;
             while(temp[i] != '\0')
             {
                 for_expand[0] = temp[i];
@@ -78,7 +79,7 @@ char* MaleKeyOfDlar(char *data,t_template **text)
                 i++;
             }
             temp = ft_strdup("");
-            if(quat != '"' && key != NULL)
+            if(quat != '"')
             {
                 i = 0;
                 while(key[i] != '\0')
@@ -89,7 +90,6 @@ char* MaleKeyOfDlar(char *data,t_template **text)
                     i++;
                 }
                 lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
-                
             }
             else
                 e = ft_strjoin(e,key);
@@ -101,8 +101,7 @@ char* MaleKeyOfDlar(char *data,t_template **text)
         }
         i++;
     }
-    ((t_text*)(*text)->content)->expand = expand ;
-    // printf("%s",((t_ExpandData*)((t_text*)(*text)->content)->expand->content)->expan_data[0]);
+    ((t_text*)(*text)->content)->expand = expand;
 	return(e);
 }
 
@@ -184,20 +183,24 @@ int RMlist(t_template* lst)
 void pText(t_template* lst)
 {
     t_template *exp;
+    int i;
+
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
         if(ft_strncmp(((t_text*)lst->content)->data,"",1) != 0)
             printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
-        while(exp != NULL)
-        {
-            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[0],((t_ExpandData*)exp->content)->key);
+       
+        while(exp)
+        { 
+            i = 0;
+            while(((t_ExpandData*)exp->content)->expan_data[i])
+            {
+                 printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[i],((t_ExpandData*)exp->content)->key);
+                 i++;
+            }
             exp = exp->next;
         }
-            
-            //printf("%s",((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data[0]);
-        // if(((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data)
-        // ((t_ExpandData*)((t_text*)lst->content)->expand->content)->expan_data
 		lst = lst->next;
 	}
 }
