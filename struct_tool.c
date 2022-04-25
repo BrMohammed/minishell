@@ -41,6 +41,7 @@ t_derections *new_derections(char *file,int type,int i)
 
     derections = malloc(sizeof(t_derections));
     derections->file = ft_strdup(file);
+    derections->expand = NULL;
     derections->type = type;
     derections->order = i;
     return(derections);

@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
+#define TEXT  1
+#define DERECYION 0
+
 
 typedef struct s_global
 {
@@ -63,6 +66,7 @@ typedef struct s_text
 typedef struct s_derections
 {
     char *file;
+    t_template *expand;
     int order;
     int type;
 }t_derections;

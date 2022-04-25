@@ -2,7 +2,7 @@
 # include "libft/libft.h"
 
 
-char* MaleKeyOfDlar(char *data,t_template **text)
+char* MaleKeyOfDlar(char *data,t_template **text,int branch)
 {
     int i = 0;
     int j = 0;
@@ -113,7 +113,10 @@ char* MaleKeyOfDlar(char *data,t_template **text)
         }
         i++;
     }
-    ((t_text*)(*text)->content)->expand = expand;
+    if(branch == TEXT)
+        ((t_text*)(*text)->content)->expand = expand;
+    else if(branch == DERECYION)
+        ((t_derections*)(*text)->content)->expand = expand;
 	return(e);
 }
 
@@ -139,7 +142,7 @@ int RText(t_template *lst,t_template *Mlst)
             return(1);
         }
         data = NULL;
-        data = MaleKeyOfDlar(((t_text*)lst->content)->data,&lst);
+        data = MaleKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
         if(data == NULL)
             data = ft_strdup("");
         ((t_text*)lst->content)->data = ft_strdup(data);
@@ -151,8 +154,7 @@ int RText(t_template *lst,t_template *Mlst)
 int RDerections(t_template* lst)
 {
     char* t_temp;
-
-
+    char *data;
     
     while (lst)
 	{
@@ -169,6 +171,11 @@ int RDerections(t_template* lst)
             Perror(t_temp);
             return(1);
         }
+        data = NULL;
+        data = MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
+        if(data == NULL)
+            data = ft_strdup("");
+        ((t_derections*)lst->content)->file = ft_strdup(data);
 		lst = lst->next;
 	}
     return(0);
@@ -219,10 +226,23 @@ void pText(t_template* lst)
 
 void pDerections(t_template* lst)
 {
+    t_template *exp;
+    int i;
     while (lst)
 	{
-         if(((t_derections*)lst->content)->file && ((t_derections*)lst->content)->type)
+        exp = ((t_derections*)lst->content)->expand;
+         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type)
 	        printf(" |%s, %d , %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order);
+        while(exp)
+        { 
+            i = 0;
+            while(((t_ExpandData*)exp->content)->expan_data[i])
+            {
+                 printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[i],((t_ExpandData*)exp->content)->key);
+                 i++;
+            }
+            exp = exp->next;
+        }
 		lst = lst->next;
 	}
 }
