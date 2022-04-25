@@ -47,6 +47,7 @@ char* MaleKeyOfDlar(char *data,t_template **text)
         }
         if(data[i] == '$'  && quat != '\'')
         {
+            
             key = ft_strdup("");
             i++;
             j = i;
@@ -72,28 +73,39 @@ char* MaleKeyOfDlar(char *data,t_template **text)
             free(key);
             key = ft_strdup("");
             i--;
+            if(temp == NULL)
+            {
+                e = ft_strdup("");
+                temp = NULL;
+                i = j;
+                free(key);
+                continue;
+            }
             while(temp[i] != '\0')
             {
                 for_expand[0] = temp[i];
                 key = ft_strjoin(key,for_expand);
                 i++;
             }
-            temp = ft_strdup("");
-            if(quat != '"')
+            if(temp != NULL)
             {
-                i = 0;
-                while(key[i] != '\0')
+                temp = ft_strdup("");
+                if(quat != '"')
                 {
-                    for_expand[0] = key[i];
-                    if((key[i] == 32 && key[i + 1] != 32 ) || key[i] != 32)
-                        temp = ft_strjoin(temp,for_expand);
-                    i++;
+                    i = 0;
+                    while(key[i] != '\0')
+                    {
+                        for_expand[0] = key[i];
+                        if((key[i] == 32 && key[i + 1] != 32 ) || key[i] != 32)
+                            temp = ft_strjoin(temp,for_expand);
+                        i++;
+                    }
+                    lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
                 }
-                lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
+                else
+                   e = ft_strjoin(e,key);
             }
-            else
-                e = ft_strjoin(e,key);
-            if(e == NULL)
+            if(temp == NULL)
                 e = ft_strdup("");
             temp = NULL;
             i = j;
@@ -126,6 +138,7 @@ int RText(t_template *lst,t_template *Mlst)
             printf("Syntax Error\n");
             return(1);
         }
+        data = NULL;
         data = MaleKeyOfDlar(((t_text*)lst->content)->data,&lst);
         if(data == NULL)
             data = ft_strdup("");
@@ -184,11 +197,10 @@ void pText(t_template* lst)
 {
     t_template *exp;
     int i;
-
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
-        if(ft_strncmp(((t_text*)lst->content)->data,"",1) != 0)
+        if(((t_text*)lst->content)->data != NULL)
             printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
        
         while(exp)
