@@ -2,7 +2,7 @@
 # include "libft/libft.h"
 
 
-char* MaleKeyOfDlar(char *data,t_template **text,int branch)
+void MaleKeyOfDlar(char *data,t_template **text,int branch)
 {
     int i = 0;
     int j = 0;
@@ -13,11 +13,18 @@ char* MaleKeyOfDlar(char *data,t_template **text,int branch)
     char *for_expand;
     t_template *expand;
     char* key_ex;
+    int chek = 0;
+    //  t_template *temp00 = NULL;
 
     i = 0;
     j = 0;
     e = ft_strdup("");
     expand = NULL;
+    temp = NULL;
+    key_ex = NULL;
+    lstadd_back(&expand, new_template(new_expand(ft_split("g",'\0'),key_ex)));
+    ((t_ExpandData*)expand->content)->expan_data[0] = e;
+   // printf("%s\n",((t_ExpandData*)expand->content)->expan_data[0]);
     while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
@@ -88,37 +95,60 @@ char* MaleKeyOfDlar(char *data,t_template **text,int branch)
                 key = ft_strjoin(key,for_expand);
                 i++;
             }
-            if(temp != NULL)
+            temp = ft_strdup("");
+            if(quat != '"')
             {
-                temp = ft_strdup("");
-                if(quat != '"')
+                chek ++;
+                i = 0;
+                while(key[i] != '\0' )
                 {
-                    i = 0;
-                    while(key[i] != '\0')
-                    {
+                    // if(key[i] != 32)
+                    // {
                         for_expand[0] = key[i];
-                        if((key[i] == 32 && key[i + 1] != 32 ) || key[i] != 32)
-                            temp = ft_strjoin(temp,for_expand);
-                        i++;
-                    }
-                    lstadd_back(&expand, new_template(new_expand(ft_split(temp,' '),key_ex)));
+                        e = ft_strjoin(e,for_expand);
+                   // }
+                    i++;
+                    // if(key[i] == 32 && key[i + 1] != 32 && key[i + 1] != '\0')
+                    // {
+                    //     ((t_ExpandData*)expand->content)->expan_data[0] = strdup(e);
+                    //     free(e);
+                    //     e = ft_strdup("");
+                    //     lstadd_back(&expand, new_template(new_expand(ft_split(e,'\0'),key_ex)));
+                    //     ((t_ExpandData*)expand->content)->expan_data[0] = e;
+                    //     i++;
+                    // }
                 }
-                else
-                   e = ft_strjoin(e,key);
+               
+                ((t_ExpandData*)expand->content)->expan_data = ft_split(e,' ');
+                if(key[i] == 32 && key[i + 1] != 32 && key[i + 1] != '\0' && chek > 1 && ft_strncmp(((t_ExpandData*)expand->content)->expan_data[0],e,ft_strlen(e)) != 0)
+                {
+                    lstadd_back(&expand, new_template(new_expand(ft_split(e,'\0'),key_ex)));
+                        ((t_ExpandData*)expand->content)->expan_data[0] = e;
+                }
+                    free(e);
+                    e = ft_strdup("");
+                
             }
-            if(temp == NULL)
-                e = ft_strdup("");
+            else
+                e = ft_strjoin(e,key);
             temp = NULL;
             i = j;
             free(key);
         }
         i++;
     }
+    if(e[0] != '\0')
+    {
+        i = 0;
+        while(((t_ExpandData*)expand->content)->expan_data[i])
+            i++;
+        ((t_ExpandData*)expand->content)->expan_data[i - 1] = ft_strjoin(((t_ExpandData*)expand->content)->expan_data[i - 1],e);
+    }
+   
     if(branch == TEXT)
         ((t_text*)(*text)->content)->expand = expand;
     else if(branch == DERECYION)
         ((t_derections*)(*text)->content)->expand = expand;
-	return(e);
 }
 
 /***** ERROR *****/
@@ -129,7 +159,6 @@ void Perror(char* error)
 int RText(t_template *lst,t_template *Mlst)
 {
     (void)Mlst;
-    char *data;
     while (lst)
 	{
         if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
@@ -142,11 +171,7 @@ int RText(t_template *lst,t_template *Mlst)
             printf("Syntax Error\n");
             return(1);
         }
-        data = NULL;
-        data = MaleKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
-        if(data == NULL)
-            data = ft_strdup("");
-        ((t_text*)lst->content)->data = ft_strdup(data);
+        MaleKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
 		lst = lst->next;
 	}
     return(0);
@@ -173,14 +198,11 @@ int RDerections(t_template* lst)
             Perror(t_temp);
             return(1);
         }
-        data = NULL;
-        data = MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
-        if(data == NULL)
-            data = ft_strdup("");
-        ((t_derections*)lst->content)->file = ft_strdup(data);
+        MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
           if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
           {
-              ((t_derections*)lst->content)->fd = open(data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            ((t_derections*)lst->content)->fd = open(data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            close(((t_derections*)lst->content)->fd);
           }
 		lst = lst->next;
 	}

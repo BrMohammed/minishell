@@ -127,5 +127,7 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	countpart = 0;
 	contaner_lop(s, c, c1, countpart);
+	if(ft_strncmp(s,"",1) == 0)
+		c1[0] = "";
 	return (c1);
 }
