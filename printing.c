@@ -6,6 +6,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
 {
     int i = 0;
     int j = 0;
+    int t = 0;
     char *e;
     char* temp;
     char* key;
@@ -22,9 +23,8 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     expand = NULL;
     temp = NULL;
     key_ex = NULL;
-    lstadd_back(&expand, new_template(new_expand(ft_split("g",'\0'),key_ex)));
-    ((t_ExpandData*)expand->content)->expan_data[0] = e;
-   // printf("%s\n",((t_ExpandData*)expand->content)->expan_data[0]);
+    lstadd_back(&expand, new_template(new_expand(ft_split("",'\0'),key_ex)));
+    ((t_ExpandData*)expand->content)->expan_data[0] = ft_strdup("");
     while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
@@ -33,7 +33,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         for_expand = malloc(2);
         for_expand[0] = '\0';
         for_expand[1] = '\0';
-        if(data[i] != '$' && data[i])
+        if(data[i] != '$')
         {
             /* quat set*/
             if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
@@ -53,34 +53,32 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             temp[0] = data[i]; 
             e = ft_strjoin(e,temp);
         }
-        if(data[i] == '$' && quat != '\'')/*dolar in text or inter of doublequet*/
+        else if(data[i] == '$')/*dolar in text or inter of doublequet*/
         {
-            
             key = ft_strdup("");
             i++;
             j = i;
             while(data[j] && data[j] != '$' && ((data[j] >= 'a' && data[j] <= 'z') || (data[j] >= 'A' && data[j] <= 'Z') /*continue join when dejet or alpha or - */
-		        || (data[j] >= '0' && data[j] <= '9') || data[j] == '-'))
+		        || (data[j] >= '0' && data[j] <= '9') || (data[j] == '-') || data[j] == 32))
             {
                 temp[0] = data[j];
                 key = ft_strjoin(key,temp);
                 j++;
             }
             if(data[j] == '$') /* if char is dolar*/
-                j--; 
+                j--;
             key_ex = strdup(key);
             key = ft_strjoin(key,"=");
-            i = 0;
             free(temp);
             temp = NULL;
-            while (g_global.envp[i] && temp == NULL) /*serch in env */
+            t = 0;
+            while (g_global.envp[t] && temp == NULL) /*serch in env */
             {
-                temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
-                i++; 
+                temp = ft_strnstr(g_global.envp[t], key,ft_strlen(key));
+                t++; 
             }
             free(key);
             key = ft_strdup("");
-            i--;
             if(temp == NULL) /* key is null*/
             {
                 e = ft_strdup("");
@@ -89,54 +87,40 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 free(key);
                 continue;
             }
-            while(temp[i] != '\0')
+            t = j - i + 1;
+            while(temp[t] != '\0')
             {
-                for_expand[0] = temp[i];
+                for_expand[0] = temp[t];
                 key = ft_strjoin(key,for_expand);
-                i++;
+                t++;
             }
+            //printf("%s\nkey : %s\n%d\n%d\n",e,key,j,i);
             temp = ft_strdup("");
             if(quat != '"')
             {
-                chek ++;
-                i = 0;
-                while(key[i] != '\0' )
+                chek++;
+                t = 0;
+                while(key[t] != '\0' )
                 {
-                    // if(key[i] != 32)
-                    // {
-                        for_expand[0] = key[i];
-                        e = ft_strjoin(e,for_expand);
-                   // }
-                    i++;
-                    // if(key[i] == 32 && key[i + 1] != 32 && key[i + 1] != '\0')
-                    // {
-                    //     ((t_ExpandData*)expand->content)->expan_data[0] = strdup(e);
-                    //     free(e);
-                    //     e = ft_strdup("");
-                    //     lstadd_back(&expand, new_template(new_expand(ft_split(e,'\0'),key_ex)));
-                    //     ((t_ExpandData*)expand->content)->expan_data[0] = e;
-                    //     i++;
-                    // }
+                    for_expand[0] = key[t];
+                    e = ft_strjoin(e,for_expand);
+                    t++;
                 }
-               
                 ((t_ExpandData*)expand->content)->expan_data = ft_split(e,' ');
-                if(key[i] == 32 && key[i + 1] != 32 && key[i + 1] != '\0' && chek > 1 && ft_strncmp(((t_ExpandData*)expand->content)->expan_data[0],e,ft_strlen(e)) != 0)
-                {
-                    lstadd_back(&expand, new_template(new_expand(ft_split(e,'\0'),key_ex)));
-                        ((t_ExpandData*)expand->content)->expan_data[0] = e;
-                }
-                    free(e);
-                    e = ft_strdup("");
-                
+                free(e);
+                e = ft_strdup("");
             }
             else
                 e = ft_strjoin(e,key);
             temp = NULL;
             i = j;
             free(key);
+            free(temp);
+            free(for_expand);
         }
         i++;
     }
+    //printf("%s\n",e);
     if(e[0] != '\0')
     {
         i = 0;

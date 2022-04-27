@@ -120,8 +120,11 @@ char	**ft_split(char const *s, char c)
 	c1 = (char **)malloc(sizeof(char *) * (countpart + 1));
 	if (!c1)
 		return (NULL);
-	c1[countpart] = NULL;
+	c1[countpart + 1] = NULL;
 	countpart = 0;
+	int i = 0;
+	while(c1[i])
+		i++;
 	countstr_lop(s, c, c1, countpart);
 	if (!c1)
 		return (NULL);
