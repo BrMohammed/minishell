@@ -69,13 +69,14 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 j--;
             key_ex = strdup(key);
             key = ft_strjoin(key,"=");
+            t = ft_strlen(key);
             free(temp);
             temp = NULL;
-            t = 0;
-            while (g_global.envp[t] && temp == NULL) /*serch in env */
+            i = 0;
+            while (g_global.envp[i] && temp == NULL) /*serch in env */
             {
-                temp = ft_strnstr(g_global.envp[t], key,ft_strlen(key));
-                t++; 
+                temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
+                i++;
             }
             free(key);
             key = ft_strdup("");
@@ -87,14 +88,14 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 free(key);
                 continue;
             }
-            t = j - i + 1;
             while(temp[t] != '\0')
             {
                 for_expand[0] = temp[t];
                 key = ft_strjoin(key,for_expand);
                 t++;
             }
-            //printf("%s\nkey : %s\n%d\n%d\n",e,key,j,i);
+            //printf("..%d\n%s\n",t,key);
+            //printf("%s\nkey : %s\n%d\n%d\n",temp,key,j,i);
             temp = ft_strdup("");
             if(quat != '"')
             {
@@ -115,12 +116,13 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             temp = NULL;
             i = j;
             free(key);
-            free(temp);
-            free(for_expand);
         }
-        i++;
+        free(temp);
+        free(for_expand);
+        i++; 
+       // printf("%s\n",e);
     }
-    //printf("%s\n",e);
+   
     if(e[0] != '\0')
     {
         i = 0;
@@ -128,7 +130,6 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             i++;
         ((t_ExpandData*)expand->content)->expan_data[i - 1] = ft_strjoin(((t_ExpandData*)expand->content)->expan_data[i - 1],e);
     }
-   
     if(branch == TEXT)
         ((t_text*)(*text)->content)->expand = expand;
     else if(branch == DERECYION)
