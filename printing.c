@@ -94,7 +94,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 key = ft_strjoin(key,for_expand);
                 t++;
             }
-            //printf("..%d\n%s\n",t,key);
+            
             //printf("%s\nkey : %s\n%d\n%d\n",temp,key,j,i);
             temp = ft_strdup("");
             if(quat != '"')
@@ -120,15 +120,15 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         free(temp);
         free(for_expand);
         i++; 
-       // printf("%s\n",e);
+        
     }
-   
+    //printf("%s\n",e);
     if(e[0] != '\0')
     {
         i = 0;
-        while(((t_ExpandData*)expand->content)->expan_data[i])
+        while(((t_ExpandData*)expand->content)->expan_data[i] && ((t_ExpandData*)expand->content)->expan_data[i][0])
             i++;
-        ((t_ExpandData*)expand->content)->expan_data[i - 1] = ft_strjoin(((t_ExpandData*)expand->content)->expan_data[i - 1],e);
+        ((t_ExpandData*)expand->content)->expan_data[i] = ft_strjoin(((t_ExpandData*)expand->content)->expan_data[i],e);
     }
     if(branch == TEXT)
         ((t_text*)(*text)->content)->expand = expand;
@@ -226,7 +226,7 @@ void pText(t_template* lst)
         while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             i = 0;
-            while(((t_ExpandData*)exp->content)->expan_data[i])
+            while(((t_ExpandData*)exp->content)->expan_data[i] != NULL && ((t_ExpandData*)exp->content)->expan_data[i][0] != '\0')
             {
                  printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[i],((t_ExpandData*)exp->content)->key);
                  i++;
