@@ -96,22 +96,22 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             if(quat != '"')
             {
                 t = 0;
+              
                 while(key[t] != '\0' )
                 {
                     for_expand[0] = key[t];
                     e = ft_strjoin(e,for_expand);
                     t++;
-                    if(key[t] == 32 )
+                    if(key[t] == 32)
                     {
                         ((t_ExpandData*)expand->content)->expan_data = ft_strdup(e);
                         ((t_ExpandData*)expand->content)->key = key_ex;
                         free(e);
-                        e = ft_strdup("");
+                        e = ft_strdup(""); 
                         lstadd_back(&expand, new_template(new_expand(e,key_ex)));
                         while(key[t] == 32)
                             t++;
                     }
-                   // printf("->%s\n",e);
                 }
             }
             else
@@ -123,12 +123,9 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         free(temp);
         free(for_expand);
         i++; 
-        
     }
-    
     if(e[0] != '\0')
     {
-        printf("%s\n\n",e);
         i = 0;
         temp00 = expand;
         if (temp00)
