@@ -1,6 +1,26 @@
 # include "minishell.h"
 # include "libft/libft.h"
 
+void quat_skip(char *quat,char data,char **e)
+{
+    char* temp;
+
+    temp = malloc(2);
+    temp[0] = '\0';
+    temp[1] = '\0';
+    if((*quat == '\'' && data == '\'') || (*quat == '"' && data == '"'))
+        *quat = '\0';
+    else if(data == '\'' && *quat != '"')
+        *quat = '\'';
+    else if(data == '"' && *quat != '\'')
+        *quat = '"';
+    else
+    {
+        temp[0] = data; 
+        *e = ft_strjoin(*e,temp);
+    }
+    free(temp);
+}
 
 void MaleKeyOfDlar(char *data,t_template **text,int branch)
 {
@@ -22,7 +42,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     expand = NULL;
     temp = NULL;
     key_ex = NULL;
-    lstadd_back(&expand, new_template(new_expand(e,key_ex)));
+    lstadd_back(&expand, new_template(new_expand("",key_ex)));
     while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
@@ -33,28 +53,8 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         for_expand[1] = '\0';
         if(data[i] != '$')
         {
-            /* quat set*/
-            if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
-            {
-                quat = '\0';
-                printf("%c---> hire\n",quat);
-            }
-            else if(data[i] == '\'' && quat != '"')
-            { 
-                quat = '\'';
-                printf("%c--->\n",quat);
-            }
-            else if(data[i] == '"' && quat != '\'')
-            {
-                quat = '"';
-                printf("%c--->\n",quat);
-            }
-            else
-            {
-                temp[0] = data[i]; 
-                e = ft_strjoin(e,temp);
-            }
-        }
+            quat_skip(&quat,data[i],&e); /* quat set*/
+        } 
         else if(data[i] == '$' && quat == '\'') /*when singelquet and dolar exest sqiping the key*/
         {
             temp[0] = data[i]; 
@@ -88,9 +88,9 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             key = ft_strdup("");
             if(temp == NULL) /* key is null*/
             {
-                e = ft_strdup("");
+                e = ft_strjoin(e,"");
                 temp = NULL;
-                i = j;
+                i = j + 1;
                 free(key);
                 continue;
             }
@@ -202,11 +202,11 @@ int RDerections(t_template* lst)
             return(1);
         }
         MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
-          if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
-          {
+        if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
+        {
             ((t_derections*)lst->content)->fd = open(data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             close(((t_derections*)lst->content)->fd);
-          }
+        }
 		lst = lst->next;
 	}
     return(0);
