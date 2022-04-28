@@ -35,11 +35,20 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         {
             /* quat set*/
             if((quat == '\'' && data[i] == '\'') || (quat == '"' && data[i] == '"'))
+            {
                 quat = '\0';
+                printf("%c---> hire\n",quat);
+            }
             else if(data[i] == '\'' && quat != '"')
+            { 
                 quat = '\'';
+                printf("%c--->\n",quat);
+            }
             else if(data[i] == '"' && quat != '\'')
+            {
                 quat = '"';
+                printf("%c--->\n",quat);
+            }
             else
             {
                 temp[0] = data[i]; 
@@ -63,8 +72,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 key = ft_strjoin(key,temp);
                 j++;
             }
-            if(data[j] == '$') /* if char is dolar*/
-                j--;
+            j--; /* if char is dolar*/
             key_ex = strdup(key);
             key = ft_strjoin(key,"=");
             t = ft_strlen(key);
@@ -93,8 +101,6 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 t++;
             }
             temp = ft_strdup("");
-            printf(">>%c\n",quat);
-
             if(quat != '"')
             {
                 t = 0;
