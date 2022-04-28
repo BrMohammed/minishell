@@ -96,7 +96,6 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
             if(quat != '"')
             {
                 t = 0;
-              
                 while(key[t] != '\0' )
                 {
                     for_expand[0] = key[t];
@@ -104,8 +103,14 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                     t++;
                     if(key[t] == 32)
                     {
-                        ((t_ExpandData*)expand->content)->expan_data = ft_strdup(e);
-                        ((t_ExpandData*)expand->content)->key = key_ex;
+                        temp00 = expand;
+                        if (temp00)
+                        {
+                            while (temp00->next != NULL)
+                                temp00 = temp00->next;
+                        }
+                        ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(e);
+                        ((t_ExpandData*)temp00->content)->key = key_ex;
                         free(e);
                         e = ft_strdup(""); 
                         lstadd_back(&expand, new_template(new_expand(e,key_ex)));
