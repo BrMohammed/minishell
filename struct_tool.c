@@ -61,7 +61,7 @@ t_text *new_text(char *data,int type,int i)
 }
 
 
-t_ExpandData *new_expand(char** expand_data, char*key)
+t_ExpandData *new_expand(char* expand_data, char*key)
 {
     t_ExpandData *expand;
 

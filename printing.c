@@ -14,8 +14,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     char *for_expand;
     t_template *expand;
     char* key_ex;
-    int chek = 0;
-    //  t_template *temp00 = NULL;
+    t_template *temp00 = NULL;
 
     i = 0;
     j = 0;
@@ -23,8 +22,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     expand = NULL;
     temp = NULL;
     key_ex = NULL;
-    lstadd_back(&expand, new_template(new_expand(ft_split("",'\0'),key_ex)));
-    ((t_ExpandData*)expand->content)->expan_data[0] = ft_strdup("");
+    lstadd_back(&expand, new_template(new_expand(e,key_ex)));
     while(i <= (int)ft_strlen(data))
     {
         temp = malloc(2);
@@ -94,22 +92,27 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 key = ft_strjoin(key,for_expand);
                 t++;
             }
-            
-            //printf("%s\nkey : %s\n%d\n%d\n",temp,key,j,i);
             temp = ft_strdup("");
             if(quat != '"')
             {
-                chek++;
                 t = 0;
                 while(key[t] != '\0' )
                 {
                     for_expand[0] = key[t];
                     e = ft_strjoin(e,for_expand);
                     t++;
+                    if(key[t] == 32 )
+                    {
+                        ((t_ExpandData*)expand->content)->expan_data = ft_strdup(e);
+                        ((t_ExpandData*)expand->content)->key = key_ex;
+                        free(e);
+                        e = ft_strdup("");
+                        lstadd_back(&expand, new_template(new_expand(e,key_ex)));
+                        while(key[t] == 32)
+                            t++;
+                    }
+                   // printf("->%s\n",e);
                 }
-                ((t_ExpandData*)expand->content)->expan_data = ft_split(e,' ');
-                free(e);
-                e = ft_strdup("");
             }
             else
                 e = ft_strjoin(e,key);
@@ -122,13 +125,18 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         i++; 
         
     }
-    //printf("%s\n",e);
+    
     if(e[0] != '\0')
     {
+        printf("%s\n\n",e);
         i = 0;
-        while(((t_ExpandData*)expand->content)->expan_data[i] && ((t_ExpandData*)expand->content)->expan_data[i][0])
-            i++;
-        ((t_ExpandData*)expand->content)->expan_data[i] = ft_strjoin(((t_ExpandData*)expand->content)->expan_data[i],e);
+        temp00 = expand;
+        if (temp00)
+        {
+            while (temp00->next != NULL)
+                temp00 = temp00->next;
+        }
+        ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(e);
     }
     if(branch == TEXT)
         ((t_text*)(*text)->content)->expand = expand;
@@ -216,21 +224,14 @@ int RMlist(t_template* lst)
 void pText(t_template* lst)
 {
     t_template *exp;
-    int i;
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
         if(((t_text*)lst->content)->data != NULL)
             printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
-       
-        while(exp) /*   >>>>>   for looping in the expanded link of node text*/
+         while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
-            i = 0;
-            while(((t_ExpandData*)exp->content)->expan_data[i] != NULL && ((t_ExpandData*)exp->content)->expan_data[i][0] != '\0')
-            {
-                 printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[i],((t_ExpandData*)exp->content)->key);
-                 i++;
-            }
+            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
             exp = exp->next;
         }
 		lst = lst->next;
@@ -240,21 +241,14 @@ void pText(t_template* lst)
 void pDerections(t_template* lst)
 {
     t_template *exp;
-    int i;
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
          if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type)
 	        printf(" |%s, type : %d , ord : %d , fd : %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
-
-        while(exp)/*>>>>>   for looping in the expanded link of node derections*/
+         while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
-            i = 0;
-            while(((t_ExpandData*)exp->content)->expan_data[i])
-            {
-                 printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data[i],((t_ExpandData*)exp->content)->key);
-                 i++;
-            }
+            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
             exp = exp->next;
         }
 		lst = lst->next;

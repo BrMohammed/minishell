@@ -118,7 +118,6 @@ t_token *GetNextToken(t_lexer *lexer)
 	type = TYPE_TEXT;
 	temp_text = token_type(lexer, &type);
 	token = init_token(temp_text,type);
-	free(temp_text);
 	return(token);
 }
 
