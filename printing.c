@@ -93,6 +93,8 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
                 t++;
             }
             temp = ft_strdup("");
+            printf(">>%c\n",quat);
+
             if(quat != '"')
             {
                 t = 0;
@@ -127,7 +129,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         }
         free(temp);
         free(for_expand);
-        i++; 
+        i++;
     }
     if(e[0] != '\0')
     {
