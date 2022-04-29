@@ -1,6 +1,84 @@
 # include "minishell.h"
 # include "libft/libft.h"
 
+void ExpandData(char* e,t_template **expand,int branch,t_template **text)
+{
+    int i;
+    t_template *temp00;
+
+    i = 0;
+    temp00 = NULL;
+    if(e[0] != '\0')
+    {
+        temp00 = *expand;
+        if (temp00)
+        {
+            while (temp00->next != NULL)
+                temp00 = temp00->next;
+        }
+        ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(e);
+    }
+    if(branch == TEXT)
+        ((t_text*)(*text)->content)->expand = *expand;
+    else if(branch == DERECYION)
+        ((t_derections*)(*text)->content)->expand = *expand;
+}
+
+char* CheckDolar(char *temp,char *key_ex)
+{
+    char *for_expand;
+    int t;
+    char* key;
+
+    for_expand = malloc(2);
+    for_expand[0] = '\0';
+    for_expand[1] = '\0';
+    t = ft_strlen(key_ex) + 1;
+    key = ft_strdup("");
+    while(temp[t] != '\0')
+    {
+        for_expand[0] = temp[t];
+        key = ft_strjoin(key,for_expand);
+        t++;
+    }
+    return(key);
+}
+
+void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)
+{
+    int t;
+    t_template *temp00;
+    char *for_expand;
+
+    temp00 = NULL;
+    for_expand = malloc(2);
+    for_expand[0] = '\0';
+    for_expand[1] = '\0';
+    t = 0;
+    while(key[t] != '\0' )
+    {
+        for_expand[0] = key[t];
+        *e = ft_strjoin(*e,for_expand);
+        t++;
+        if(key[t] == 32)
+        {
+            temp00 = *expand;
+            if (temp00)
+            {
+                while (temp00->next != NULL)
+                    temp00 = temp00->next;
+            }
+            ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(*e);
+            ((t_ExpandData*)temp00->content)->key = key_ex;
+            free(*e);
+            *e = ft_strdup(""); 
+            lstadd_back(expand, new_template(new_expand(*e,key_ex)));
+            while(key[t] == 32)
+                t++;
+        }
+    }
+}
+
 void quat_skip(char *quat,char data,char **e)
 {
     char* temp;
@@ -22,136 +100,116 @@ void quat_skip(char *quat,char data,char **e)
     free(temp);
 }
 
-void MaleKeyOfDlar(char *data,t_template **text,int branch)
+char* MakeTheKey(char *data, int *j,char** key_ex)
 {
-    int i = 0;
-    int j = 0;
-    int t = 0;
-    char *e;
-    char* temp;
     char* key;
-    char quat;
-    char *for_expand;
-    t_template *expand;
+    int i;
+    char* temp;
+
+    key = ft_strdup("");
+    temp = malloc(2);
+    temp[0] = '\0';
+    temp[1] = '\0';
+    while(data[*j] && data[*j] != '$' && ((data[*j] >= 'a' && data[*j] <= 'z') || (data[*j] >= 'A' && data[*j] <= 'Z') /*continue join when dejet or alpha or - */
+        || (data[*j] >= '0' && data[*j] <= '9') || (data[*j] == '-') || data[*j] == 32))
+    {
+        temp[0] = data[*j];
+        key = ft_strjoin(key,temp);
+        *j = *j + 1;
+    }
+   *j = *j - 1; /* if char is dolar*/
+    *key_ex = strdup(key);
+    key = ft_strjoin(key,"=");
+    free(temp);
+    temp = NULL;
+    i = 0;
+    while (g_global.envp[i] && temp == NULL) /*serch in env */
+    {
+        temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
+        i++;
+    }
+    free(key);
+    return(temp);
+}
+
+// void forDolarIfNotNull(char *key_ex,char **e,char quat,t_template **expand)
+// {
+//     char* key;
+
+//     key = CheckDolar(temp,key_ex);
+//     temp = ft_strdup("");
+//     if(quat != '"')
+//         DolarWhoutQuat(key,e,expand,key_ex);
+//     else
+//         *e = ft_strjoin(*e,key);
+//     temp = NULL;
+//     i = j;
+//     free(key);
+// }
+
+int Dolar(char *data,char **e,char quat,t_template **expand)
+{
+    int i;
+    int j;
+    char* temp;
     char* key_ex;
-    t_template *temp00 = NULL;
 
     i = 0;
-    j = 0;
-    e = ft_strdup("");
-    expand = NULL;
-    temp = NULL;
+    while(data[i] != '$')
+        i++;
+    i++;
+    j = i;
     key_ex = NULL;
-    lstadd_back(&expand, new_template(new_expand("",key_ex)));
+    temp = ft_strdup("");
+    temp = MakeTheKey(data,&j,&key_ex); /*key of dolar*/
+    if(temp == NULL) /* key is null*/
+    {
+        *e = ft_strjoin(*e,"");
+        temp = NULL;
+        i = j;
+    }
+    else
+    {
+        key = CheckDolar(temp,key_ex);
+        temp = ft_strdup("");
+        if(quat != '"')
+            DolarWhoutQuat(key,e,expand,key_ex);
+        else
+            *e = ft_strjoin(*e,key);
+        temp = NULL;
+        i = j;
+        free(key);
+    }
+    return(i);
+}
+
+void MaleKeyOfDlar(char *data,t_template **text,int branch)
+{
+    int i;
+    char *e;
+    char* temp;
+    char quat;
+    t_template *expand;
+
+    i = 0;
+    e = ft_strdup("");
+    lstadd_back(&expand, new_template(new_expand("","")));
     while(i <= (int)ft_strlen(data))
     {
-        temp = malloc(2);
-        temp[0] = '\0';
-        temp[1] = '\0';
-        for_expand = malloc(2);
-        for_expand[0] = '\0';
-        for_expand[1] = '\0';
+        temp = ft_strdup("");
         if(data[i] != '$')
-        {
             quat_skip(&quat,data[i],&e); /* quat set*/
-        } 
         else if(data[i] == '$' && quat == '\'') /*when singelquet and dolar exest sqiping the key*/
         {
             temp[0] = data[i]; 
             e = ft_strjoin(e,temp);
         }
         else if(data[i] == '$')/*dolar in text or inter of doublequet*/
-        {
-            key = ft_strdup("");
-            i++;
-            j = i;
-            while(data[j] && data[j] != '$' && ((data[j] >= 'a' && data[j] <= 'z') || (data[j] >= 'A' && data[j] <= 'Z') /*continue join when dejet or alpha or - */
-		        || (data[j] >= '0' && data[j] <= '9') || (data[j] == '-') || data[j] == 32))
-            {
-                temp[0] = data[j];
-                key = ft_strjoin(key,temp);
-                j++;
-            }
-            j--; /* if char is dolar*/
-            key_ex = strdup(key);
-            key = ft_strjoin(key,"=");
-            t = ft_strlen(key);
-            free(temp);
-            temp = NULL;
-            i = 0;
-            while (g_global.envp[i] && temp == NULL) /*serch in env */
-            {
-                temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
-                i++;
-            }
-            free(key);
-            key = ft_strdup("");
-            if(temp == NULL) /* key is null*/
-            {
-                e = ft_strjoin(e,"");
-                temp = NULL;
-                i = j + 1;
-                free(key);
-                continue;
-            }
-            while(temp[t] != '\0')
-            {
-                for_expand[0] = temp[t];
-                key = ft_strjoin(key,for_expand);
-                t++;
-            }
-            temp = ft_strdup("");
-            if(quat != '"')
-            {
-                t = 0;
-                while(key[t] != '\0' )
-                {
-                    for_expand[0] = key[t];
-                    e = ft_strjoin(e,for_expand);
-                    t++;
-                    if(key[t] == 32)
-                    {
-                        temp00 = expand;
-                        if (temp00)
-                        {
-                            while (temp00->next != NULL)
-                                temp00 = temp00->next;
-                        }
-                        ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(e);
-                        ((t_ExpandData*)temp00->content)->key = key_ex;
-                        free(e);
-                        e = ft_strdup(""); 
-                        lstadd_back(&expand, new_template(new_expand(e,key_ex)));
-                        while(key[t] == 32)
-                            t++;
-                    }
-                }
-            }
-            else
-                e = ft_strjoin(e,key);
-            temp = NULL;
-            i = j;
-            free(key);
-        }
+            i = Dolar(data,&e,quat,&expand);
         free(temp);
-        free(for_expand);
         i++;
     }
-    if(e[0] != '\0')
-    {
-        i = 0;
-        temp00 = expand;
-        if (temp00)
-        {
-            while (temp00->next != NULL)
-                temp00 = temp00->next;
-        }
-        ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(e);
-    }
-    if(branch == TEXT)
-        ((t_text*)(*text)->content)->expand = expand;
-    else if(branch == DERECYION)
-        ((t_derections*)(*text)->content)->expand = expand;
+    ExpandData(e,&expand,branch,text);
 }
 
 /***** ERROR *****/
