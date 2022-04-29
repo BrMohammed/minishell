@@ -107,9 +107,7 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
     char* temp;
 
     key = ft_strdup("");
-    temp = malloc(2);
-    temp[0] = '\0';
-    temp[1] = '\0';
+    temp = ft_strdup("");
     while(data[*j] && data[*j] != '$' && ((data[*j] >= 'a' && data[*j] <= 'z') || (data[*j] >= 'A' && data[*j] <= 'Z') /*continue join when dejet or alpha or - */
         || (data[*j] >= '0' && data[*j] <= '9') || (data[*j] == '-') || data[*j] == 32))
     {
@@ -117,6 +115,7 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
         key = ft_strjoin(key,temp);
         *j = *j + 1;
     }
+    printf(">>%s\n",key);
    *j = *j - 1; /* if char is dolar*/
     *key_ex = strdup(key);
     key = ft_strjoin(key,"=");
@@ -132,43 +131,34 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
     return(temp);
 }
 
-// void forDolarIfNotNull(char *key_ex,char **e,char quat,t_template **expand)
-// {
-//     char* key;
-
-//     key = CheckDolar(temp,key_ex);
-//     temp = ft_strdup("");
-//     if(quat != '"')
-//         DolarWhoutQuat(key,e,expand,key_ex);
-//     else
-//         *e = ft_strjoin(*e,key);
-//     temp = NULL;
-//     i = j;
-//     free(key);
-// }
-
-int Dolar(char *data,char **e,char quat,t_template **expand)
+char* Begin_Dolar(int *j,char* data,char **e,char **key_ex)
 {
-    int i;
-    int j;
     char* temp;
-    char* key_ex;
 
-    i = 0;
-    while(data[i] != '$')
-        i++;
-    i++;
-    j = i;
-    key_ex = NULL;
+    *key_ex = NULL;
     temp = ft_strdup("");
-    temp = MakeTheKey(data,&j,&key_ex); /*key of dolar*/
+    temp = MakeTheKey(data,j,key_ex); /*key of dolar*/
     if(temp == NULL) /* key is null*/
     {
         *e = ft_strjoin(*e,"");
         temp = NULL;
-        i = j;
     }
-    else
+    return(temp);
+}
+
+int Dolar(char *data,char **e,char quat,t_template **expand)
+{
+    int j;
+    int i;
+    char* temp;
+    char* key_ex;
+    char* key;
+
+    i = g_global.g_ii;
+    i++;
+    j = i;
+    temp = Begin_Dolar(&j,data,e,&key_ex);
+    if(temp != NULL)
     {
         key = CheckDolar(temp,key_ex);
         temp = ft_strdup("");
@@ -177,9 +167,9 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
         else
             *e = ft_strjoin(*e,key);
         temp = NULL;
-        i = j;
         free(key);
     }
+    i = j;
     return(i);
 }
 
@@ -197,6 +187,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     while(i <= (int)ft_strlen(data))
     {
         temp = ft_strdup("");
+        g_global.g_ii = i;
         if(data[i] != '$')
             quat_skip(&quat,data[i],&e); /* quat set*/
         else if(data[i] == '$' && quat == '\'') /*when singelquet and dolar exest sqiping the key*/
@@ -253,7 +244,6 @@ int RDerections(t_template* lst)
             t_temp = "<<";
         if(((t_derections*)lst->content)->type == TYPE_DRredirection)
             t_temp = ">>";
-      
         if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
         {
             Perror(t_temp);
