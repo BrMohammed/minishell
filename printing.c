@@ -115,7 +115,6 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
         key = ft_strjoin(key,temp);
         *j = *j + 1;
     }
-    printf(">>%s\n",key);
    *j = *j - 1; /* if char is dolar*/
     *key_ex = strdup(key);
     key = ft_strjoin(key,"=");
@@ -232,7 +231,6 @@ int RText(t_template *lst,t_template *Mlst)
 int RDerections(t_template* lst)
 {
     char* t_temp;
-    char *data;
     
     while (lst)
 	{
@@ -252,7 +250,7 @@ int RDerections(t_template* lst)
         MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
         if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
         {
-            ((t_derections*)lst->content)->fd = open(data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             close(((t_derections*)lst->content)->fd);
         }
 		lst = lst->next;
