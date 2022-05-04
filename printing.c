@@ -164,7 +164,11 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
         if(quat != '"')
             DolarWhoutQuat(key,e,expand,key_ex);
         else
+        {
             *e = ft_strjoin(*e,key);
+            ((t_ExpandData*)(*expand)->content)->key = key_ex;
+        }
+            
         temp = NULL;
         free(key);
     }
@@ -182,6 +186,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
 
     i = 0;
     e = ft_strdup("");
+    expand = NULL;
     lstadd_back(&expand, new_template(new_expand("","")));
     while(i <= (int)ft_strlen(data))
     {
@@ -284,12 +289,13 @@ void pText(t_template* lst)
 	{
         exp = ((t_text*)lst->content)->expand;
         if(((t_text*)lst->content)->data != NULL)
-            printf("{%s -> %d -> %d}",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+            printf("{%s -> type : %d -> ord : %d} (>>) ",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
             exp = exp->next;
         }
+        printf(" , ");
 		lst = lst->next;
 	}
 }
@@ -301,12 +307,13 @@ void pDerections(t_template* lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
          if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type)
-	        printf(" |%s, type : %d , ord : %d , fd : %d|",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
+	        printf(" |%s, type : %d , ord : %d , fd : %d| (>>) ",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
             exp = exp->next;
         }
+        printf(" , ");
 		lst = lst->next;
 	}
 }
