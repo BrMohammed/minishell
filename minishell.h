@@ -1,8 +1,15 @@
 # ifndef LEXER_H
 # define LEXER_H
 
+# include "libft/libft.h"
 #include <stdio.h>
 #include <readline/readline.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <string.h>
+# include <errno.h>
+# include <sys/wait.h>
 
 #define TEXT  1
 #define DERECYION 0
@@ -99,4 +106,6 @@ t_ExpandData *new_expand(char* expand_data, char*key);
 void *minishell(char* all);
 void pMlist(t_template* lst);
 int RMlist(t_template* lst);
+
+void	path_finder(char **path, char **c, char **envp);
 #endif

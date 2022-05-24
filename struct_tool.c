@@ -1,5 +1,4 @@
 # include "minishell.h"
-# include "libft/libft.h"
 
 t_token* init_token(char* value,int type)
 {

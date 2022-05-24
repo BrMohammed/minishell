@@ -1,7 +1,4 @@
 #include "minishell.h"
-# include "libft/libft.h"
-
-
 
 void AgrimNextToken(t_lexer* lexer)
 {

@@ -120,7 +120,7 @@ char	**ft_split(char const *s, char c)
 	c1 = (char **)malloc(sizeof(char *) * (countpart + 1));
 	if (!c1)
 		return (NULL);
-	c1[countpart + 1] = NULL;
+	c1[countpart] = NULL;
 	countpart = 0;
 	int i = 0;
 	while(c1[i])

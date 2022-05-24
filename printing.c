@@ -1,5 +1,4 @@
 # include "minishell.h"
-# include "libft/libft.h"
 
 void ExpandData(char* e,t_template **expand,int branch,t_template **text)
 {
@@ -281,23 +280,63 @@ int RMlist(t_template* lst)
     return(0);
 }
 
+// void table_add_back(char ***c, char *str)
+// {
+//     char **temp;
+//     int i;
+
+//     i = 0;
+//     while(c[i])
+//     {
+
+//     }
+// }
+
+
 /***** PRINTING *****/
-void pText(t_template* lst)
+char** pText(t_template* lst)
 {
     t_template *exp;
+    t_template* temp_lst;
+    t_template* temp_exp;
+    int number_of_cases;
+    char **c;
+
+    temp_lst = lst;
+    number_of_cases = 0;
+    while (temp_lst)
+	{
+        temp_exp = ((t_text*)temp_lst->content)->expand;
+        while(temp_exp)
+        {
+            number_of_cases++;
+            temp_exp = temp_exp->next;
+        }
+		temp_lst = temp_lst->next;
+	}
+
+    c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
+	c[number_of_cases] = NULL;
+    number_of_cases = 0;
+
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
         if(((t_text*)lst->content)->data != NULL)
-            printf("{%s -> type : %d -> ord : %d} (>>) ",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+        {
+            //printf("{%s -> type : %d -> ord : %d} (>>) ",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
+        }
+            
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
-            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
+            //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
+            c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
+            number_of_cases++;
             exp = exp->next;
         }
-        printf(" , ");
 		lst = lst->next;
 	}
+    return(c);
 }
 
 void pDerections(t_template* lst)
@@ -307,23 +346,39 @@ void pDerections(t_template* lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
          if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type)
-	        printf(" |%s, type : %d , ord : %d , fd : %d| (>>) ",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
+         {
+            //printf(" |%s, type : %d , ord : %d , fd : %d| (>>) ",((t_derections*)lst->content)->file,((t_derections*)lst->content)->type,((t_derections*)lst->content)->order,((t_derections*)lst->content)->fd);
+         }
+	        
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
-            printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
+            //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
+
             exp = exp->next;
         }
-        printf(" , ");
 		lst = lst->next;
 	}
 }
 
 void pMlist(t_template* lst)
 {
+    char	**c;
+    char	*path;
+    int id;
+
+    path = NULL;
     while(lst)
     {
         if(((t_Mlist *)lst->content)->text)
-	        pText(((t_Mlist *)lst->content)->text);
+	        c = pText(((t_Mlist *)lst->content)->text);
+        path_finder(&path, c, g_global.envp);
+        id = fork();
+        if (id == 0)
+        {
+               if (execve(path, &c[0], g_global.envp) == -1)
+				    perror(c[0]);
+        }
+        wait(NULL);
         if(((t_Mlist *)lst->content)->derections)
 	        pDerections(((t_Mlist *)lst->content)->derections);
         lst = lst->next;

@@ -1,7 +1,4 @@
 # include "minishell.h"
-# include "libft/libft.h"
-
-
 
 t_template *Makelist(t_lexer *lexer, t_template **list)
 {
