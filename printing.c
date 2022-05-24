@@ -309,7 +309,8 @@ char** pText(t_template* lst)
         temp_exp = ((t_text*)temp_lst->content)->expand;
         while(temp_exp)
         {
-            number_of_cases++;
+            if(ft_strncmp(((t_ExpandData*)temp_lst->content)->expan_data, "|",1) != 0)
+                number_of_cases++;
             temp_exp = temp_exp->next;
         }
 		temp_lst = temp_lst->next;
@@ -330,8 +331,11 @@ char** pText(t_template* lst)
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
-            c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
-            number_of_cases++;
+            if(ft_strncmp(((t_ExpandData*)exp->content)->expan_data, "|",1) != 0)
+            {
+                c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
+                number_of_cases++;
+            }
             exp = exp->next;
         }
 		lst = lst->next;
@@ -364,24 +368,66 @@ void pMlist(t_template* lst)
 {
     char	**c;
     char	*path;
+    int fd[2][2];
+    int index;
     int id;
+    int t;
+    pipe(fd[0]);
+    pipe(fd[1]);
+    index = 0;
 
-    path = NULL;
+
     while(lst)
     {
+        path = NULL;
         if(((t_Mlist *)lst->content)->text)
 	        c = pText(((t_Mlist *)lst->content)->text);
         path_finder(&path, c, g_global.envp);
+        // printf("%s , %s , %d \n",c[0],path,index);
+       
         id = fork();
         if (id == 0)
         {
-               if (execve(path, &c[0], g_global.envp) == -1)
-				    perror(c[0]);
+             if(lst->next != NULL)
+            {
+                if(index % 2 == 1)
+                    close(fd[0][1]);
+                else
+                    close(fd[1][1]);
+                dup2(fd[index % 2][1], 1);
+                close(fd[index % 2][1]);
+            }
+            if (execve(path, &c[0], g_global.envp) == -1)
+            {
+                perror(c[0]);
+                exit(1);
+            }
         }
-        wait(NULL);
+        if (path != NULL)
+		    free(path);
+        if(lst->next != NULL)
+        {
+            if(index % 2 == 1)
+                 close(fd[0][1]);
+            else
+                close(fd[1][1]);
+            dup2(fd[index % 2][0], 0);
+            close(fd[index % 2][0]);
+            close(fd[index % 2][1]);
+        }
+        t = 0;
+        while (c[t])
+			free(c[t++]);
+        free(c);
         if(((t_Mlist *)lst->content)->derections)
 	        pDerections(((t_Mlist *)lst->content)->derections);
+        index++;
         lst = lst->next;
-        printf("\n");
     }
+    while(index > 0)
+    {
+        wait(NULL);
+        index--;
+    }
+   
 }

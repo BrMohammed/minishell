@@ -15,6 +15,7 @@ t_lexer* init_lexer(char* src)
 {
     t_lexer* lexer;
 
+printf("%p==\n",src);
     lexer = malloc(sizeof(t_lexer));
     lexer->src = src;
     lexer->size = ft_strlen(src);
