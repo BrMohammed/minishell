@@ -28,7 +28,7 @@ fclean:
 			@echo "\033[0;31mMINISHELL DELETED 🗑"
 re:			fclean all
 
-#  github bigin
+#  github bigin   # lsof -c minishell
 # git pull --rebase origin main
 ADD = git add .
 

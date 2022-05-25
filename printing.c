@@ -372,7 +372,7 @@ void pMlist(t_template* lst)
     int index;
     int id;
     int t;
-    pipe(fd);
+    int lastFd = -1;
     index = 0;
 
     while(lst)
@@ -380,23 +380,21 @@ void pMlist(t_template* lst)
         path = NULL;
         if(((t_Mlist *)lst->content)->text)
 	        c = pText(((t_Mlist *)lst->content)->text);
+        if (lst->next != NULL)
+              pipe(fd);
         id = fork();
         path_finder(&path, c, g_global.envp);
-        // printf("%s , %s , %d \n",c[0],path,index);
         if (id == 0)
-        {
-            
-            if(lst->next != NULL)
+        {  
+            if ( lastFd != -1)
             {
-                close(fd[0]);
-                dup2(fd[1],1);
-                close(fd[1]);
+                dup2(lastFd, STDIN_FILENO);
+                close(lastFd);
             }
-            if(index != 0)
+            if (lst->next != NULL)
             {
+                dup2(fd[1], STDOUT_FILENO);
                 close(fd[1]);
-                dup2(fd[0],0);
-                close(fd[0]);
             }
             if (execve(path, &c[0], g_global.envp) == -1)
             {
@@ -404,6 +402,9 @@ void pMlist(t_template* lst)
                 exit(1);
             }
         }
+        if (lastFd != -1)
+            close(lastFd);
+        lastFd = fd[0];
         close(fd[1]);
         if (path != NULL)
 		    free(path);
