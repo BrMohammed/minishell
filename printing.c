@@ -368,34 +368,35 @@ void pMlist(t_template* lst)
 {
     char	**c;
     char	*path;
-    int fd[2][2];
+    int fd[2];
     int index;
     int id;
     int t;
-    pipe(fd[0]);
-    pipe(fd[1]);
+    pipe(fd);
     index = 0;
-
 
     while(lst)
     {
         path = NULL;
         if(((t_Mlist *)lst->content)->text)
 	        c = pText(((t_Mlist *)lst->content)->text);
+        id = fork();
         path_finder(&path, c, g_global.envp);
         // printf("%s , %s , %d \n",c[0],path,index);
-       
-        id = fork();
         if (id == 0)
         {
-             if(lst->next != NULL)
+            
+            if(lst->next != NULL)
             {
-                if(index % 2 == 1)
-                    close(fd[0][1]);
-                else
-                    close(fd[1][1]);
-                dup2(fd[index % 2][1], 1);
-                close(fd[index % 2][1]);
+                close(fd[0]);
+                dup2(fd[1],1);
+                close(fd[1]);
+            }
+            if(index != 0)
+            {
+                close(fd[1]);
+                dup2(fd[0],0);
+                close(fd[0]);
             }
             if (execve(path, &c[0], g_global.envp) == -1)
             {
@@ -403,18 +404,9 @@ void pMlist(t_template* lst)
                 exit(1);
             }
         }
+        close(fd[1]);
         if (path != NULL)
 		    free(path);
-        if(lst->next != NULL)
-        {
-            if(index % 2 == 1)
-                 close(fd[0][1]);
-            else
-                close(fd[1][1]);
-            dup2(fd[index % 2][0], 0);
-            close(fd[index % 2][0]);
-            close(fd[index % 2][1]);
-        }
         t = 0;
         while (c[t])
 			free(c[t++]);

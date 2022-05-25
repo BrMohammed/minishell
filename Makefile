@@ -5,7 +5,7 @@ SRC_P = lexer.c parser.c printing.c struct_tool.c\
 
 CC = @gcc 
 
-CFLAGS = -lreadline -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -lreadline -Wall -Wextra -Werror -g #-fsanitize=address
 
 
 LIBFT = libft/libft.a
