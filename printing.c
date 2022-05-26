@@ -280,46 +280,39 @@ int RMlist(t_template* lst)
     return(0);
 }
 
-// void table_add_back(char ***c, char *str)
-// {
-//     char **temp;
-//     int i;
+char **creat_table(t_template *lst)
+{
+    t_template* temp_exp;
+    int number_of_cases;
+    char **c;
 
-//     i = 0;
-//     while(c[i])
-//     {
-
-//     }
-// }
+    number_of_cases = 0;
+    while (lst)
+	{
+        temp_exp = ((t_text*)lst->content)->expand;
+        while(temp_exp)
+        {
+            if(ft_strncmp(((t_ExpandData*)lst->content)->expan_data, "|",1) != 0)
+                number_of_cases++;
+            temp_exp = temp_exp->next;
+        }
+		lst = lst->next;
+	}
+    c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
+	c[number_of_cases] = NULL;
+    return(c);
+}
 
 
 /***** PRINTING *****/
 char** pText(t_template* lst)
 {
     t_template *exp;
-    t_template* temp_lst;
-    t_template* temp_exp;
     int number_of_cases;
     char **c;
 
-    temp_lst = lst;
+    c = creat_table(lst);
     number_of_cases = 0;
-    while (temp_lst)
-	{
-        temp_exp = ((t_text*)temp_lst->content)->expand;
-        while(temp_exp)
-        {
-            if(ft_strncmp(((t_ExpandData*)temp_lst->content)->expan_data, "|",1) != 0)
-                number_of_cases++;
-            temp_exp = temp_exp->next;
-        }
-		temp_lst = temp_lst->next;
-	}
-
-    c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
-	c[number_of_cases] = NULL;
-    number_of_cases = 0;
-
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
@@ -343,9 +336,14 @@ char** pText(t_template* lst)
     return(c);
 }
 
-void pDerections(t_template* lst)
+char **pDerections(t_template* lst)
 {
     t_template *exp;
+    int number_of_cases;
+    char **c;
+
+    c = creat_table(lst);
+    number_of_cases = 0;
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
@@ -357,64 +355,86 @@ void pDerections(t_template* lst)
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
-
+             c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
+                number_of_cases++;
             exp = exp->next;
         }
 		lst = lst->next;
 	}
+    return(c);
+}
+
+int pipeline(t_template *lst,char *path, int lastFd,char **c)
+{
+    int fd[2];
+    int id;
+
+    if (lst->next != NULL)
+        pipe(fd); 
+    id = fork();  
+    if (id == 0)
+    {  
+        if (lst->next != NULL)
+        {
+            dup2(fd[1], 1);
+            close(fd[1]);
+        }
+        if (lastFd != 1)
+        {
+            dup2(lastFd, 0);
+            close(lastFd);
+        }
+        if (execve(path, &c[0], g_global.envp) == -1)
+        {
+            perror(c[0]);
+            exit(1);
+        }
+    }
+    if (lastFd != 1)
+        close(lastFd);
+    lastFd = fd[0]; 
+    if(lst->next != NULL) 
+        close(fd[1]);
+    return(lastFd);
 }
 
 void pMlist(t_template* lst)
 {
-    char	**c;
+    char	**c[2];
     char	*path;
-    int fd[2];
     int index;
-    int id;
     int t;
     int lastFd = -1;
-    index = 0;
 
+    index = 0;
+    c[0] = NULL;
+    c[1] = NULL;
     while(lst)
     {
-        path = NULL;
-        if(((t_Mlist *)lst->content)->text)
-	        c = pText(((t_Mlist *)lst->content)->text);
-        if (lst->next != NULL)
-            pipe(fd);
-        id = fork();
-        path_finder(&path, c, g_global.envp);
-        if (id == 0)
-        {  
-            if ( lastFd != -1)
-            {
-                dup2(lastFd, STDIN_FILENO);
-                close(lastFd);
-            }
-            if (lst->next != NULL)
-            {
-                dup2(fd[1], STDOUT_FILENO);
-                close(fd[1]);
-            }
-            if (execve(path, &c[0], g_global.envp) == -1)
-            {
-                perror(c[0]);
-                exit(1);
-            }
-        }
-        if (lastFd != -1)
-            close(lastFd);
-        lastFd = fd[0];
-        if(lst->next != NULL)
-            close(fd[1]);
-        if (path != NULL)
-		    free(path);
-        t = 0;
-        while (c[t])
-			free(c[t++]);
-        free(c);
+        path = NULL; 
         if(((t_Mlist *)lst->content)->derections)
-	        pDerections(((t_Mlist *)lst->content)->derections);
+        {
+             c[1] = pDerections(((t_Mlist *)lst->content)->derections);
+           for(int i = 0; c[1][i];i++)
+                printf("%s\n",c[1][i]);
+        }
+	       
+        /**********   pipe  *********/
+        if(((t_Mlist *)lst->content)->text)
+        {
+            c[0] = pText(((t_Mlist *)lst->content)->text);  
+            path_finder(&path, c[0], g_global.envp);
+            lastFd = pipeline(lst,path,lastFd,c[0]);
+            if (path != NULL)
+                free(path);
+            t = 0;
+            while (c[0][t])
+                free(c[0][t++]);
+        }
+	        
+       // free(c);
+       /*******************/
+
         index++;
         lst = lst->next;
     }
@@ -423,5 +443,4 @@ void pMlist(t_template* lst)
         wait(NULL);
         index--;
     }
-   
 }
