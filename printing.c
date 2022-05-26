@@ -381,7 +381,7 @@ void pMlist(t_template* lst)
         if(((t_Mlist *)lst->content)->text)
 	        c = pText(((t_Mlist *)lst->content)->text);
         if (lst->next != NULL)
-              pipe(fd);
+            pipe(fd);
         id = fork();
         path_finder(&path, c, g_global.envp);
         if (id == 0)
@@ -405,7 +405,8 @@ void pMlist(t_template* lst)
         if (lastFd != -1)
             close(lastFd);
         lastFd = fd[0];
-        close(fd[1]);
+        if(lst->next != NULL)
+            close(fd[1]);
         if (path != NULL)
 		    free(path);
         t = 0;
