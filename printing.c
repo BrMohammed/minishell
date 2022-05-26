@@ -216,7 +216,7 @@ int RText(t_template *lst,t_template *Mlst)
     (void)Mlst;
     while (lst)
 	{
-        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1) || (((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
+        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1))
         {
             Perror("|");
             return(1);
@@ -226,6 +226,8 @@ int RText(t_template *lst,t_template *Mlst)
             printf("Syntax Error\n");
             return(1);
         }
+        if((((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
+            return(2);
         MaleKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
 		lst = lst->next;
 	}
@@ -259,22 +261,29 @@ int RDerections(t_template* lst)
         }
 		lst = lst->next;
 	}
-    return(0);
+    return(3);
 }
 
 int RMlist(t_template* lst)
 {
     int r;
+    int r2;
 
-    r = 0;
     while(lst)
-    {
+    { 
+        r = 0;
+        r2 = 0;
         if(((t_Mlist *)lst->content)->text)
 	        r = RText(((t_Mlist *)lst->content)->text,lst);
         if(((t_Mlist *)lst->content)->derections)
-	       r =  RDerections(((t_Mlist *)lst->content)->derections);
+	       r2 =  RDerections(((t_Mlist *)lst->content)->derections);
+        if(r == 2 & r2 == 0)
+        {
+            Perror("|");
+            return(1);
+        }
         lst = lst->next;
-        if (r == 1)
+        if (r == 1 || r2 == 1)
             return(1);
     }
     return(0);
@@ -286,6 +295,7 @@ char **creat_table(t_template *lst)
     int number_of_cases;
     char **c;
 
+    c = NULL;
     number_of_cases = 0;
     while (lst)
 	{
@@ -298,8 +308,11 @@ char **creat_table(t_template *lst)
         }
 		lst = lst->next;
 	}
-    c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
-	c[number_of_cases] = NULL;
+    if(number_of_cases != 0)
+    {
+        c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
+        c[number_of_cases] = NULL;
+    }
     return(c);
 }
 
@@ -332,6 +345,7 @@ char** pText(t_template* lst)
             exp = exp->next;
         }
 		lst = lst->next;
+
 	}
     return(c);
 }
@@ -415,24 +429,23 @@ void pMlist(t_template* lst)
         if(((t_Mlist *)lst->content)->derections)
         {
              c[1] = pDerections(((t_Mlist *)lst->content)->derections);
-           for(int i = 0; c[1][i];i++)
-                printf("%s\n",c[1][i]);
         }
 	       
         /**********   pipe  *********/
         if(((t_Mlist *)lst->content)->text)
         {
-            c[0] = pText(((t_Mlist *)lst->content)->text);  
-            path_finder(&path, c[0], g_global.envp);
-            lastFd = pipeline(lst,path,lastFd,c[0]);
-            if (path != NULL)
-                free(path);
-            t = 0;
-            while (c[0][t])
-                free(c[0][t++]);
+            c[0] = pText(((t_Mlist *)lst->content)->text);
+            if(c[0] != NULL)
+            {
+                 path_finder(&path, c[0], g_global.envp); 
+                 lastFd = pipeline(lst,path,lastFd,c[0]);
+                if (path != NULL)
+                    free(path);
+                t = 0;
+                while (c[0][t])
+                    free(c[0][t++]);
+            }
         }
-	        
-       // free(c);
        /*******************/
 
         index++;
