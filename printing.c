@@ -257,7 +257,13 @@ int RDerections(t_template* lst)
         if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
         {
             ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            close(((t_derections*)lst->content)->fd);
+            //close(((t_derections*)lst->content)->fd);
+        }
+         if(((t_derections*)lst->content)->type == TYPE_Lredirection || ((t_derections*)lst->content)->type == TYPE_Lredirection)
+        {
+            
+            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_RDWR);
+            //close(((t_derections*)lst->content)->fd);
         }
 		lst = lst->next;
 	}
@@ -287,33 +293,6 @@ int RMlist(t_template* lst)
             return(1);
     }
     return(0);
-}
-
-char **creat_table(t_template *lst)
-{
-    t_template* temp_exp;
-    int number_of_cases;
-    char **c;
-
-    c = NULL;
-    number_of_cases = 0;
-    while (lst)
-	{
-        temp_exp = ((t_text*)lst->content)->expand;
-        while(temp_exp)
-        {
-            if(ft_strncmp(((t_ExpandData*)lst->content)->expan_data, "|",1) != 0)
-                number_of_cases++;
-            temp_exp = temp_exp->next;
-        }
-		lst = lst->next;
-	}
-    if(number_of_cases != 0)
-    {
-        c = (char **)malloc(sizeof(char *) * (number_of_cases + 1));
-        c[number_of_cases] = NULL;
-    }
-    return(c);
 }
 
 
@@ -353,11 +332,7 @@ char** pText(t_template* lst)
 char **pDerections(t_template* lst)
 {
     t_template *exp;
-    int number_of_cases;
-    char **c;
 
-    c = creat_table(lst);
-    number_of_cases = 0;
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
@@ -369,83 +344,47 @@ char **pDerections(t_template* lst)
          while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
-             c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
-                number_of_cases++;
             exp = exp->next;
         }
 		lst = lst->next;
 	}
-    return(c);
-}
-
-int pipeline(t_template *lst,char *path, int lastFd,char **c)
-{
-    int fd[2];
-    int id;
-
-    if (lst->next != NULL)
-        pipe(fd); 
-    id = fork();  
-    if (id == 0)
-    {  
-        if (lst->next != NULL)
-        {
-            dup2(fd[1], 1);
-            close(fd[1]);
-        }
-        if (lastFd != 1)
-        {
-            dup2(lastFd, 0);
-            close(lastFd);
-        }
-        if (execve(path, &c[0], g_global.envp) == -1)
-        {
-            perror(c[0]);
-            exit(1);
-        }
-    }
-    if (lastFd != 1)
-        close(lastFd);
-    lastFd = fd[0]; 
-    if(lst->next != NULL) 
-        close(fd[1]);
-    return(lastFd);
+    return(0);
 }
 
 void pMlist(t_template* lst)
 {
-    char	**c[2];
+    char	**c;
     char	*path;
     int index;
     int t;
     int lastFd = -1;
+    
 
     index = 0;
-    c[0] = NULL;
-    c[1] = NULL;
+    c = NULL;
     while(lst)
     {
         path = NULL; 
-        if(((t_Mlist *)lst->content)->derections)
-        {
-             c[1] = pDerections(((t_Mlist *)lst->content)->derections);
-        }
-	       
+        // if(((t_Mlist *)lst->content)->derections)
+        // {
+        //     pDerections(((t_Mlist *)lst->content)->derections);
+        // }
         /**********   pipe  *********/
         if(((t_Mlist *)lst->content)->text)
         {
-            c[0] = pText(((t_Mlist *)lst->content)->text);
-            if(c[0] != NULL)
+            c = pText(((t_Mlist *)lst->content)->text);
+            if(c != NULL)
             {
-                 path_finder(&path, c[0], g_global.envp); 
-                 lastFd = pipeline(lst,path,lastFd,c[0]);
+                 path_finder(&path, c, g_global.envp);
+                 lastFd = pipeline(lst,path,lastFd,c);
                 if (path != NULL)
                     free(path);
                 t = 0;
-                while (c[0][t])
-                    free(c[0][t++]);
+                while (c[t])
+                    free(c[t++]);
             }
         }
+        free(c);
        /*******************/
 
         index++;

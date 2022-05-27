@@ -108,4 +108,7 @@ void pMlist(t_template* lst);
 int RMlist(t_template* lst);
 
 void	path_finder(char **path, char **c, char **envp);
+int pipeline(t_template *lst,char *path, int lastFd,char **c);
+char **creat_table(t_template *lst);
+char **pDerections(t_template* lst);
 #endif
