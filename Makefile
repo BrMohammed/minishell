@@ -1,7 +1,7 @@
 NAME = minishell
 
 SRC_P = lexer.c parser.c printing.c struct_tool.c\
-		path_finder.c execution.c  #files.c here_doc.c
+		path_finder.c execution.c  here_doc.c #files.c
 
 CC = @gcc 
 
@@ -30,6 +30,8 @@ re:			fclean all
 
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
+
+#cat <<R
 ADD = git add .
 
 read :=		@read -p "-> " enter \

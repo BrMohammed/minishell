@@ -266,7 +266,6 @@ int RDerections(t_template* lst)
                 printf("minishell: %s: No such file or directory\n",((t_derections*)lst->content)->file);
             }
         }
-        
 		lst = lst->next;
 	}
     return(3);

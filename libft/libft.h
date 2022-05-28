@@ -41,6 +41,7 @@ void	*ft_memchr( const void *membk, int serchar, size_t size );
 int		ft_atoi(const char *str);
 char	*ft_strdup( const char *src );
 void	*ft_calloc( size_t count, size_t size );
+int		ft_strcmp( const char *s1, const char *s2);
 
 	/*--------------Second part-------*/
 

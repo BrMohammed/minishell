@@ -44,17 +44,11 @@ int *OutDerections(t_template* lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
         if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
-        {
             fd[1] = ((t_derections*)lst->content)->fd; //out
-            printf("%d \n",fd[1]);
-        }
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
             fd[0] = heredoc(((t_derections*)lst->content)->file);
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
-        {
             fd[0] = ((t_derections*)lst->content)->fd;
-            printf("%d \n",fd[0]);
-        }
 		lst = lst->next;
 	}
     return(fd);
@@ -66,7 +60,7 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
     int *fd_Der;
     int id;
 
- 
+    fd_Der = NULL;
     if(((t_Mlist *)lst->content)->derections)
        fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
     if (lst->next != NULL)
@@ -84,12 +78,12 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
             dup2(lastFd, 0);
             close(lastFd);
         }
-        if(fd_Der[1] != 0)
+        if(fd_Der[1] > 0)
         {
             dup2(fd_Der[1], 1);
             close(fd_Der[1]);
         }
-        if(fd_Der[0] != 0)
+        if(fd_Der[0] > 0)
         {
             dup2(fd_Der[0], 0);
             close(fd_Der[0]);
@@ -100,9 +94,9 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
             exit(1);
         }
     }
-     if(fd_Der[1] != 0)
+     if(fd_Der[1] > 0)
         close(fd_Der[1]);
-    if(fd_Der[0] != 0)
+    if(fd_Der[0] > 0 )
         close(fd_Der[0]);
     if (lastFd != -1)
         close(lastFd);

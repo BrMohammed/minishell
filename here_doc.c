@@ -12,32 +12,27 @@
 
 # include "minishell.h"
 
-int	heredoc(char *argv)
+int	heredoc(char *file)
 {
 	char	r[10240];
 	int		error;
 	char	*inputs;
-	int		f;
+	int		f;;
 
 	inputs = malloc(1);
 	inputs[0] = '\0';
 	r[0] = '\0';
-	while (ft_strcmp(argv, r) != -10)
+	f = open(file, O_RDWR | O_CREAT | O_TRUNC,0777);
+	while (ft_strcmp(file, r) != -10)
 	{
 		inputs = ft_strjoin(inputs, r);
-		write(1, "heredoc> ", 9);
+		write(1, "> ", 2);
 		error = read(0, r, 10240);
 		r[error] = '\0';
 	}
-	error = 0;
-	f = open(argv, O_RDWR | O_CREAT, 0777);
-	if (inputs[error])
-	{
-		while (inputs[error])
-		{
-			write(f, &inputs[error++], 1);
-		}
-	}
+	ft_putstr_fd(inputs, f);
 	free(inputs);
+	close(f);
+	f = open(file, O_RDWR);
 	return(f);
 }
