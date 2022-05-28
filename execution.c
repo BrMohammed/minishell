@@ -48,12 +48,13 @@ int *OutDerections(t_template* lst)
             fd[1] = ((t_derections*)lst->content)->fd; //out
             printf("%d \n",fd[1]);
         }
-           
+        if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
+            fd[0] = heredoc(((t_derections*)lst->content)->file);
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
         {
             fd[0] = ((t_derections*)lst->content)->fd;
             printf("%d \n",fd[0]);
-        }    
+        }
 		lst = lst->next;
 	}
     return(fd);
@@ -68,7 +69,6 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
  
     if(((t_Mlist *)lst->content)->derections)
        fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
-
     if (lst->next != NULL)
         pipe(fd);
     id = fork();  

@@ -258,16 +258,15 @@ int RDerections(t_template* lst)
             ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out >
         if(((t_derections*)lst->content)->type == TYPE_DRredirection)
             ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
-         if(((t_derections*)lst->content)->type == TYPE_Lredirection || ((t_derections*)lst->content)->type == TYPE_Lredirection)
+         if(((t_derections*)lst->content)->type == TYPE_Lredirection)
         {
-            
             ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_RDWR);
             if(((t_derections*)lst->content)->fd == -1)
             {
                 printf("minishell: %s: No such file or directory\n",((t_derections*)lst->content)->file);
             }
-            //close(((t_derections*)lst->content)->fd);
         }
+        
 		lst = lst->next;
 	}
     return(3);

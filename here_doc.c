@@ -12,7 +12,7 @@
 
 # include "minishell.h"
 
-void	heredoc(char *argv)
+int	heredoc(char *argv)
 {
 	char	r[10240];
 	int		error;
@@ -30,7 +30,7 @@ void	heredoc(char *argv)
 		r[error] = '\0';
 	}
 	error = 0;
-	f = open("here_doc", O_RDWR | O_CREAT, 0777);
+	f = open(argv, O_RDWR | O_CREAT, 0777);
 	if (inputs[error])
 	{
 		while (inputs[error])
@@ -39,4 +39,5 @@ void	heredoc(char *argv)
 		}
 	}
 	free(inputs);
+	return(f);
 }
