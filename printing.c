@@ -254,12 +254,10 @@ int RDerections(t_template* lst)
             return(1);
         }
         MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
-        if(((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection)
-        {
-            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out
-            
-            //close(((t_derections*)lst->content)->fd);
-        }
+        if(((t_derections*)lst->content)->type == TYPE_Rredirection)
+            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out >
+        if(((t_derections*)lst->content)->type == TYPE_DRredirection)
+            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
          if(((t_derections*)lst->content)->type == TYPE_Lredirection || ((t_derections*)lst->content)->type == TYPE_Lredirection)
         {
             

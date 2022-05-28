@@ -43,10 +43,17 @@ int *OutDerections(t_template* lst)
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
-        if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Rredirection)
-           fd[1] = ((t_derections*)lst->content)->fd; //out
+        if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
+        {
+            fd[1] = ((t_derections*)lst->content)->fd; //out
+            printf("%d \n",fd[1]);
+        }
+           
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
-             fd[0] = ((t_derections*)lst->content)->fd;
+        {
+            fd[0] = ((t_derections*)lst->content)->fd;
+            printf("%d \n",fd[0]);
+        }    
 		lst = lst->next;
 	}
     return(fd);
@@ -93,6 +100,10 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
             exit(1);
         }
     }
+     if(fd_Der[1] != 0)
+        close(fd_Der[1]);
+    if(fd_Der[0] != 0)
+        close(fd_Der[0]);
     if (lastFd != -1)
         close(lastFd);
     lastFd = fd[0]; 
