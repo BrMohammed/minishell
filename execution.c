@@ -72,6 +72,11 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
             dup2(fd[1], 1);
             close(fd[1]);
         }
+        if (lastFd != -1)
+        {
+            dup2(lastFd, 0);
+            close(lastFd);
+        }
         if(fd_Der[1] != 0)
         {
             dup2(fd_Der[1], 1);
@@ -81,11 +86,6 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         {
             dup2(fd_Der[0], 0);
             close(fd_Der[0]);
-        }
-        if (lastFd != -1)
-        {
-            dup2(lastFd, 0);
-            close(lastFd);
         }
         if (execve(path, &c[0], g_global.envp) == -1)
         {
