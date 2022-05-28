@@ -44,7 +44,11 @@ int *OutDerections(t_template* lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
         if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
+        {
             fd[1] = ((t_derections*)lst->content)->fd; //out
+            if(fd[1] == -1)
+                printf("minishell: %s: Permission denied \n",((t_derections*)lst->content)->file);
+        }  
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
             fd[0] = heredoc(((t_derections*)lst->content)->file);
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
@@ -60,14 +64,16 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
     int *fd_Der;
     int id;
 
-    fd_Der = NULL;
     if(((t_Mlist *)lst->content)->derections)
        fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+
     if (lst->next != NULL)
         pipe(fd);
     id = fork();  
     if (id == 0)
     {  
+        if(fd_Der[0] == -1 || fd_Der[1] == -1)
+            exit(1);
         if (lst->next != NULL)
         {
             dup2(fd[1], 1);
@@ -87,20 +93,20 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         {
             dup2(fd_Der[0], 0);
             close(fd_Der[0]);
-        }
+        }   
         if (execve(path, &c[0], g_global.envp) == -1)
         {
             perror(c[0]);
             exit(1);
         }
     }
-     if(fd_Der[1] > 0)
+    if(fd_Der[1] > 0)
         close(fd_Der[1]);
     if(fd_Der[0] > 0 )
         close(fd_Der[0]);
     if (lastFd != -1)
         close(lastFd);
-    lastFd = fd[0]; 
+    lastFd = fd[0];
     if(lst->next != NULL) 
         close(fd[1]);
     return(lastFd);

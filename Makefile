@@ -32,6 +32,8 @@ re:			fclean all
 # git pull --rebase origin main
 
 #cat <<R
+
+#< /dev/random cat | cat > out -w
 ADD = git add .
 
 read :=		@read -p "-> " enter \
