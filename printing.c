@@ -401,10 +401,4 @@ void pMlist(t_template* lst)
     }
     waitpid(((t_Mlist *)tmp->content)->pid, &lastone, 0);
     // echo $?
-    
-    // while(index > 0)
-    // { 
-    //     wait(NULL);
-    //     index--;
-    // }
 }

@@ -82,42 +82,31 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
     id = fork();
     if (id == 0)
     {  
-        // cat /dev/random | ls 
-        // if(fd_Der[0] == -1 || fd_Der[1] == -1)
-        // {
-        //     exit(1);
-        // }
-        if (lastFd != -1)
+        if(fd_Der[0] == -1 || fd_Der[1] == -1)
         {
-            dup2(lastFd , STDIN_FILENO);
+            exit(1);
+        }
+        if(fd_Der[0] > 0)
+        {
+            dup2(fd_Der[0], 0);
+            close(fd_Der[0]);
+        }
+        else if (lastFd != -1)
+        {
+            dup2(lastFd, 0);
             close(lastFd);
         }
-        if (lst->next !=  NULL)
+        if(fd_Der[1] > 0)
         {
-                dup2(fd[1], STDOUT_FILENO);
-                close(fd[1]);
-                close(fd[0]);
+            dup2(fd_Der[1], 1);
+            close(fd_Der[1]);
         }
-        // if(fd_Der[0] > 0)
-        // {
-        //     dup2(fd_Der[0], 0);
-        //     close(fd_Der[0]);
-        // }
-        // if (lastFd != -1)
-        // {
-        //     dup2(lastFd, 0);
-        //     close(lastFd);
-        // }
-        // if(fd_Der[1] > 0)
-        // {
-        //     dup2(fd_Der[1], 1);
-        //     close(fd_Der[1]);
-        // }
-        // else if (lst->next != NULL)
-        // {
-        //     dup2(fd[1], 1);
-        //     close(fd[1]);
-        // }
+        else if (lst->next != NULL)
+        {
+            dup2(fd[1], 1);
+            close(fd[1]);
+            close(fd[0]);
+        }
         if (execve(path, &c[0], g_global.envp) == -1)
         {
             perror(c[0]);
@@ -125,26 +114,18 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         }
         close(fd[0]);
     }
-    else{
+    else
+    {
        ((t_Mlist *)lst->content)->pid = id;
         if(lastFd != -1)
             close(lastFd);
-
+        lastFd = fd[0];
         if (lst->next != NULL)
-        {
-            lastFd = dup(fd[0]);
             close(fd[1]);
-            close(fd[0]);
-        }
-        else
-            lastFd = -1;
-            
-       
         if(fd_Der[1] > 0)
             close(fd_Der[1]);
         if(fd_Der[0] > 0 )
             close(fd_Der[0]);
     }
-
     return(lastFd);
 }
