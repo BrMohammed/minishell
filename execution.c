@@ -31,8 +31,11 @@ int *OutDerections(t_template* lst)
     t_template *exp;
     int *fd;
     int i;
+    int used[2];
     
     i  = 0;
+    used[1] = 0;
+    used[0] = 0;
     fd = (int *)malloc(sizeof(int) * 3);
     fd[2] = '\0';
 	if (!fd)
@@ -45,17 +48,37 @@ int *OutDerections(t_template* lst)
         exp = ((t_derections*)lst->content)->expand;
         if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
         {
+             if(used[1] % 2 == 1)
+            {
+                close(fd[1]);
+                used[1]++;
+            }
             fd[1] = ((t_derections*)lst->content)->fd; //out
             if(fd[1] == -1)
                 printf("minishell: %s: Permission denied \n",((t_derections*)lst->content)->file);
+            used[1]++;
         }  
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
-            fd[0] = heredoc(((t_derections*)lst->content)->file);
-        if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
         {
-            fd[0] = ((t_derections*)lst->content)->fd;
+            if(used[0] % 2 == 1)
+            {
+                close(fd[0]);
+                used[0]++;
+            }
+            fd[0] = heredoc(((t_derections*)lst->content)->file);
+            used[0]++;
         }
             
+        if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
+        {
+            if(used[0] % 2 == 1)
+            {
+                close(fd[0]);
+                used[0]++;
+            }
+            fd[0] = ((t_derections*)lst->content)->fd;
+            used[0]++;
+        }
 		lst = lst->next;
 	}
     return(fd);

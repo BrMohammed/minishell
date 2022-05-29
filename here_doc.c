@@ -17,12 +17,12 @@ int	heredoc(char *file)
 	char	r[10240];
 	int		error;
 	char	*inputs;
-	int		f;;
+	int fd_herd[2];
 
 	inputs = malloc(1);
 	inputs[0] = '\0';
 	r[0] = '\0';
-	f = open(file, O_RDWR | O_CREAT | O_TRUNC,0777);
+	pipe(fd_herd);
 	while (ft_strcmp(file, r) != -10)
 	{
 		inputs = ft_strjoin(inputs, r);
@@ -30,9 +30,8 @@ int	heredoc(char *file)
 		error = read(0, r, 10240);
 		r[error] = '\0';
 	}
-	ft_putstr_fd(inputs, f);
+	ft_putstr_fd(inputs, fd_herd[1]);
 	free(inputs);
-	close(f);
-	f = open(file, O_RDWR);
-	return(f);
+	close(fd_herd[1]);
+	return(fd_herd[0]);
 }
