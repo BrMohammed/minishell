@@ -25,6 +25,7 @@ typedef struct s_pipeline
 typedef struct s_global
 {
     char **envp;
+    int g_flags;
     int g_i;
     int g_ii;
 }t_global;
@@ -118,7 +119,8 @@ int RMlist(t_template* lst);
 void	path_finder(char **path, char **c, char **envp);
 int pipeline(t_template *lst,char *path, int lastFd,char **c);
 char **creat_table(t_template *lst);
-char **pDerections(t_template* lst);
 int	heredoc(char *name);
 int main(int argc, char** argv, char** envp);
+int *allocation_for_FD();
+int *OutDerections(t_template* lst);
 #endif
