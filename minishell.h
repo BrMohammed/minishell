@@ -120,4 +120,5 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c);
 char **creat_table(t_template *lst);
 char **pDerections(t_template* lst);
 int	heredoc(char *name);
+int main(int argc, char** argv, char** envp);
 #endif
