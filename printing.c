@@ -260,7 +260,7 @@ int RDerections(t_template* lst)
             ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
          if(((t_derections*)lst->content)->type == TYPE_Lredirection)
         {
-            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_RDWR);
+            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_RDONLY);
             if(((t_derections*)lst->content)->fd == -1)
             {
                 printf("minishell: %s: No such file or directory\n",((t_derections*)lst->content)->file);
@@ -352,6 +352,7 @@ char **pDerections(t_template* lst)
     return(0);
 }
 
+
 void pMlist(t_template* lst)
 {
     char	**c;
@@ -359,7 +360,7 @@ void pMlist(t_template* lst)
     int index;
     int t;
     int lastFd = -1;
-    
+    t_template *tmp = lst;
 
     index = 0;
     c = NULL;
@@ -391,9 +392,19 @@ void pMlist(t_template* lst)
         index++;
         lst = lst->next;
     }
-    while(index > 0)
+    int ex;
+    int lastone;
+    while(tmp->next != NULL)
     {
-        wait(NULL);
-        index--;
+        waitpid(((t_Mlist *)tmp->content)->pid, &ex, 0);
+        tmp = tmp->next;
     }
+    waitpid(((t_Mlist *)tmp->content)->pid, &lastone, 0);
+    // echo $?
+    
+    // while(index > 0)
+    // { 
+    //     wait(NULL);
+    //     index--;
+    // }
 }

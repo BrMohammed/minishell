@@ -31,7 +31,7 @@ re:			fclean all
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
 
-#cat <<R
+#</dev/random  cat | ls >lll
 
 #< /dev/random cat | cat > out -w
 ADD = git add .

@@ -84,6 +84,7 @@ typedef struct s_Mlist
 {
     t_template *text;
     t_template *derections;
+    pid_t pid;
     int order;
 }t_Mlist;
 
