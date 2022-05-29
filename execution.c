@@ -84,72 +84,79 @@ int *OutDerections(t_template* lst)
     return(fd);
 }
 
+void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd)
+{
+    if(fd_Der[0] == -1 || fd_Der[1] == -1)
+        exit(1);
+    if(fd_Der[0] > 0)
+    {
+        dup2(fd_Der[0], 0);
+        close(fd_Der[0]);
+    }
+    else if (lastFd != -1)
+    {
+        dup2(lastFd, 0);
+        close(lastFd);
+    }
+    if(fd_Der[1] > 0)
+    {
+        dup2(fd_Der[1], 1);
+        close(fd_Der[1]);
+    }
+    else if (lst->next != NULL)
+    {
+        dup2(fd[1], 1);
+        close(fd[1]);
+        close(fd[0]);
+    }
+}
+
+void close_parent(t_pipeline var,int *lastFd,t_template *lst)
+{
+    ((t_Mlist *)lst->content)->pid = var.id;
+    if(*lastFd != -1)
+        close(*lastFd);
+    *lastFd = var.fd[0];
+    if (lst->next != NULL)
+        close(var.fd[1]);
+    if(var.fd_Der[1] > 0)
+        close(var.fd_Der[1]);
+    if(var.fd_Der[0] > 0 )
+        close(var.fd_Der[0]);
+}
+
+int *allocation_for_FD()
+{
+    int *fd;
+    fd = (int *)malloc(sizeof(int) * 3);
+    fd[2] = '\0';
+    fd[1] = 0;
+    fd[0] = 0;
+    return(fd);
+}
+
 int pipeline(t_template *lst,char *path, int lastFd,char **c)
 {
-    int fd[2];
-    int *fd_Der;
-    int id;
-    int i;
+    t_pipeline var;
     
-    i  = 0;
-    fd_Der = (int *)malloc(sizeof(int) * 3);
-    fd_Der[2] = '\0';
-	if (!fd_Der)
-		return (0);
-    fd_Der[1] = 0;
-    fd_Der[0] = 0;
+    var.i  = 0;
+    var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
-       fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+       var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
     if (lst->next != NULL)
-        pipe(fd);
-    id = fork();
-    if (id == 0)
+        pipe(var.fd);
+    var.id = fork();
+    if (var.id == 0)
     {  
-        if(fd_Der[0] == -1 || fd_Der[1] == -1)
-        {
-            exit(1);
-        }
-        if(fd_Der[0] > 0)
-        {
-            dup2(fd_Der[0], 0);
-            close(fd_Der[0]);
-        }
-        else if (lastFd != -1)
-        {
-            dup2(lastFd, 0);
-            close(lastFd);
-        }
-        if(fd_Der[1] > 0)
-        {
-            dup2(fd_Der[1], 1);
-            close(fd_Der[1]);
-        }
-        else if (lst->next != NULL)
-        {
-            dup2(fd[1], 1);
-            close(fd[1]);
-            close(fd[0]);
-        }
+        duplicate(var.fd_Der,lastFd,lst,var.fd);
         if (execve(path, &c[0], g_global.envp) == -1)
         {
             perror(c[0]);
             exit(1);
         }
-        close(fd[0]);
     }
     else
-    {
-       ((t_Mlist *)lst->content)->pid = id;
-        if(lastFd != -1)
-            close(lastFd);
-        lastFd = fd[0];
-        if (lst->next != NULL)
-            close(fd[1]);
-        if(fd_Der[1] > 0)
-            close(fd_Der[1]);
-        if(fd_Der[0] > 0 )
-            close(fd_Der[0]);
-    }
+        close_parent(var,&lastFd,lst);
     return(lastFd);
 }
 char** pText(t_template* lst)
@@ -220,10 +227,7 @@ void pMlist(t_template* lst)
     index = 0;
     c = NULL;
 
-     fd_Der = (int *)malloc(sizeof(int) * 3);
-    fd_Der[2] = '\0';
-    fd_Der[1] = 0;
-    fd_Der[0] = 0;
+    fd_Der = allocation_for_FD();
     while(lst)
     {
         path = NULL; 

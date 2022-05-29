@@ -14,6 +14,13 @@
 #define TEXT  1
 #define DERECYION 0
 
+typedef struct s_pipeline
+{
+    int fd[2];
+    int *fd_Der;
+    int id;
+    int i;
+}t_pipeline;
 
 typedef struct s_global
 {
