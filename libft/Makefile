@@ -63,18 +63,18 @@ all :$(NAME)
 
 $(NAME):	$(objets)
 			@$(AR) $(NAME) $(objets)
-			@echo "\033[0;92m{LIBFT} PROJECT FILE CREATED ✅"
+			@echo "{LIBFT} PROJECT FILE CREATED"
 
 $(objets):$(FILES)
 	$(CC) $(FLAGS) $(FILES)
 	
 clean :
 			@$(RM) $(objets) $(objets_b)
-			@echo "\033[0;93m{LIBFT} OBJECTS DELETED ❌"
+			@echo "{LIBFT} OBJECTS DELETED ❌"
 
 fclean :	clean
 			@$(RM) $(NAME)
-			@echo "\033[0;93m{LIBFT} PROJECT File DELETED ❌"
+			@echo "{LIBFT} PROJECT File DELETED ❌"
 
 re :		fclean all
 
@@ -83,7 +83,7 @@ bonus:		$(objets_b)
 $(objets_b):	$(FILES_BONUS)
 				$(CC)  $(FLAGS) $(FILES_BONUS)
 				@$(AR) $(NAME) $(objets_b)
-				@echo "\033[0;92m{LIBFT} BONUS CREATED ✅"
+				@echo "{LIBFT} BONUS CREATED"
 
 
 rebonus :	fclean bonus

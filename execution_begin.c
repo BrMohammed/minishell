@@ -53,13 +53,9 @@ void pMlist(t_template* lst)
         {
             fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
             if (fd_Der[1] != 0)
-            {
                 close(fd_Der[1]);
-            }
             if (fd_Der[0] != 0)
-            {
                 close(fd_Der[0]);
-            }
         }
         /**********   pipe  *********/
         if(((t_Mlist *)lst->content)->text)

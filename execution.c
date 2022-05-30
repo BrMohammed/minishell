@@ -135,18 +135,25 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
 int pipeline(t_template *lst,char *path, int lastFd,char **c)
 {
     t_pipeline var;
+    int pipe_exist;
     
     var.i  = 0;
+    pipe_exist = 0;
     var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
        var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
     if (lst->next != NULL)
+    {
         pipe(var.fd);
+        pipe_exist = 1;
+    }
+    
     var.id = fork();
     if (var.id == 0)
-    {  
-        duplicate(var.fd_Der,lastFd,lst,var.fd);
-        if (execve(path, &c[0], g_global.envp) == -1)
+    {  duplicate(var.fd_Der,lastFd,lst,var.fd);
+        if(ft_strcmp(c[0],"export") == 0)
+            export(c,var.fd[1],pipe_exist);
+        else if (execve(path, &c[0], g_global.envp) == -1)
         {
             perror(c[0]);
             exit(1);
