@@ -131,22 +131,23 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
 }
 
 
-void all_builtins(char **c, int pipe_exist, int fd,char *path)
+int  all_builtins(char **c, int pipe_exist, int fd)
 {
-     if(ft_strcmp(c[0],"export") == 0 && pipe_exist == 1)
-        export(c,fd,pipe_exist);
-    else if (execve(path, &c[0], g_global.envp) == -1)
+    if(ft_strcmp(c[0],"export") == 0)
     {
-        perror(c[0]);
-        exit(1);
+        export(c,fd,pipe_exist);
+        return(1);
     }
+    return(0);
 }
 int pipeline(t_template *lst,char *path, int lastFd,char **c)
 {
     t_pipeline var;
     int pipe_exist;
+    int enter_built;
     
     var.i  = 0;
+    enter_built = 0;
     pipe_exist = 0;
     var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
@@ -157,16 +158,23 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         pipe_exist = 1;
     }
     if(pipe_exist == 0)
-        all_builtins(c, pipe_exist, var.fd[1], path);
-    else if(pipe_exist == 1)
-    {
-        var.id = fork();
-        if (var.id == 0)
-        {  
-            duplicate(var.fd_Der,lastFd,lst,var.fd);
-            all_builtins(c, pipe_exist, var.fd[1], path);
+        enter_built = all_builtins(c, pipe_exist, var.fd[1]);
+    var.id = fork();
+    if (var.id == 0)
+    {  
+        duplicate(var.fd_Der,lastFd,lst,var.fd);
+        if(pipe_exist == 1)
+            enter_built = all_builtins(c, pipe_exist, var.fd[1]);
+        if(enter_built == 0)
+        {
+            if (execve(path, &c[0], g_global.envp) == -1)
+            {
+                perror(c[0]);
+                exit(1);
+            }
         }
     }
-    close_parent(var,&lastFd,lst);
+    else
+        close_parent(var,&lastFd,lst);
     return(lastFd);
 }
