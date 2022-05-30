@@ -131,7 +131,16 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
 }
 
 
-
+void all_builtins(char **c, int pipe_exist, int fd,char *path)
+{
+     if(ft_strcmp(c[0],"export") == 0 && pipe_exist == 1)
+        export(c,fd,pipe_exist);
+    else if (execve(path, &c[0], g_global.envp) == -1)
+    {
+        perror(c[0]);
+        exit(1);
+    }
+}
 int pipeline(t_template *lst,char *path, int lastFd,char **c)
 {
     t_pipeline var;
@@ -147,19 +156,17 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         pipe(var.fd);
         pipe_exist = 1;
     }
-    
-    var.id = fork();
-    if (var.id == 0)
-    {  duplicate(var.fd_Der,lastFd,lst,var.fd);
-        if(ft_strcmp(c[0],"export") == 0)
-            export(c,var.fd[1],pipe_exist);
-        else if (execve(path, &c[0], g_global.envp) == -1)
-        {
-            perror(c[0]);
-            exit(1);
+    if(pipe_exist == 0)
+        all_builtins(c, pipe_exist, var.fd[1], path);
+    else if(pipe_exist == 1)
+    {
+        var.id = fork();
+        if (var.id == 0)
+        {  
+            duplicate(var.fd_Der,lastFd,lst,var.fd);
+            all_builtins(c, pipe_exist, var.fd[1], path);
         }
     }
-    else
-        close_parent(var,&lastFd,lst);
+    close_parent(var,&lastFd,lst);
     return(lastFd);
 }
