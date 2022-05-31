@@ -18,7 +18,9 @@ all:		$(NAME)
 $(NAME):
 			@cd libft && make && make bonus && cd ..
 			$(CC) $(CFLAGS) $(LIBFT) $(SRC_P) -o $(NAME)
+			@cd libft && make clean && cd ..
 			@echo "®MINISHELL CREATED"
+
 
 clean:
 			@cd libft && make clean && cd ..
