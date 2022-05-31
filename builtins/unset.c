@@ -10,7 +10,7 @@ void unset(char **c,int false)
 
     
     i = 0;
-    //cr = NULL;
+    cr = NULL;
     while(c[i + 1] != NULL)
     {
         comp = 0;
@@ -18,9 +18,10 @@ void unset(char **c,int false)
         br = 0;
         while(g_global.envp[y] != NULL)
         {
-            if(ft_strncmp(g_global.envp[y], c[i + 1],ft_strlen(c[i + 1])) == 0)
+            if(ft_strncmp(g_global.envp[y], c[i + 1],ft_strlen(c[i + 1])) == 0 && 
+                (g_global.envp[y][ft_strlen(c[i + 1])] == '\0' || g_global.envp[y][ft_strlen(c[i + 1])] == '='))
             {
-               
+                printf("%s\n",g_global.envp[y]);
                 break;
             }
             y++;
@@ -36,7 +37,6 @@ void unset(char **c,int false)
             cr[y] = NULL;
             comp = 0;
             y = 0;
-            
             while(g_global.envp[comp])
             {
                 if(br != comp)
