@@ -125,4 +125,6 @@ int *allocation_for_FD();
 int *OutDerections(t_template* lst);
 void export(char **c,int fd,int false);
 void unset(char **c,int false);
+void exitB();
+void envB(int fd,int false);
 #endif

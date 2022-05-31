@@ -130,7 +130,6 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
         close(var.fd_Der[0]);
 }
 
-
 int  all_builtins(char **c, int pipe_exist, int fd)
 {
     if(ft_strcmp(c[0],"export") == 0)
@@ -141,6 +140,16 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     if(ft_strcmp(c[0],"unset") == 0)
     {
         unset(c,pipe_exist);
+        return(1);
+    }
+    if(ft_strcmp(c[0],"exit") == 0)
+    {
+        exitB();
+        return(1);
+    }
+    if(ft_strcmp(c[0],"env") == 0)
+    {
+        envB(fd,pipe_exist);
         return(1);
     }
     return(0);

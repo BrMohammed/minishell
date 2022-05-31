@@ -2,7 +2,7 @@ NAME = minishell
 
 SRC_P = lexer.c parser.c error.c struct_tool.c\
 		path_finder.c execution.c  here_doc.c main.c execution_begin.c builtins/export.c\
-		builtins/unset.c
+		builtins/unset.c builtins/exit_env.c
 
 CC = @gcc 
 
