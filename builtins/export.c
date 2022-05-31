@@ -1,15 +1,15 @@
-# include "minishell.h"
+# include "../minishell.h"
 
 void just_export(int fd,int false)
 {
     int i;
     int y;
+    int equal_exist; 
 
     i = 0;
+    equal_exist = 0;
     if(false == 1)
-    {
         dup2(fd,1);
-    }
     while (g_global.envp[i])
     {
         y = 0;
@@ -19,10 +19,18 @@ void just_export(int fd,int false)
                 printf("declare -x ");
             printf("%c",g_global.envp[i][y]); 
             if(g_global.envp[i][y] == '=')
+            {
                 printf("%c",'"');
+                equal_exist = 1;
+            }
             y++;
-            if(g_global.envp[i][y] == '\0')
-                printf("%c\n",'"');
+            if(g_global.envp[i][y] == '\0' && equal_exist == 1)
+            {
+                printf("%c",'"');
+                equal_exist = 0;
+            }
+            if (g_global.envp[i][y] == '\0')
+                printf("\n");
         }
         i++;
     }
@@ -45,8 +53,7 @@ void add_in_export(char **c)
     i = 0;
     while(g_global.envp[i] != NULL)
     {
-        if(g_global.envp[i] != '\0')
-            cr[i] = ft_strdup(g_global.envp[i]);
+        cr[i] = ft_strdup(g_global.envp[i]);
         i++;
     }
     y = 0;

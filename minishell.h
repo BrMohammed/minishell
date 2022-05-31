@@ -124,4 +124,5 @@ int main(int argc, char** argv, char** envp);
 int *allocation_for_FD();
 int *OutDerections(t_template* lst);
 void export(char **c,int fd,int false);
+void unset(char **c,int false);
 #endif
