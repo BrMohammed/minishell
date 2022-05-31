@@ -127,4 +127,5 @@ void export(char **c,int fd,int false);
 void unset(char **c,int false);
 void exitB();
 void envB(int fd,int false);
+void pwd(int fd,int false);
 #endif

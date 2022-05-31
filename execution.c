@@ -152,6 +152,11 @@ int  all_builtins(char **c, int pipe_exist, int fd)
         envB(fd,pipe_exist);
         return(1);
     }
+    if(ft_strcmp(c[0],"pwd") == 0)
+    {
+        pwd(fd,pipe_exist);
+        return(1);
+    }
     return(0);
 }
 int pipeline(t_template *lst,char *path, int lastFd,char **c)
