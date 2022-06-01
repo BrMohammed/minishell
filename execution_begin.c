@@ -84,4 +84,5 @@ void pMlist(t_template* lst)
         tmp = tmp->next;
     }
     waitpid(((t_Mlist *)tmp->content)->pid, &g_global.g_flags, 0);
+    g_global.g_flags = WEXITSTATUS(g_global.g_flags);
 }

@@ -193,8 +193,8 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         {
             if (execve(path, &c[0], g_global.envp) == -1)
             {
-                perror(c[0]);
-                exit(1);
+                printf("minishel: %s: command not found\n",c[0]);
+                exit(127);
             }
         }
     }

@@ -48,5 +48,9 @@ void echo(char **c,int fd,int false)
     if(nl_exist == 1)
        printf("\n");
     if(false == 1)
+    {
+        g_global.g_flags = 0;
         exit(0);
+    }
+        
 }
