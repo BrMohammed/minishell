@@ -128,4 +128,5 @@ void unset(char **c,int false);
 void exitB();
 void envB(int fd,int false);
 void pwd(int fd,int false);
+void echo(char **c,int fd,int false);
 #endif
