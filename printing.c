@@ -108,23 +108,32 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
 
     key = ft_strdup("");
     temp = ft_strdup("");
-    while(data[*j] && data[*j] != '$' && ((data[*j] >= 'a' && data[*j] <= 'z') || (data[*j] >= 'A' && data[*j] <= 'Z') /*continue join when dejet or alpha or - */
-        || (data[*j] >= '0' && data[*j] <= '9') || (data[*j] == '-') || data[*j] == 32))
+    if(data[*j] == '?') // flage chek
     {
         temp[0] = data[*j];
         key = ft_strjoin(key,temp);
-        *j = *j + 1;
+        temp = ft_itoa(g_global.g_flags);
     }
-   *j = *j - 1; /* if char is dolar*/
-    *key_ex = strdup(key);
-    key = ft_strjoin(key,"=");
-    free(temp);
-    temp = NULL;
-    i = 0;
-    while (g_global.envp[i] && temp == NULL) /*serch in env */
+    else
     {
-        temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
-        i++;
+        while(data[*j] && data[*j] != '$' && ((data[*j] >= 'a' && data[*j] <= 'z') || (data[*j] >= 'A' && data[*j] <= 'Z') /*continue join when dejet or alpha or - */
+        || (data[*j] >= '0' && data[*j] <= '9') || (data[*j] == '-') || data[*j] == 32))
+        {
+            temp[0] = data[*j];
+            key = ft_strjoin(key,temp);
+            *j = *j + 1;
+        }
+        *j = *j - 1; /* if char is dolar*/
+        *key_ex = strdup(key);
+        key = ft_strjoin(key,"=");
+        free(temp);
+        temp = NULL;
+        i = 0;
+        while (g_global.envp[i] && temp == NULL) /*serch in env */
+        {
+            temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
+            i++;
+        }
     }
     free(key);
     return(temp);
@@ -145,6 +154,20 @@ char* Begin_Dolar(int *j,char* data,char **e,char **key_ex)
     return(temp);
 }
 
+int chek_if_flag(char *temp)
+{
+    int i;
+
+    i = 0;
+    while(temp[i] != '\0')
+    {
+        if(temp[i] == '=')
+            return(0);
+        i++;
+    }
+    return(1);
+}
+
 int Dolar(char *data,char **e,char quat,t_template **expand)
 {
     int j;
@@ -159,7 +182,10 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
     temp = Begin_Dolar(&j,data,e,&key_ex);
     if(temp != NULL)
     {
-        key = CheckDolar(temp,key_ex);
+        if(chek_if_flag(temp) == 0)
+            key = CheckDolar(temp,key_ex); // begin key after =
+        else
+            key = temp;
         temp = ft_strdup("");
         if(quat != '"')
             DolarWhoutQuat(key,e,expand,key_ex);
