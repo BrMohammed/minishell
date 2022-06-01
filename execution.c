@@ -164,14 +164,13 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     }
     return(0);
 }
-int pipeline(t_template *lst,char *path, int lastFd,char **c)
+int pipeline(t_template *lst,t_pMlist *pMlist_var)
 {
     t_pipeline var;
     int pipe_exist;
-    int enter_built;
     
     var.i  = 0;
-    enter_built = 0;
+    pMlist_var->enter_built = 0;
     pipe_exist = 0;
     var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
@@ -182,23 +181,23 @@ int pipeline(t_template *lst,char *path, int lastFd,char **c)
         pipe_exist = 1;
     }
     if(pipe_exist == 0)
-        enter_built = all_builtins(c, pipe_exist, var.fd[1]);
+        pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
     var.id = fork();
     if (var.id == 0)
     {  
-        duplicate(var.fd_Der,lastFd,lst,var.fd);
+        duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
         if(pipe_exist == 1)
-            enter_built = all_builtins(c, pipe_exist, var.fd[1]);
-        if(enter_built == 0)
+            pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
+        if(pMlist_var->enter_built == 0)
         {
-            if (execve(path, &c[0], g_global.envp) == -1)
+            if (execve(pMlist_var->path, &pMlist_var->c[0], g_global.envp) == -1)
             {
-                printf("minishel: %s: command not found\n",c[0]);
+                printf("minishel: %s: command not found\n",pMlist_var->c[0]);
                 exit(127);
             }
         }
     }
     else
-        close_parent(var,&lastFd,lst);
-    return(lastFd);
+        close_parent(var,&pMlist_var->lastFd,lst);
+    return(pMlist_var->lastFd);
 }

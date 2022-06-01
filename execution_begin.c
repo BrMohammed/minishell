@@ -34,21 +34,23 @@ char** pText(t_template* lst)
 
 void pMlist(t_template* lst)
 {
-    char	**c;
-    char	*path;
+    t_pMlist pMlist_var;
+    // char	**c;
+    // char	*path;
     int index;
     int t;
-    int lastFd = -1;
+    // int lastFd = -1;
     t_template *tmp = lst;
     int *fd_Der;
 
     index = 0;
-    c = NULL;
+    pMlist_var.c = NULL;
+    pMlist_var.lastFd = -1;
 
     fd_Der = allocation_for_FD();
     while(lst)
     {
-        path = NULL; 
+        pMlist_var.path = NULL; 
         if(((t_Mlist *)lst->content)->derections && !((t_Mlist *)lst->content)->text)
         {
             fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
@@ -60,21 +62,20 @@ void pMlist(t_template* lst)
         /**********   pipe  *********/
         if(((t_Mlist *)lst->content)->text)
         {
-            c = pText(((t_Mlist *)lst->content)->text);
-            if(c != NULL)
+            pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
+            if(pMlist_var.c != NULL)
             {
-                 path_finder(&path, c, g_global.envp);
-                 lastFd = pipeline(lst,path,lastFd,c);
-                if (path != NULL)
-                    free(path);
+                path_finder(&pMlist_var.path, pMlist_var.c, g_global.envp);
+                pMlist_var.lastFd = pipeline(lst,&pMlist_var);
+                if (pMlist_var.path != NULL)
+                    free(pMlist_var.path);
                 t = 0;
-                while (c[t])
-                    free(c[t++]);
+                while (pMlist_var.c[t])
+                    free(pMlist_var.c[t++]);
             }
         }
-        free(c);
+        free(pMlist_var.c);
        /*******************/
-
         index++;
         lst = lst->next;
     }

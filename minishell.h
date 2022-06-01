@@ -22,6 +22,14 @@ typedef struct s_pipeline
     int i;
 }t_pipeline;
 
+typedef struct s_pMlist
+{
+    char	**c;
+    char	*path;
+    int lastFd;
+    int enter_built;
+}t_pMlist;
+
 typedef struct s_global
 {
     char **envp;
@@ -117,7 +125,7 @@ void pMlist(t_template* lst);
 int RMlist(t_template* lst);
 
 void	path_finder(char **path, char **c, char **envp);
-int pipeline(t_template *lst,char *path, int lastFd,char **c);
+int pipeline(t_template *lst,t_pMlist *pMlist_var);
 char **creat_table(t_template *lst);
 int	heredoc(char *name);
 int main(int argc, char** argv, char** envp);
