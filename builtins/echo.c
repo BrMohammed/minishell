@@ -20,7 +20,7 @@ void echo(char **c,int fd,int false)
             y = 1;
             while(c[1][y] && c[1][y] == 'n')
                 y++;
-            if(c[1][y] == '\0')
+            if(c[1][y] == '\0' && c[1][1] == 'n')
             {
                 nl_exist = 0;
                 i++;
@@ -38,13 +38,15 @@ void echo(char **c,int fd,int false)
             }
             else
                 skip = 0;
-            if(skip == 0)
-                printf("%s",c[i + 1]);
+            if(skip == 0 && c[i + 1] != NULL)
+                printf("%s ",c[i + 1]);
         }
-        else
-            printf("%s\n",c[i + 1]);
+        else if(c[i + 1] != NULL)
+            printf("%s ",c[i + 1]);
         i++;
     }
+    if(nl_exist == 1)
+       printf("\n");
     if(false == 1)
         exit(0);
 }
