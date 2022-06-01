@@ -2,7 +2,7 @@ NAME = minishell
 
 SRC_P = lexer.c parser.c error.c struct_tool.c\
 		path_finder.c execution.c  here_doc.c main.c execution_begin.c builtins/export.c\
-		builtins/unset.c builtins/exit_env_pwd.c builtins/echo.c
+		builtins/unset.c builtins/exit_env_pwd.c builtins/echo.c builtins/cd.c
 
 CC = @gcc 
 
@@ -16,17 +16,17 @@ RM = @rm -f
 all:		$(NAME)
 
 $(NAME):
-			@cd libft && make && make bonus && cd ..
+			@make -C libft && make bonus -C libft
 			$(CC) $(CFLAGS) $(LIBFT) $(SRC_P) -o $(NAME)
-			@cd libft && make clean && cd ..
+			@make clean -C libft
 			@echo "®MINISHELL CREATED"
 
 
 clean:
-			@cd libft && make clean && cd ..
+			@make clean -C libft
 
 fclean: 	
-			@cd libft && make fclean && cd ..
+			@make fclean -C libft
 			$(RM) $(NAME)
 			@echo "MINISHELL DELETED 🗑"
 re:			fclean all
@@ -34,9 +34,7 @@ re:			fclean all
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
 
-#</dev/random  cat | ls >lll
 
-#< /dev/random cat | cat > out -w
 ADD = git add .
 
 read :=		@read -p "-> " enter \
@@ -54,10 +52,3 @@ push :
 	@$(ADD)
 	$(read)
 	$(PU)
-
-
-# 	bash-3.2$ echo $h
-# dddddd dddd 'gggg '
-
-# bash-3.2$ echo "$h"
-# dddddd       dddd 'gggg   '

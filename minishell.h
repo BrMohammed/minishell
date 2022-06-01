@@ -137,4 +137,5 @@ void exitB();
 void envB(int fd,int false);
 void pwd(int fd,int false);
 void echo(char **c,int fd,int false);
+void cd(char **c,int false);
 #endif

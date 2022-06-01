@@ -50,6 +50,9 @@ void unset(char **c,int false)
             unset_exist(br);
         i++;
     }
-    if(false == 1)
+     if(false == 1)
+    {
+        g_global.g_flags = 0;
         exit(0);
+    }
 }

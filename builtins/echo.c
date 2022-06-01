@@ -52,5 +52,4 @@ void echo(char **c,int fd,int false)
         g_global.g_flags = 0;
         exit(0);
     }
-        
 }

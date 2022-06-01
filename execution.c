@@ -162,6 +162,11 @@ int  all_builtins(char **c, int pipe_exist, int fd)
         echo(c,fd,pipe_exist);
         return(1);
     }
+    if (ft_strcmp(c[0],"cd") == 0)
+    {
+        cd(c,pipe_exist);
+        return(1);
+    }
     return(0);
 }
 int pipeline(t_template *lst,t_pMlist *pMlist_var)

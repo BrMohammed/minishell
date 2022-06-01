@@ -74,6 +74,9 @@ void export(char **c,int fd,int false)
         just_export(fd,false);
     else
         add_in_export(c);
-    if(false == 1)
+     if(false == 1)
+    {
+        g_global.g_flags = 0;
         exit(0);
+    }
 }

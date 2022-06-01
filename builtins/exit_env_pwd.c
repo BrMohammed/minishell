@@ -2,6 +2,7 @@
 
 void exitB()
 {
+    g_global.g_flags = 0;
     exit(0);
 }
 
@@ -34,8 +35,11 @@ void pwd(int fd,int false)
         }
         printf("\n");
     }
-    if(false == 1)
+     if(false == 1)
+    {
+        g_global.g_flags = 0;
         exit(0);
+    }
 }
 
 void envB(int fd,int false)
@@ -66,5 +70,8 @@ void envB(int fd,int false)
         i++;
     }
     if(false == 1)
+    {
+        g_global.g_flags = 0;
         exit(0);
+    }
 }
