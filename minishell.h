@@ -13,6 +13,7 @@ typedef struct s_global
     char **envp;
     int g_i;
     int g_ii;
+    int g_flags;
 }t_global;
 
 t_global g_global;
