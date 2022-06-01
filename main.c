@@ -5,6 +5,7 @@ int main(int argc, char** argv, char** envp)
 	char    *all;
 	
 	g_global.envp = envp;
+	g_global.g_flags = 0;
 	(void)argv;
 	(void) envp;
 	if(argc == 1)
