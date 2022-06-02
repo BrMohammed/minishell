@@ -2,5 +2,6 @@
     "files.associations": {
         "lexer.h": "c",
         "minishell.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
