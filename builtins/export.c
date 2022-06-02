@@ -69,7 +69,7 @@ int serch_on_env(char *c)
                 j++;
             }
             g_global.envp[i] = cr;
-            free(cr);
+            //free(cr);
             return(1);
         }
     }
