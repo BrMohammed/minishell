@@ -36,35 +36,87 @@ void just_export(int fd,int false)
     }
 }
 
+int serch_on_env(char *c)
+{
+    int i;
+    char *cr;
+    int j;
+
+    i = 0;
+    while(c[i] && c[i] != '=')
+        i++;
+    if(c[i] == '\0')
+    {
+        i = 0;
+        while (g_global.envp[i] && ft_strcmp(g_global.envp[i],c) != 0)
+            i++;
+        if(g_global.envp[i] != '\0')
+            return(1);
+    }
+    else
+    {
+        i = 0;
+        while (g_global.envp[i] && ft_strncmp(g_global.envp[i],c, ft_strlen(c) - 1) != 0)
+            i++;
+        if(g_global.envp[i] != '\0')
+        {
+            cr = malloc(sizeof(char*) * ft_strlen(c)+1);
+            cr[ft_strlen(c)] = '\0';
+            j = 0;
+            while(c[j])
+            {
+                cr[j] = c[j];
+                j++;
+            }
+            g_global.envp[i] = cr;
+            free(cr);
+            return(1);
+        }
+    }
+    return (0);
+}
+
 void add_in_export(char **c)
 {
     int i;
     int y;
     char **cr;
+    int serch;
+    int x;
 
-    i = 0;
-    while(c[i])
-        i++;
-    i--;
-    while(g_global.envp[i])
-        i++;
-    cr = (char **)malloc(sizeof(char *) * (i + 1));
-    cr[i] = NULL;
-    i = 0;
-    while(g_global.envp[i] != NULL)
-    {
-        cr[i] = ft_strdup(g_global.envp[i]);
-        i++;
+    i = 1;
+    serch = 0;
+    x = 1;
+    while(c[x])
+    { 
+        serch = serch_on_env(c[x]);
+        if(serch == 0)
+            i++;
+        x++;
     }
-    y = 0;
-    while(c[y] != NULL)
+    if(i != 1)
     {
-        if(c[y + 1] != '\0')
-            cr[i] = ft_strdup(c[y + 1]);
-        i++;
-        y++;
+        while(g_global.envp[i])
+            i++;
+        cr = (char **)malloc(sizeof(char *) * (i + 1));
+        cr[i] = NULL;
+        i = 0;
+        while(g_global.envp[i] != NULL)
+        {
+            cr[i] = ft_strdup(g_global.envp[i]);
+            i++;
+        }
+        y = 0;
+        while(c[y] != NULL)
+        {
+            if(c[y + 1] != '\0')
+                cr[i] = ft_strdup(c[y + 1]);
+            i++;
+            y++;
+        }
+        g_global.envp = cr;
     }
-    g_global.envp = cr;
+    
 }
 
 void export(char **c,int fd,int false)
@@ -74,7 +126,7 @@ void export(char **c,int fd,int false)
         just_export(fd,false);
     else
         add_in_export(c);
-     if(false == 1)
+    if(false == 1)
     {
         g_global.g_flags = 0;
         exit(0);

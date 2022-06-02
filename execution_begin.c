@@ -35,18 +35,14 @@ char** pText(t_template* lst)
 void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
-    // char	**c;
-    // char	*path;
     int index;
     int t;
-    // int lastFd = -1;
     t_template *tmp = lst;
     int *fd_Der;
 
     index = 0;
     pMlist_var.c = NULL;
     pMlist_var.lastFd = -1;
-
     fd_Der = allocation_for_FD();
     while(lst)
     {
