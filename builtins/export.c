@@ -41,6 +41,7 @@ int serch_on_env(char *c)
     int i;
     char *cr;
     int j;
+    int x;
 
     i = 0;
     while(c[i] && c[i] != '=')
@@ -55,8 +56,9 @@ int serch_on_env(char *c)
     }
     else
     {
+        x = i;
         i = 0;
-        while (g_global.envp[i] && ft_strncmp(g_global.envp[i],c, ft_strlen(c) - 1) != 0)
+        while (g_global.envp[i] && ft_strncmp(g_global.envp[i],c, x) != 0)
             i++;
         if(g_global.envp[i] != '\0')
         {
@@ -75,7 +77,7 @@ int serch_on_env(char *c)
     return (0);
 }
 
-void add_in_export(char **c)
+char  **add_in_export(char **c)
 {
     int i;
     int y;
@@ -86,6 +88,7 @@ void add_in_export(char **c)
     i = 1;
     serch = 0;
     x = 1;
+    cr = NULL;
     while(c[x])
     { 
         serch = serch_on_env(c[x]);
@@ -93,12 +96,13 @@ void add_in_export(char **c)
             i++;
         x++;
     }
+    x = 0;
     if(i != 1)
     {
-        while(g_global.envp[i])
-            i++;
-        cr = (char **)malloc(sizeof(char *) * (i + 1));
-        cr[i] = NULL;
+        while(g_global.envp[x])
+            x++;
+        cr = (char **)malloc(sizeof(char *) * (x + i + 1));
+        cr[x + i] = NULL;
         i = 0;
         while(g_global.envp[i] != NULL)
         {
@@ -113,9 +117,9 @@ void add_in_export(char **c)
             i++;
             y++;
         }
-        g_global.envp = cr;
+        return(cr);
     }
-    
+    return(g_global.envp);
 }
 
 void export(char **c,int fd,int false)
@@ -124,7 +128,7 @@ void export(char **c,int fd,int false)
     if(c[1] == '\0')
         just_export(fd,false);
     else
-        add_in_export(c);
+        g_global.envp = add_in_export(c);
     if(false == 1)
     {
         g_global.g_flags = 0;

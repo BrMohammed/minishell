@@ -30,7 +30,6 @@ void cd(char **c ,int false)
     {
         chdir(getenv("HOME"));
         getcwd(cwd, sizeof(cwd));
-        printf("%s\n",cwd);
     }
         
     if(false == 1)
