@@ -140,4 +140,7 @@ void pwd(int fd,int false);
 void echo(char **c,int fd,int false);
 void cd(char **c,int false);
 int serch_on_env(char *c,int *error);
+void copie_table(char **cp);
+void free_table(char **c);
+int input_error(char *c);
 #endif
