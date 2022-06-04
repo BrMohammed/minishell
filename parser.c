@@ -64,7 +64,6 @@ void *minishell(char* all)
 	lexer = init_lexer(all);
 	list = Makelist(lexer,&list);
 	error = list;
-	//g_global.g_i = 1;
 	if(error)
 	{
 		if(RMlist(error) == 1)

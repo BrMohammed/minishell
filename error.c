@@ -111,7 +111,7 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
     {
         temp[0] = data[*j];
         key = ft_strjoin(key,temp);
-        temp = ft_itoa(g_global.g_flags);
+        temp = ft_itoa(g_global->g_flags);
     }
     else
     {
@@ -128,9 +128,9 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
         free(temp);
         temp = NULL;
         i = 0;
-        while (g_global.envp[i] && temp == NULL) /*serch in env */
+        while (g_global->envp[i] && temp == NULL) /*serch in env */
         {
-            temp = ft_strnstr(g_global.envp[i], key,ft_strlen(key));
+            temp = ft_strnstr(g_global->envp[i], key,ft_strlen(key));
             i++;
         }
     }
@@ -175,7 +175,7 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
     char* key_ex;
     char* key;
 
-    i = g_global.g_ii;
+    i = g_global->g_ii;
     i++;
     j = i;
     temp = Begin_Dolar(&j,data,e,&key_ex);
@@ -216,7 +216,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     while(i <= (int)ft_strlen(data))
     {
         temp = ft_strdup("");
-        g_global.g_ii = i;
+        g_global->g_ii = i;
         if(data[i] != '$')
             quat_skip(&quat,data[i],&e); /* quat set*/
         else if(data[i] == '$' && quat == '\'') /*when singelquet and dolar exest sqiping the key*/

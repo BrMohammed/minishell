@@ -11,26 +11,26 @@ void just_export(int fd,int false)
     equal_exist = 0;
     if(false == 1)
         dup2(fd,1);
-    while (g_global.envp[i])
+    while (g_global->envp[i])
     {
         y = 0;
-        while(g_global.envp[i][y])
+        while(g_global->envp[i][y])
         {
             if(y == 0)
                 printf("declare -x ");
-            printf("%c",g_global.envp[i][y]); 
-            if(g_global.envp[i][y] == '=')
+            printf("%c",g_global->envp[i][y]); 
+            if(g_global->envp[i][y] == '=')
             {
                 printf("%c",'"');
                 equal_exist = 1;
             }
             y++;
-            if(g_global.envp[i][y] == '\0' && equal_exist == 1)
+            if(g_global->envp[i][y] == '\0' && equal_exist == 1)
             {
                 printf("%c",'"');
                 equal_exist = 0;
             }
-            if (g_global.envp[i][y] == '\0')
+            if (g_global->envp[i][y] == '\0')
                 printf("\n");
         }
         i++;
@@ -42,13 +42,13 @@ int input_error(char *c)
     if(c[0] == '-')
     {
         printf("minishell: export: `%c%c': invalid option\n",c[0],c[1]);
-        g_global.g_flags = 4;
+        g_global->g_flags = 4;
         return(1);
     }
     if(ft_isalnum(c) == 1 && ft_isdigit(c) == 0)
     {
         printf("minishell: export: `%s': not a valid identifier\n",c);
-        g_global.g_flags = 1;
+        g_global->g_flags = 1;
         return(1);
     }
     return(0);
@@ -85,18 +85,18 @@ int serch_on_env(char *c,int *error)
     if(c[i] == '\0')
     {
         i = 0;
-        while (g_global.envp[i] && ft_strcmp(g_global.envp[i],c) != 0)
+        while (g_global->envp[i] && ft_strcmp(g_global->envp[i],c) != 0)
             i++;
-        if(g_global.envp[i] != '\0')
+        if(g_global->envp[i] != '\0')
             return(1);
     }
     else
     {
         x = i;
         i = 0;
-        while (g_global.envp[i] && ft_strncmp(g_global.envp[i],c, x) != 0)
+        while (g_global->envp[i] && ft_strncmp(g_global->envp[i],c, x) != 0)
             i++;
-        if(g_global.envp[i] != '\0')
+        if(g_global->envp[i] != '\0')
         {
             cr = malloc(sizeof(char*) * ft_strlen(c)+1);
             cr[ft_strlen(c)] = '\0';
@@ -106,11 +106,41 @@ int serch_on_env(char *c,int *error)
                 cr[j] = c[j];
                 j++;
             }
-            g_global.envp[i] = cr;
+            g_global->envp[i] = cr;
             return(1);
         }
     }
     return (0);
+}
+
+void free_table(char **c)
+{
+    int i;
+
+    i = 0;
+    while(c[i])
+    {
+        free(c[i]);
+        i++;
+    }
+    free(c);
+}
+
+void copie_table(char **cp)
+{
+    int i;
+
+    i = 0;
+    while(cp[i] != NULL)
+		i++;
+	g_global->envp = (char **)malloc(sizeof(char *) * i + 1);
+	g_global->envp[i] = NULL;
+    i = 0;
+	while(cp[i] != NULL)
+	{
+		g_global->envp[i] = ft_strdup(cp[i]);
+		i++;
+	}
 }
 
 void add_in_export(char **c,int *error_out)
@@ -133,30 +163,23 @@ void add_in_export(char **c,int *error_out)
         if(serch == 0 && *error_out == 0)
         {
             i = 0;
-            while(g_global.envp[i])
+            while(g_global->envp[i])
                 i++;
             cr = (char **)malloc(sizeof(char *) * (i + 2));
             cr[i + 1] = NULL;
             i = 0;
-            while(g_global.envp[i] != NULL)
+            while(g_global->envp[i] != NULL)
             {
-                cr[i] = ft_strdup(g_global.envp[i]);
+                cr[i] = ft_strdup(g_global->envp[i]);
                 i++;
             }
             cr[i] = ft_strdup(c[x]);
-            g_global.envp = cr;
-            i = 0;
-            while(cr[i])
-            {
-                free(cr[i]);
-                i++;
-            }
-            free(cr);
+            free_table(g_global->envp);
+            copie_table(cr);
+            free_table(cr);
         }
         x++;
     }
-    
-    //return(g_global.envp);
 }
 
 void export(char **c,int fd,int false)
@@ -171,7 +194,7 @@ void export(char **c,int fd,int false)
     if(false == 1)
     {
         if(error == 0)
-            g_global.g_flags = 0;
+            g_global->g_flags = 0;
         exit(0);
     }
 }

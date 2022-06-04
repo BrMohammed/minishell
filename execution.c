@@ -195,7 +195,7 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
             pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
         if(pMlist_var->enter_built == 0)
         {
-            if (execve(pMlist_var->path, &pMlist_var->c[0], g_global.envp) == -1)
+            if (execve(pMlist_var->path, &pMlist_var->c[0], g_global->envp) == -1)
             {
                 printf("minishel: %s: command not found\n",pMlist_var->c[0]);
                 exit(127);

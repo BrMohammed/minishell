@@ -14,6 +14,17 @@
 #define TEXT  1
 #define DERECYION 0
 
+typedef struct s_global
+{
+    char **envp;
+    int g_flags;
+    int g_i;
+    int g_ii;
+}t_global;
+
+t_global *g_global;
+
+
 typedef struct s_pipeline
 {
     int fd[2];
@@ -29,16 +40,6 @@ typedef struct s_pMlist
     int lastFd;
     int enter_built;
 }t_pMlist;
-
-typedef struct s_global
-{
-    char **envp;
-    int g_flags;
-    int g_i;
-    int g_ii;
-}t_global;
-
-t_global g_global;
 
 typedef struct s_template
 {

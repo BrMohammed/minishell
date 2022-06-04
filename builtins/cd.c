@@ -33,7 +33,7 @@ void cd(char **c ,int false)
         move_to_dir(getenv("HOME"));
     if(false == 1)
     {
-        g_global.g_flags = 0;
+        g_global->g_flags = 0;
         exit(0);
     }
 }
