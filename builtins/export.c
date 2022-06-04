@@ -1,38 +1,44 @@
 # include "../minishell.h"
 #include <errno.h>
 
+void print_export(char *c)
+{
+    int equal_exist;
+    int y;
+
+    equal_exist = 0;
+    y = 0;
+    while(c[y])
+    {
+        if(y == 0)
+            printf("declare -x ");
+        printf("%c",c[y]); 
+        if(c[y] == '=')
+        {
+            printf("%c",'"');
+            equal_exist = 1;
+        }
+        y++;
+        if(c == '\0' && equal_exist == 1)
+        {
+            printf("%c",'"');
+            equal_exist = 0;
+        }
+        if (c[y] == '\0')
+            printf("\n");
+    }
+}
+
 void just_export(int fd,int false)
 {
     int i;
-    int y;
-    int equal_exist; 
 
     i = 0;
-    equal_exist = 0;
     if(false == 1)
         dup2(fd,1);
     while (g_global->envp[i])
     {
-        y = 0;
-        while(g_global->envp[i][y])
-        {
-            if(y == 0)
-                printf("declare -x ");
-            printf("%c",g_global->envp[i][y]); 
-            if(g_global->envp[i][y] == '=')
-            {
-                printf("%c",'"');
-                equal_exist = 1;
-            }
-            y++;
-            if(g_global->envp[i][y] == '\0' && equal_exist == 1)
-            {
-                printf("%c",'"');
-                equal_exist = 0;
-            }
-            if (g_global->envp[i][y] == '\0')
-                printf("\n");
-        }
+        print_export(g_global->envp[i]);
         i++;
     }
 }
@@ -45,12 +51,13 @@ int input_error(char *c)
         g_global->g_flags = 4;
         return(1);
     }
-    if(ft_isalnum(c) == 1 && ft_isdigit(c) == 0)
+    if((ft_isalnum(c) == 1 && ft_isdigit(c) == 0) || (c[0] >= '0' && c[0] <= '9'))
     {
         printf("minishell: export: `%s': not a valid identifier\n",c);
         g_global->g_flags = 1;
         return(1);
     }
+
     return(0);
 }
 
@@ -143,9 +150,28 @@ void copie_table(char **cp)
 	}
 }
 
-void add_in_export(char **c,int *error_out)
+char **add_to_table(char *c)
 {
     int i;
+    char **cr;
+
+    i = 0;
+    while(g_global->envp[i])
+        i++;
+    cr = (char **)malloc(sizeof(char *) * (i + 2));
+    cr[i + 1] = NULL;
+    i = 0;
+    while(g_global->envp[i] != NULL)
+    {
+        cr[i] = ft_strdup(g_global->envp[i]);
+        i++;
+    }
+    cr[i] = ft_strdup(c);
+    return(cr);
+}
+
+void add_in_export(char **c,int *error_out)
+{
     char **cr;
     int serch;
     int x;
@@ -162,18 +188,7 @@ void add_in_export(char **c,int *error_out)
             *error_out = 1;
         if(serch == 0 && *error_out == 0)
         {
-            i = 0;
-            while(g_global->envp[i])
-                i++;
-            cr = (char **)malloc(sizeof(char *) * (i + 2));
-            cr[i + 1] = NULL;
-            i = 0;
-            while(g_global->envp[i] != NULL)
-            {
-                cr[i] = ft_strdup(g_global->envp[i]);
-                i++;
-            }
-            cr[i] = ft_strdup(c[x]);
+            cr = add_to_table(c[x]);
             free_table(g_global->envp);
             copie_table(cr);
             free_table(cr);
