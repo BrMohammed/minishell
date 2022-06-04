@@ -35,17 +35,16 @@ char** pText(t_template* lst)
 void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
-    int index;
     int t;
     t_template *tmp = lst;
     int *fd_Der;
 
-    index = 0;
-    pMlist_var.c = NULL;
+    
     pMlist_var.lastFd = -1;
     fd_Der = allocation_for_FD();
     while(lst)
     {
+        pMlist_var.c = NULL;
         pMlist_var.path = NULL; 
         if(((t_Mlist *)lst->content)->derections && !((t_Mlist *)lst->content)->text)
         {
@@ -68,11 +67,10 @@ void pMlist(t_template* lst)
                 t = 0;
                 while (pMlist_var.c[t])
                     free(pMlist_var.c[t++]);
+                free(pMlist_var.c);
             }
         }
-        free(pMlist_var.c);
        /*******************/
-        index++;
         lst = lst->next;
     }
     while(tmp->next != NULL)
@@ -80,6 +78,12 @@ void pMlist(t_template* lst)
         waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
         tmp = tmp->next;
     }
-    waitpid(((t_Mlist *)tmp->content)->pid, &g_global.g_flags, 0);
-    g_global.g_flags = WEXITSTATUS(g_global.g_flags);
+    if(pMlist_var.enter_built == 0)
+    {
+        waitpid(((t_Mlist *)tmp->content)->pid, &g_global.g_flags, 0);
+        g_global.g_flags = WEXITSTATUS(g_global.g_flags);
+    }
+    else
+        waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
+    
 }
