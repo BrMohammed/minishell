@@ -13,6 +13,7 @@ int main(int argc, char** argv, char** envp)
 		while (1)
 		{
 			all = readline("minishell? ");
+			add_history(all);
 			minishell(all);
 			free(all);
 		}
