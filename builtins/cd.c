@@ -22,6 +22,10 @@ void move_to_dir(char *c)
     old = ft_strjoin(old,cwd);
     temp[1] = ft_strdup(old);
     export(temp,0,0);
+    free(temp[1]);
+    free(temp[0]);
+    free(temp);
+    free(old);
 }
 
 void cd(char **c ,int false)

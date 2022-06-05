@@ -19,7 +19,7 @@ void print_export(char *c)
             equal_exist = 1;
         }
         y++;
-        if(c == '\0' && equal_exist == 1)
+        if(c[y] == '\0' && equal_exist == 1)
         {
             printf("%c",'"');
             equal_exist = 0;
@@ -87,7 +87,11 @@ int serch_on_env(char *c,int *error)
         }
         *error = input_error(befor_equal); //  error if input take 1 all the comm in the next dont export
         if(*error == 1)
+        {
+            free(befor_equal);
             return(1);
+        }
+        free(befor_equal);
     }
     if(c[i] == '\0')
     {
@@ -113,7 +117,9 @@ int serch_on_env(char *c,int *error)
                 cr[j] = c[j];
                 j++;
             }
-            g_global->envp[i] = cr;
+            free(g_global->envp[i]);
+            g_global->envp[i] = ft_strdup(cr);
+            free(cr);
             return(1);
         }
     }

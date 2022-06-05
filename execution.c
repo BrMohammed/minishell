@@ -144,17 +144,17 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     }
     if(ft_strcmp(c[0],"exit") == 0)
     {
-        exitB();
+        exitB(c);
         return(1);
     }
     if(ft_strcmp(c[0],"env") == 0)
     {
-        envB(fd,pipe_exist);
+        envB(c,fd,pipe_exist);
         return(1);
     }
     if(ft_strcmp(c[0],"pwd") == 0)
     {
-        pwd(fd,pipe_exist);
+        pwd(c,fd,pipe_exist);
         return(1);
     }
     if (ft_strcmp(c[0],"echo") == 0)
