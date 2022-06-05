@@ -40,6 +40,7 @@ char* CheckDolar(char *temp,char *key_ex)
         key = ft_strjoin(key,for_expand);
         t++;
     }
+    free(for_expand);
     return(key);
 }
 
@@ -75,6 +76,7 @@ void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)
             while(key[t] == 32)
                 t++;
         }
+        free(for_expand);
     }
 }
 
@@ -193,9 +195,9 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
             *e = ft_strjoin(*e,key);
             ((t_ExpandData*)(*expand)->content)->key = key_ex;
         }
-            
-        temp = NULL;
+        free(temp);
         free(key);
+        free(key_ex);
     }
     i = j;
     return(i);

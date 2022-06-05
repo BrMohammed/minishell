@@ -1,12 +1,11 @@
 #include "minishell.h"
 
-int main(int argc, char** argv, char** envp)
+void copie_env(char **envp)
 {
-	char    *all;
-	int i = 0;
-	
-	g_global = malloc(sizeof(t_global));
+	int i;
 
+	i = 0;
+	g_global = malloc(sizeof(t_global));
 	while(envp[i] != NULL)
 		i++;
 	g_global->envp = (char **)malloc(sizeof(char *) * (i + 1));
@@ -18,6 +17,14 @@ int main(int argc, char** argv, char** envp)
 		i++;
 	}
 	g_global->g_flags = 0;
+}
+
+int main(int argc, char** argv, char** envp)
+{
+	char    *all;
+	
+	copie_env(envp);
+	
 	(void)argv;
 	(void) envp;
 	if(argc == 1)
@@ -29,6 +36,7 @@ int main(int argc, char** argv, char** envp)
 			minishell(all);
 			free(all);
 		}
+		free_table(g_global->envp);
 	}
 	return (0);
 }

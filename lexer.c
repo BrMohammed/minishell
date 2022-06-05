@@ -101,7 +101,6 @@ char* token_type(t_lexer *lexer, int *type)
 		*type = TYPE_EOF;
 		text = NULL;
 	}
-		
 	free(Temp_Char);
 	return(text);
 }
@@ -115,5 +114,6 @@ t_token *GetNextToken(t_lexer *lexer)
 	type = TYPE_TEXT;
 	temp_text = token_type(lexer, &type);
 	token = init_token(temp_text,type);
+	free(temp_text);
 	return(token);
 }

@@ -10,6 +10,7 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/wait.h>
+#include <dirent.h>
 
 #define TEXT  1
 #define DERECYION 0

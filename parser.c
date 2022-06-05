@@ -3,8 +3,8 @@
 t_template *Makelist(t_lexer *lexer, t_template **list)
 {
 	t_token *token;
-	t_template *text;
-	t_template *derections;
+	t_template *text; // leaks?
+	t_template *derections; // leaks?
 	int i = 0;
 	int i2 = 0;
 	
@@ -48,7 +48,6 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 		
 		i2++;
 	}
-
 	free(token);
 	return(*list);
 }
@@ -63,17 +62,15 @@ void *minishell(char* all)
 	list = NULL;
 	lexer = init_lexer(all);
 	list = Makelist(lexer,&list);
+	free(lexer);
 	error = list;
 	if(error)
 	{
 		if(RMlist(error) == 1)
-		{
-			free(lexer);
 			return(0);
-		}
 	}
 	if(list)
 		pMlist(list);
-	free(lexer);
+	free(list);
 	return(0);
 }
