@@ -43,8 +43,8 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 				temp = token->type;
 				free(token);
 				token = GetNextToken(lexer);
-				
-				temp2 = token->value;
+				if(token->type != TYPE_EOF)
+					temp2 = ft_strdup(token->value);
 				free(token);
 				if(token->type == TYPE_EOF)
 				{
@@ -52,18 +52,14 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 					temp2[0] = '\0';
 				}
 				lstadd_back(&derections,new_template((void*)new_derections(temp2,temp,i)));
-				if(token->type == TYPE_EOF)
-					free(temp2);
-				
+				free(temp2);
 				token = GetNextToken(lexer);
-				
 			}
 		}
 		free(token);
 		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
 		i2++;
 	}
-	while(1);
 	return(*list);
 }
 
@@ -79,15 +75,16 @@ void *minishell(char* all)
 	list = Makelist(lexer,&list);
 	free(lexer);
 	error = list;
-	
 	if(error)
 	{
 		if(RMlist(error) == 1)
+		{
+			free(list);
+			free(list->content);
 			return(0);
+		}
 	}
 	if(list)
 		pMlist(list);
-	free(list);
-
 	return(0);
 }
