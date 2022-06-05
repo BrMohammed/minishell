@@ -7,10 +7,16 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 	t_template *derections; // leaks?
 	int i = 0;
 	int i2 = 0;
+	char *temp2;
+	int temp;
+	
 	
 	token = GetNextToken(lexer); //<<<<< token have avery time type and value
 	if(token->type == TYPE_EOF)
+	{
+		free(token);
 		return(0);
+	}
 	while(token->type != TYPE_EOF)
 	{
 		text = NULL;
@@ -19,6 +25,7 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 		{
 			i++;
 			lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
+			free(token);
 			token = GetNextToken(lexer);
 		}
 		while (token->type != TYPE_PIPE && token->type != TYPE_EOF)
@@ -27,28 +34,36 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 			{
 				i++;
 				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
+				free(token);
 				token = GetNextToken(lexer);
 			}
 			else if(token->type == TYPE_DLredirection || token->type == TYPE_DRredirection || token->type == TYPE_Lredirection || token->type == TYPE_Rredirection)
 			{
 				i++;
-				int temp = token->type;
+				temp = token->type;
+				free(token);
 				token = GetNextToken(lexer);
-				char *temp2 = token->value;
+				
+				temp2 = token->value;
+				free(token);
 				if(token->type == TYPE_EOF)
 				{
 					temp2 = malloc(1);
 					temp2[0] = '\0';
 				}
 				lstadd_back(&derections,new_template((void*)new_derections(temp2,temp,i)));
+				if(token->type == TYPE_EOF)
+					free(temp2);
+				
 				token = GetNextToken(lexer);
+				
 			}
 		}
+		free(token);
 		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
-		
 		i2++;
 	}
-	free(token);
+	while(1);
 	return(*list);
 }
 
@@ -58,12 +73,13 @@ void *minishell(char* all)
 	t_lexer *lexer;
 	t_template *list;
 	t_template *error;
-
+	
 	list = NULL;
 	lexer = init_lexer(all);
 	list = Makelist(lexer,&list);
 	free(lexer);
 	error = list;
+	
 	if(error)
 	{
 		if(RMlist(error) == 1)
@@ -72,5 +88,6 @@ void *minishell(char* all)
 	if(list)
 		pMlist(list);
 	free(list);
+
 	return(0);
 }

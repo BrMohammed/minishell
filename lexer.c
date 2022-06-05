@@ -99,6 +99,7 @@ char* token_type(t_lexer *lexer, int *type)
 	if(text[0] == '\0')
 	{
 		*type = TYPE_EOF;
+		free(text);
 		text = NULL;
 	}
 	free(Temp_Char);
