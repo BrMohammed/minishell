@@ -229,9 +229,11 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         else if(data[i] == '$')/*dolar in text or inter of doublequet*/
             i = Dolar(data,&e,quat,&expand);
         free(temp);
+        temp = NULL;//?
         i++;
     }
     ExpandData(e,&expand,branch,text);
+    free(e);
 }
 
 /***** ERROR *****/

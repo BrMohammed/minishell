@@ -35,11 +35,10 @@ char** pText(t_template* lst)
 void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
-    int t;
-    t_template *tmp = lst;
+    t_template *tmp; 
     int *fd_Der;
 
-    
+    tmp = lst;
     pMlist_var.lastFd = -1;
     fd_Der = allocation_for_FD();
     while(lst)
@@ -64,15 +63,13 @@ void pMlist(t_template* lst)
                 pMlist_var.lastFd = pipeline(lst,&pMlist_var);
                 if (pMlist_var.path != NULL)
                     free(pMlist_var.path);
-                t = 0;
-                while (pMlist_var.c[t])
-                    free(pMlist_var.c[t++]);
-                free(pMlist_var.c);
+                free_table(pMlist_var.c);
             }
         }
        /*******************/
         lst = lst->next;
     }
+    free(fd_Der);
     while(tmp->next != NULL)
     {
         waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);

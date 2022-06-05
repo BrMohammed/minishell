@@ -204,5 +204,6 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     }
     else
         close_parent(var,&pMlist_var->lastFd,lst);
+    free(var.fd_Der);
     return(pMlist_var->lastFd);
 }
