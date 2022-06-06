@@ -47,7 +47,6 @@ void pMlist(t_template* lst)
         pMlist_var.path = NULL;
         if(((t_Mlist *)lst->content)->derections && !((t_Mlist *)lst->content)->text)
         {
-            //fd_Der = allocation_for_FD();
             fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
             if (fd_Der[1] != 0)
                 close(fd_Der[1]);
@@ -67,7 +66,6 @@ void pMlist(t_template* lst)
                 free_table(pMlist_var.c);
             }
         }
-       
         lst = lst->next;
     }
     while(tmp->next != NULL)

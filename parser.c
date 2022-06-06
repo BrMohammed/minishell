@@ -100,12 +100,13 @@ void free_text(t_template *lst)
 
 void free_tree(t_template *lst)
 {
-	if(((t_Mlist *)lst->content)->text)
+	
+	while(lst)
+	{	
+		if(((t_Mlist *)lst->content)->text)
 		free_text(((t_Mlist *)lst->content)->text);
 	if(((t_Mlist *)lst->content)->derections)
 		free_der(((t_Mlist *)lst->content)->derections);
-	while(lst)
-	{	
 		free(lst->content);
 		free(lst);
 		lst = lst->next;
