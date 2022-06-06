@@ -250,26 +250,15 @@ int RText(t_template *lst,t_template *Mlst)
         if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1))
         {
             Perror("|");
-            free(((t_text*)lst->content)->data);
-            free(lst->content);
-            free(lst);
             return(1);
         }
         if(((t_text*)lst->content)->type == TYPE_ERROR)
         {
             printf("Syntax Error\n");
-            free(((t_text*)lst->content)->data);
-            free(lst->content);
-            free(lst);
             return(1);
         }
         if((((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
-        {
-            free(((t_text*)lst->content)->data);
-            free(lst->content);
-            free(lst);
             return(2);
-        }
         MaleKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
 		lst = lst->next;
 	}
@@ -293,9 +282,6 @@ int RDerections(t_template* lst)
         if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
         {
             Perror(t_temp);
-            free(((t_derections*)lst->content)->file);
-            free(lst->content);
-            free(lst);
             return(1);
         }
         MaleKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);

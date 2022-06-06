@@ -62,6 +62,53 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 	}
 	return(*list);
 }
+void free_expand(t_template *lst)
+{
+	while(lst)
+	{
+		free(((t_ExpandData*)lst->content)->expan_data);
+		lst = lst->next;
+	}
+}
+void free_der(t_template *lst)
+{
+	while(lst)
+	{
+		if(((t_derections*)lst->content)->expand)
+			free_expand(((t_derections*)lst->content)->expand);
+		free(((t_derections*)lst->content)->file);
+		free(lst->content);
+		free(lst);
+		lst = lst->next; 
+	}
+}
+
+void free_text(t_template *lst)
+{
+	while(lst)
+	{
+		if(((t_text*)lst->content)->expand)
+			free_expand(((t_derections*)lst->content)->expand);
+		free(((t_text*)lst->content)->data);
+		free(lst->content);
+		free(lst);
+		lst = lst->next; 
+	}
+}
+
+void free_tree(t_template *lst)
+{
+	if(((t_Mlist *)lst->content)->text)
+		free_text(((t_Mlist *)lst->content)->text);
+	if(((t_Mlist *)lst->content)->derections)
+		free_der(((t_Mlist *)lst->content)->derections);
+	while(lst)
+	{	
+		free(lst->content);
+		free(lst);
+		lst = lst->next;
+	}
+}
 
 void *minishell(char* all)
 {
@@ -79,8 +126,7 @@ void *minishell(char* all)
 	{
 		if(RMlist(error) == 1)
 		{
-			free(list);
-			free(list->content);
+			free_tree(error);
 			return(0);
 		}
 	}

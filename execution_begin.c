@@ -82,5 +82,4 @@ void pMlist(t_template* lst)
     }
     else
         waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
-    
 }
