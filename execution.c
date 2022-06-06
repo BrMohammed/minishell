@@ -189,7 +189,6 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     if(pipe_exist == 0)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
     var.id = fork();
-   
     if (var.id == 0)
     {  
         duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);

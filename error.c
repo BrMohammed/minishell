@@ -315,16 +315,12 @@ int RMlist(t_template* lst)
 	        r = RText(((t_Mlist *)lst->content)->text,lst);
         if(((t_Mlist *)lst->content)->derections)
 	       r2 =  RDerections(((t_Mlist *)lst->content)->derections);
+        
         if(r == 2 & r2 == 0)
-        {
             return(1);
-        }
         lst = lst->next;
         if (r == 1 || r2 == 1)
-        {
             return(1);
-        }
-            
     }
     return(0);
 }

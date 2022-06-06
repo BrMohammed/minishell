@@ -56,10 +56,10 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 				token = GetNextToken(lexer);
 			}
 		}
-		free(token);
 		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
 		i2++;
 	}
+	free(token);
 	return(*list);
 }
 void free_expand(t_template *lst)
