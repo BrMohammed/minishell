@@ -67,6 +67,8 @@ void free_expand(t_template *lst)
 	while(lst)
 	{
 		free(((t_ExpandData*)lst->content)->expan_data);
+		free(lst->content);
+		free(lst);
 		lst = lst->next;
 	}
 }

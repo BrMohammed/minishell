@@ -34,7 +34,7 @@ int main(int argc, char** argv, char** envp)
 			all = readline("minishell? ");
 			add_history(all);
 			minishell(all);
-			while(1);
+			//while(1);
 			free(all);
 		}
 		free_table(g_global->envp);
