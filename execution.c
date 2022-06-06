@@ -3,10 +3,7 @@
 int *allocation_for_FD()
 {
     int *fd;
-    fd = (int *)malloc(sizeof(int) * 3);
-    fd[2] = '\0';
-    fd[1] = 0;
-    fd[0] = 0;
+    fd = malloc(sizeof(int) * 2);
     return(fd);
 }
 
@@ -177,9 +174,9 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     var.i  = 0;
     pMlist_var->enter_built = 0;
     pipe_exist = 0;
-    var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
-       var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+        var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+    while(1);
     if (lst->next != NULL)
     {
         pipe(var.fd);
@@ -201,7 +198,8 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
                 exit(127);
             }
         }
-    }
+       
+    } 
     else
         close_parent(var,&pMlist_var->lastFd,lst);
     free(var.fd_Der);

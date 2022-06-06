@@ -126,11 +126,12 @@ void *minishell(char* all)
 	{
 		if(RMlist(error) == 1)
 		{
-			free_tree(error);
+			free_tree(list);
 			return(0);
 		}
 	}
 	if(list)
 		pMlist(list);
+	free_tree(list);
 	return(0);
 }

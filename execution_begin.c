@@ -52,7 +52,7 @@ void pMlist(t_template* lst)
                 close(fd_Der[1]);
             if (fd_Der[0] != 0)
                 close(fd_Der[0]);
-        }
+        } 
         /**********   pipe  *********/
         if(((t_Mlist *)lst->content)->text)
         {
@@ -65,7 +65,7 @@ void pMlist(t_template* lst)
                     free(pMlist_var.path);
                 free_table(pMlist_var.c);
             }
-        }
+        } 
        /*******************/
         lst = lst->next;
     }

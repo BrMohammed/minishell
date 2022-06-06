@@ -110,22 +110,3 @@ void	path_finder(char **path, char **c, char **envp)
 	}
 	free(paths03);
 }
-
-void	close_childe(int g_t, int **fd, int index)
-{
-	int	t;
-	int	v;
-
-	t = 0;
-	v = 0;
-	while (fd[v])
-	{
-		while (fd[v][t])
-		{
-			if (g_t != v || t != index)
-				close(fd[v][t]);
-			t++;
-		}
-		v++;
-	}
-}
