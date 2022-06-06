@@ -188,23 +188,25 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     }
     if(pipe_exist == 0)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
-    var.id = fork();
-    if (var.id == 0)
-    {  
-        duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
-        if(pipe_exist == 1)
-            pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
-        if(pMlist_var->enter_built == 0)
-        {
-            if (execve(pMlist_var->path, &pMlist_var->c[0], g_global->envp) == -1)
+    if(pMlist_var->enter_built == 0)
+    {
+        var.id = fork();
+        if (var.id == 0)
+        {  
+            duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
+            if(pipe_exist == 1)
+                pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
+            if(pMlist_var->enter_built == 0)
             {
-                printf("minishel: %s: command not found\n",pMlist_var->c[0]);
-                exit(127);
+                if (execve(pMlist_var->path, &pMlist_var->c[0], g_global->envp) == -1)
+                {
+                    printf("minishel: %s: command not found\n",pMlist_var->c[0]);
+                    exit(127);
+                }
             }
-        }
-    } 
-    else
-        close_parent(var,&pMlist_var->lastFd,lst);
+        } 
+    }
+    close_parent(var,&pMlist_var->lastFd,lst);
     free(var.fd_Der);
     return(pMlist_var->lastFd);
 }

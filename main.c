@@ -24,7 +24,6 @@ int main(int argc, char** argv, char** envp)
 	char    *all;
 	
 	copie_env(envp);
-	
 	(void)argv;
 	(void) envp;
 	if(argc == 1)
@@ -34,7 +33,6 @@ int main(int argc, char** argv, char** envp)
 			all = readline("minishell? ");
 			add_history(all);
 			minishell(all);
-			//while(1);
 			free(all);
 		}
 		free_table(g_global->envp);
