@@ -40,20 +40,21 @@ void pMlist(t_template* lst)
 
     tmp = lst;
     pMlist_var.lastFd = -1;
-    fd_Der = allocation_for_FD();
+   
     while(lst)
     {
         pMlist_var.c = NULL;
-        pMlist_var.path = NULL; 
+        pMlist_var.path = NULL;
+        fd_Der = allocation_for_FD();
         if(((t_Mlist *)lst->content)->derections && !((t_Mlist *)lst->content)->text)
         {
-            fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+            OutDerections(((t_Mlist *)lst->content)->derections,&fd_Der);
             if (fd_Der[1] != 0)
                 close(fd_Der[1]);
             if (fd_Der[0] != 0)
                 close(fd_Der[0]);
-        } 
-        /**********   pipe  *********/
+        }
+        
         if(((t_Mlist *)lst->content)->text)
         {
             pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
@@ -65,11 +66,10 @@ void pMlist(t_template* lst)
                     free(pMlist_var.path);
                 free_table(pMlist_var.c);
             }
-        } 
-       /*******************/
+        }
+        free(fd_Der);
         lst = lst->next;
     }
-    free(fd_Der);
     while(tmp->next != NULL)
     {
         waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);

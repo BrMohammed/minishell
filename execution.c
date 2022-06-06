@@ -34,17 +34,15 @@ char **creat_table(t_template *lst)
     return(c);
 }
 
-int *OutDerections(t_template* lst)
+void OutDerections(t_template* lst,int **fd)
 {
     t_template *exp;
-    int *fd;
     int i;
     int used[2];
     
     i  = 0;
     used[1] = 0;
     used[0] = 0;
-    fd = allocation_for_FD();
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
@@ -52,11 +50,11 @@ int *OutDerections(t_template* lst)
         {
              if(used[1] % 2 == 1)
             {
-                close(fd[1]);
+                close(*fd[1]);
                 used[1]++;
             }
-            fd[1] = ((t_derections*)lst->content)->fd; //out
-            if(fd[1] == -1)
+            *fd[1] = ((t_derections*)lst->content)->fd; //out
+            if(*fd[1] == -1)
                 printf("minishell: %s: Permission denied \n",((t_derections*)lst->content)->file);
             used[1]++;
         }  
@@ -64,10 +62,10 @@ int *OutDerections(t_template* lst)
         {
             if(used[0] % 2 == 1)
             {
-                close(fd[0]);
+                close(*fd[0]);
                 used[0]++;
             }
-            fd[0] = heredoc(((t_derections*)lst->content)->file);
+            *fd[0] = heredoc(((t_derections*)lst->content)->file);
             used[0]++;
         }
             
@@ -75,15 +73,14 @@ int *OutDerections(t_template* lst)
         {
             if(used[0] % 2 == 1)
             {
-                close(fd[0]);
+                close(*fd[0]);
                 used[0]++;
             }
-            fd[0] = ((t_derections*)lst->content)->fd;
+            *fd[0] = ((t_derections*)lst->content)->fd;
             used[0]++;
         }
 		lst = lst->next;
 	}
-    return(fd);
 }
 
 void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd)
@@ -174,9 +171,9 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     var.i  = 0;
     pMlist_var->enter_built = 0;
     pipe_exist = 0;
+    var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
-        var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
-    while(1);
+        OutDerections(((t_Mlist *)lst->content)->derections,&var.fd_Der);
     if (lst->next != NULL)
     {
         pipe(var.fd);
@@ -198,7 +195,6 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
                 exit(127);
             }
         }
-       
     } 
     else
         close_parent(var,&pMlist_var->lastFd,lst);

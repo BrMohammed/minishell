@@ -132,7 +132,7 @@ char **creat_table(t_template *lst);
 int	heredoc(char *name);
 int main(int argc, char** argv, char** envp);
 int *allocation_for_FD();
-int *OutDerections(t_template* lst);
+void OutDerections(t_template* lst,int **fd);
 void export(char **c,int fd,int false);
 void unset(char **c,int false);
 void exitB(char **c);
@@ -144,4 +144,5 @@ int serch_on_env(char *c,int *error);
 void copie_table(char **cp);
 void free_table(char **c);
 int input_error(char *c);
+void free_tree(t_template *lst);
 #endif
