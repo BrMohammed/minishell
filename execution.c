@@ -3,7 +3,10 @@
 int *allocation_for_FD()
 {
     int *fd;
-    fd = malloc(sizeof(int) * 2);
+    fd = (int *)malloc(sizeof(int) * 3);
+    fd[2] = '\0';
+    fd[1] = 0;
+    fd[0] = 0;
     return(fd);
 }
 
@@ -34,15 +37,17 @@ char **creat_table(t_template *lst)
     return(c);
 }
 
-void OutDerections(t_template* lst,int **fd)
+int *OutDerections(t_template* lst)
 {
     t_template *exp;
     int i;
     int used[2];
+    int *fd;
     
     i  = 0;
     used[1] = 0;
     used[0] = 0;
+    fd = allocation_for_FD();
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
@@ -50,11 +55,11 @@ void OutDerections(t_template* lst,int **fd)
         {
              if(used[1] % 2 == 1)
             {
-                close(*fd[1]);
+                close(fd[1]);
                 used[1]++;
             }
-            *fd[1] = ((t_derections*)lst->content)->fd; //out
-            if(*fd[1] == -1)
+            fd[1] = ((t_derections*)lst->content)->fd; //out
+            if(fd[1] == -1)
                 printf("minishell: %s: Permission denied \n",((t_derections*)lst->content)->file);
             used[1]++;
         }  
@@ -62,10 +67,10 @@ void OutDerections(t_template* lst,int **fd)
         {
             if(used[0] % 2 == 1)
             {
-                close(*fd[0]);
+                close(fd[0]);
                 used[0]++;
             }
-            *fd[0] = heredoc(((t_derections*)lst->content)->file);
+            fd[0] = heredoc(((t_derections*)lst->content)->file);
             used[0]++;
         }
             
@@ -73,14 +78,15 @@ void OutDerections(t_template* lst,int **fd)
         {
             if(used[0] % 2 == 1)
             {
-                close(*fd[0]);
+                close(fd[0]);
                 used[0]++;
             }
-            *fd[0] = ((t_derections*)lst->content)->fd;
+            fd[0] = ((t_derections*)lst->content)->fd;
             used[0]++;
         }
 		lst = lst->next;
 	}
+    return(fd);
 }
 
 void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd)
@@ -120,7 +126,7 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
         close(var.fd[1]);
     if(var.fd_Der[1] > 0)
         close(var.fd_Der[1]);
-    if(var.fd_Der[0] > 0 )
+    if(var.fd_Der[0] > 0)
         close(var.fd_Der[0]);
 }
 
@@ -171,9 +177,10 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     var.i  = 0;
     pMlist_var->enter_built = 0;
     pipe_exist = 0;
-    var.fd_Der = allocation_for_FD();
     if(((t_Mlist *)lst->content)->derections)
-        OutDerections(((t_Mlist *)lst->content)->derections,&var.fd_Der);
+        var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+    else
+        var.fd_Der = allocation_for_FD();
     if (lst->next != NULL)
     {
         pipe(var.fd);
@@ -182,6 +189,7 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     if(pipe_exist == 0)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
     var.id = fork();
+   
     if (var.id == 0)
     {  
         duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);

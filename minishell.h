@@ -132,7 +132,7 @@ char **creat_table(t_template *lst);
 int	heredoc(char *name);
 int main(int argc, char** argv, char** envp);
 int *allocation_for_FD();
-void OutDerections(t_template* lst,int **fd);
+int *OutDerections(t_template* lst);
 void export(char **c,int fd,int false);
 void unset(char **c,int false);
 void exitB(char **c);
