@@ -50,10 +50,10 @@ void pMlist(t_template* lst)
             if (fd_Der[1] != 0)
                 close(fd_Der[1]);
             if (fd_Der[0] != 0)
-                close(fd_Der[0]); 
+                close(fd_Der[0]);
             free(fd_Der);
         }
-        if(((t_Mlist *)lst->content)->text)
+        if(((t_Mlist *)lst->content)->text || ((t_Mlist *)lst->content)->derections)
         {
             pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
             if(pMlist_var.c != NULL)
