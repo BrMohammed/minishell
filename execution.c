@@ -186,15 +186,16 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
         pipe(var.fd);
         pipe_exist = 1;
     }
-    if(pipe_exist == 0)
+    if(pipe_exist == 0 && pMlist_var->c != NULL)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
+    
     if(pMlist_var->enter_built == 0)
     {
         var.id = fork();
         if (var.id == 0)
         {  
             duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
-            if(pipe_exist == 1)
+            if(pipe_exist == 1 && pMlist_var->c != NULL)
                 pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
             if(pMlist_var->enter_built == 0)
             {

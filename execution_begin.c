@@ -35,7 +35,7 @@ void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
     t_template *tmp; 
-    int *fd_Der;
+    //int *fd_Der;
 
     tmp = lst;
     pMlist_var.lastFd = -1;
@@ -44,26 +44,18 @@ void pMlist(t_template* lst)
     {
         pMlist_var.c = NULL;
         pMlist_var.path = NULL;
-        if(((t_Mlist *)lst->content)->derections && !((t_Mlist *)lst->content)->text)
-        {
-            fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
-            if (fd_Der[1] != 0)
-                close(fd_Der[1]);
-            if (fd_Der[0] != 0)
-                close(fd_Der[0]);
-            free(fd_Der);
-        }
         if(((t_Mlist *)lst->content)->text || ((t_Mlist *)lst->content)->derections)
         {
             pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
             if(pMlist_var.c != NULL)
             {
                 path_finder(&pMlist_var.path, pMlist_var.c, g_global->envp);
-                pMlist_var.lastFd = pipeline(lst,&pMlist_var);
-                if (pMlist_var.path != NULL)
-                    free(pMlist_var.path);
-                free_table(pMlist_var.c);
             }
+            pMlist_var.lastFd = pipeline(lst,&pMlist_var);
+            if (pMlist_var.path != NULL)
+                free(pMlist_var.path);
+            if (pMlist_var.c != NULL)
+                free_table(pMlist_var.c);
         }
         lst = lst->next;
     }
