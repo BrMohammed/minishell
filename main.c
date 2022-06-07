@@ -24,6 +24,7 @@ int main(int argc, char** argv, char** envp)
 	char    *all;
 	
 	copie_env(envp);
+	signal(SIGQUIT,SIG_IGN);
 	(void)argv;
 	(void) envp;
 	if(argc == 1)

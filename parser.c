@@ -66,7 +66,8 @@ void free_expand(t_template *lst)
 {
 	while(lst)
 	{
-		free(((t_ExpandData*)lst->content)->expan_data);
+		if(((t_ExpandData*)lst->content)->expan_data[0] != '\0')
+			free(((t_ExpandData*)lst->content)->expan_data);
 		free(lst->content);
 		free(lst);
 		lst = lst->next;
@@ -100,7 +101,6 @@ void free_text(t_template *lst)
 
 void free_tree(t_template *lst)
 {
-	
 	while(lst)
 	{	
 		if(((t_Mlist *)lst->content)->text)
@@ -135,6 +135,7 @@ void *minishell(char* all)
 	}
 	if(list)
 		pMlist(list);
+	
 	free_tree(list);
 	return(0);
 }

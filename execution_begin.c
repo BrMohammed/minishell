@@ -16,7 +16,7 @@ char** pText(t_template* lst)
             //printf("{%s -> type : %d -> ord : %d} (>>) ",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
         }
             
-         while(exp) /*   >>>>>   for looping in the expanded link of node text*/
+        while(exp) /*   >>>>>   for looping in the expanded link of node text*/
         { 
             //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
             if(ft_strncmp(((t_ExpandData*)exp->content)->expan_data, "|",1) != 0)
@@ -27,7 +27,6 @@ char** pText(t_template* lst)
             exp = exp->next;
         }
 		lst = lst->next;
-
 	}
     return(c);
 }

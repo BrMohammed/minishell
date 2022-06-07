@@ -173,7 +173,7 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
 {
     t_pipeline var;
     int pipe_exist;
-    
+
     var.i  = 0;
     pMlist_var->enter_built = 0;
     pipe_exist = 0;

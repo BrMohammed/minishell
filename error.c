@@ -52,7 +52,6 @@ void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)
 
     temp00 = NULL;
     for_expand = malloc(2);
-    for_expand[0] = '\0';
     for_expand[1] = '\0';
     t = 0;
     while(key[t] != '\0' )
@@ -76,8 +75,8 @@ void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)
             while(key[t] == 32)
                 t++;
         }
-        free(for_expand);
     }
+    free(for_expand);
 }
 
 void quat_skip(char *quat,char data,char **e)
@@ -136,7 +135,7 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
             i++;
         }
     }
-    free(key);
+   free(key);
     return(temp);
 }
 
@@ -145,7 +144,6 @@ char* Begin_Dolar(int *j,char* data,char **e,char **key_ex)
     char* temp;
 
     *key_ex = NULL;
-    temp = ft_strdup("");
     temp = MakeTheKey(data,j,key_ex); /*key of dolar*/
     if(temp == NULL) /* key is null*/
     {
@@ -214,6 +212,7 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
     i = 0;
     e = ft_strdup("");
     expand = NULL;
+    quat = 0;
     lstadd_back(&expand, new_template(new_expand("","")));
     while(i <= (int)ft_strlen(data))
     {
@@ -228,13 +227,12 @@ void MaleKeyOfDlar(char *data,t_template **text,int branch)
         }
         else if(data[i] == '$')/*dolar in text or inter of doublequet*/
             i = Dolar(data,&e,quat,&expand);
-        free(temp);
-        temp = NULL;//?
+      free(temp);
+        temp = NULL;
         i++;
     }
     ExpandData(e,&expand,branch,text);
     free(e);
-    
 }
 
 /***** ERROR *****/
