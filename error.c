@@ -289,20 +289,20 @@ int RDerections(t_template* lst)
              if(((t_derections*)lst->content)->expand->next != NULL || ((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data[0] == '\0')
              {
                  printf("minishell: %s: ambiguous redirect\n",((t_derections*)lst->content)->file);
-                 ((t_derections*)lst->content)->fd = 0;
+                 ((t_derections*)lst->content)->fd = -1;
              }
             else
-                ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out >
+                ((t_derections*)lst->content)->fd = open(((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out >
         }
         if(((t_derections*)lst->content)->type == TYPE_DRredirection)
         {
             if(((t_derections*)lst->content)->expand->next != NULL || ((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data[0] == '\0')
             {
                 printf("minishell: %s: ambiguous redirect\n",((t_derections*)lst->content)->file);
-                ((t_derections*)lst->content)->fd = 0;
+                ((t_derections*)lst->content)->fd = -1;
             } 
             else
-                ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
+                ((t_derections*)lst->content)->fd = open(((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
         }
         if(((t_derections*)lst->content)->type == TYPE_Lredirection)
         {

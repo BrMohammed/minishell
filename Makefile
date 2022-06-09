@@ -36,9 +36,7 @@ re:			fclean all
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
 
-
-#echo hamza > $P
-# >$PWD
+#TODO:
 
 
 ADD = git add .
