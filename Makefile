@@ -6,7 +6,9 @@ SRC_P = lexer.c parser.c error.c struct_tool.c\
 
 CC = @gcc 
 
-CFLAGS = -lreadline -Wall -Wextra -Werror -g #-fsanitize=address
+RDLINE		:= -lreadline -L/goinfre/brmohamm/.brew/opt/readline/lib 
+
+CFLAGS = -lreadline -Wall -Wextra -Werror -I/goinfre/brmohamm/.brew/opt/readline/include  #-fsanitize=address -g
 
 
 LIBFT = libft/libft.a
@@ -17,7 +19,7 @@ all:		$(NAME)
 
 $(NAME):
 			@make -C libft && make bonus -C libft
-			$(CC) $(CFLAGS) $(LIBFT) $(SRC_P) -o $(NAME)
+			$(CC) $(CFLAGS) $(RDLINE) $(LIBFT) $(SRC_P) -o $(NAME)
 			@make clean -C libft
 			@echo "®MINISHELL CREATED"
 
@@ -33,6 +35,10 @@ re:			fclean all
 
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
+
+
+#echo hamza > $P
+# >$PWD
 
 
 ADD = git add .

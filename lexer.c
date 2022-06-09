@@ -1,9 +1,12 @@
 #include "minishell.h"
 
-void AgrimNextToken(t_lexer* lexer)
+int AgrimNextToken(t_lexer* lexer)
 {
 	lexer->i++;
+	if(lexer->i > lexer->size)
+		return(1);
 	lexer->c = lexer->src[lexer->i];
+	return(0);
 }
 
 void string_join(t_lexer *lexer, char **text,int *type)
@@ -35,7 +38,8 @@ void string_join(t_lexer *lexer, char **text,int *type)
 			ii++;
 		}
 		*text = ft_strjoin(*text,Temp_Char);
-		AgrimNextToken(lexer);
+		if(AgrimNextToken(lexer) == 1)
+			break;
 		if(((lexer->c == '(' || lexer->c == ')' || lexer->c == '&' ||lexer->c == '|' 
 		|| lexer->c == '>' || lexer->c == '<') && ( quat == '\0')) || ((lexer->c == '\n' || lexer->c  == '\t' 
 		|| lexer->c  == 32) && ( quat == '\0')))

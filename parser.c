@@ -1,6 +1,6 @@
 # include "minishell.h"
 
-t_template *Makelist(t_lexer *lexer, t_template **list)
+void Makelist(t_lexer *lexer, t_template **list)
 {
 	t_token *token;
 	t_template *text; // leaks?
@@ -10,14 +10,10 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 	char *temp2;
 	int temp;
 	
-	
-	token = GetNextToken(lexer); //<<<<< token have avery time type and value
+	token = GetNextToken(lexer);
 	if(token->type == TYPE_EOF)
-	{
 		free(token);
-		return(0);
-	}
-	while(token->type != TYPE_EOF)
+	while(token->type != TYPE_EOF || token->value != NULL)
 	{
 		text = NULL;
 		derections = NULL;
@@ -60,47 +56,65 @@ t_template *Makelist(t_lexer *lexer, t_template **list)
 		i2++;
 	}
 	free(token);
-	return(*list);
+	//return(*list);
 }
 void free_expand(t_template *lst)
 {
+	t_template *temp;
+
+	temp = lst;
 	while(lst)
 	{
 		if(((t_ExpandData*)lst->content)->expan_data[0] != '\0')
 			free(((t_ExpandData*)lst->content)->expan_data);
 		free(lst->content);
-		free(lst);
 		lst = lst->next;
+		free(temp);
+		temp = lst;
 	}
+	free(lst);
 }
 void free_der(t_template *lst)
 {
+	t_template *temp;
+
+	temp = lst;
 	while(lst)
 	{
 		if(((t_derections*)lst->content)->expand)
 			free_expand(((t_derections*)lst->content)->expand);
 		free(((t_derections*)lst->content)->file);
 		free(lst->content);
-		free(lst);
-		lst = lst->next; 
+		lst = lst->next;
+		free(temp);
+		temp = lst;
 	}
+	free(lst);
 }
 
 void free_text(t_template *lst)
 {
+	t_template *temp;
+
+	temp = lst;
 	while(lst)
 	{
 		if(((t_text*)lst->content)->expand)
 			free_expand(((t_derections*)lst->content)->expand);
 		free(((t_text*)lst->content)->data);
 		free(lst->content);
-		free(lst);
-		lst = lst->next; 
+		lst = lst->next;
+		free(temp);
+		temp = lst;
 	}
+	free(lst);
 }
 
 void free_tree(t_template *lst)
 {
+	t_template *temp;
+
+	temp = lst;
 	while(lst)
 	{	
 		if(((t_Mlist *)lst->content)->text)
@@ -108,9 +122,11 @@ void free_tree(t_template *lst)
 	if(((t_Mlist *)lst->content)->derections)
 		free_der(((t_Mlist *)lst->content)->derections);
 		free(lst->content);
-		free(lst);
 		lst = lst->next;
+		free(temp);
+		temp = lst;
 	}
+	free(lst);
 }
 
 void *minishell(char* all)
@@ -122,20 +138,19 @@ void *minishell(char* all)
 	
 	list = NULL;
 	lexer = init_lexer(all);
-	list = Makelist(lexer,&list);
+	Makelist(lexer,&list);
 	free(lexer);
 	error = list;
 	if(error)
 	{
 		if(RMlist(error) == 1)
-		{
+		{		
 			free_tree(list);
 			return(0);
 		}
 	}
 	if(list)
 		pMlist(list);
-	
 	free_tree(list);
 	return(0);
 }

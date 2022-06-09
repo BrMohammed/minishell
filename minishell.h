@@ -3,7 +3,8 @@
 
 # include "libft/libft.h"
 #include <stdio.h>
-#include <readline/readline.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -11,6 +12,7 @@
 # include <errno.h>
 # include <sys/wait.h>
 #include <dirent.h>
+#include <signal.h>
 
 #define TEXT  1
 #define DERECYION 0
@@ -145,4 +147,5 @@ void copie_table(char **cp);
 void free_table(char **c);
 int input_error(char *c);
 void free_tree(t_template *lst);
+void signal_callback_handler(int sig);
 #endif

@@ -35,7 +35,6 @@ void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
     t_template *tmp; 
-    //int *fd_Der;
 
     tmp = lst;
     pMlist_var.lastFd = -1;
@@ -48,9 +47,7 @@ void pMlist(t_template* lst)
         {
             pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
             if(pMlist_var.c != NULL)
-            {
                 path_finder(&pMlist_var.path, pMlist_var.c, g_global->envp);
-            }
             pMlist_var.lastFd = pipeline(lst,&pMlist_var);
             if (pMlist_var.path != NULL)
                 free(pMlist_var.path);
@@ -59,16 +56,16 @@ void pMlist(t_template* lst)
         }
         lst = lst->next;
     }
-    while(tmp->next != NULL)
+    while(tmp)
     {
-        waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
+        // dprintf(2, "bef************** : [%d]\n", ((t_Mlist *)tmp->content)->pid);
+        waitpid(-1, &g_global->g_flags, 0);
+        if(g_global->g_flags == 2)
+            g_global->g_flags = 130;
+        else if(g_global->g_flags == 3)
+            g_global->g_flags = 131;
+        else if(((t_Mlist *)tmp->content)->pid != 0)
+            g_global->g_flags = WEXITSTATUS(g_global->g_flags);
         tmp = tmp->next;
     }
-    if(pMlist_var.enter_built == 0)
-    {
-        waitpid(((t_Mlist *)tmp->content)->pid, &g_global->g_flags, 0);
-        g_global->g_flags = WEXITSTATUS(g_global->g_flags);
-    }
-    else
-        waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
 }

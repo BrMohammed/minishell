@@ -169,6 +169,12 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     }
     return(0);
 }
+// void handler(int sig)
+// {
+//     (void)sig;
+//     dprintf(2, "totototototototo\n");
+//     exit(0);
+// }
 int pipeline(t_template *lst,t_pMlist *pMlist_var)
 {
     t_pipeline var;
@@ -190,10 +196,14 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
     
     if(pMlist_var->enter_built == 0)
-    {
+    {       
         var.id = fork();
+        //dprintf(2, "pid : [%d]\n", var.id);
+       // signal(SIGINT, SIG_IGN);
         if (var.id == 0)
         {  
+            // signal(SIGINT, SIG_DFL);
+            // signal(SIGQUIT, SIG_DFL);
             duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
             if(pipe_exist == 1 && pMlist_var->c != NULL)
                 pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
