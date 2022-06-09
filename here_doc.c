@@ -14,13 +14,11 @@
 
 void handler(int sig)
 {
-	(void)sig;//if //(sig == SIGINT)
-			// ft_putchar_fd('\n', 1);
-			// rl_replace_line("", 0);
-		//rl_on_new_line();
-			//rl_redisplay();
-    exit(1);
-	//kill(getpid (),SIGKILL);
+	(void)sig;
+	rl_replace_line("", 0);
+	ft_putchar_fd('\n', 1);
+	rl_on_new_line();
+    exit(2);
 }
 
 int	heredoc(char *file)
@@ -35,13 +33,11 @@ int	heredoc(char *file)
 	inputs[0] = '\0';
 	r[0] = '\0';
 	pipe(fd_herd);
-	//signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	id = fork();
 	if(id == 0)
 	{
-		//signal(SIGINT, SIG_IGN);
-		//signal(SIGINT, SIG_DFL);
-		//signal(SIGINT, handler);
+		signal(SIGINT, handler);
 		close(fd_herd[0]);
 		while (ft_strcmp(file, r) != -10 && error != 0)
 		{
