@@ -110,9 +110,10 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
     temp = ft_strdup("");
     if(data[*j] == '?') // flage chek
     {
-        temp[0] = data[*j];
-        key = ft_strjoin(key,temp);
+        free(temp);
+        temp = NULL;
         temp = ft_itoa(g_global->g_flags);
+        
     }
     else
     {
@@ -135,7 +136,7 @@ char* MakeTheKey(char *data, int *j,char** key_ex)
             i++;
         }
     }
-   free(key);
+    free(key);
     return(temp);
 }
 
