@@ -26,7 +26,7 @@ int		ft_isprint(int c);
 size_t	ft_strlen(const char *str);
 void	*ft_memset(void *str, int value, size_t count);
 int		ft_toupper(int chr);
-int		ft_tolower(int chr);
+char*	ft_tolower(char *str);
 char	*ft_strchr( const char *str, int c );
 char	*ft_strrchr( const char *str, int c );
 void	ft_bzero(void *str, size_t count);

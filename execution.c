@@ -157,7 +157,7 @@ int  all_builtins(char **c, int pipe_exist, int fd)
         pwd(c,fd,pipe_exist);
         return(1);
     }
-    if (ft_strcmp(c[0],"echo") == 0)
+    if (ft_strcmp(ft_tolower(c[0]),"echo") == 0)
     {
         echo(c,fd,pipe_exist);
         return(1);

@@ -12,11 +12,22 @@
 
 #include "libft.h"
 
-int	ft_tolower(int chr)
+char*	ft_tolower(char *str)
 {
-	if (chr >= 'A' && chr <= 'Z')
+	char *c;
+	int i ;
+
+	i = 0;
+
+	c = malloc(ft_strlen(str) + 1);
+	while(str[i])
 	{
-		chr = chr + 32;
+		if (str[i] >= 'A' && str[i] <= 'Z')
+			c[i] = str[i] + 32;
+		else
+			c[i] = str[i];
+		i++;
 	}
-	return (chr);
+	c[i] ='\0';
+	return (c);
 }
