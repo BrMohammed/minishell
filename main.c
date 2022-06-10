@@ -46,13 +46,17 @@ int main(int argc, char** argv, char** envp)
 			signal(SIGQUIT, SIG_IGN);
 			signal(SIGINT, signal_handler2);
 			free(all);
+			g_global->error_her = 0;
 			all = readline("minishell? ");
 			add_history(all);	    
 			if(all != NULL && all[0] != '\0')
 				minishell(all);
 		}
 		free(all);
-		free_table(g_global->envp);
 	}
-	return (0);
+	if(g_global->g_flags == 130)
+		g_global->g_flags = 2;
+	if(g_global->g_flags == 131)
+		g_global->g_flags = 3;
+	exit(g_global->g_flags);
 }

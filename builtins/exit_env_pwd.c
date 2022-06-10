@@ -27,14 +27,11 @@ void exitB(char **c)
     if(c[1])
         error = args_error(c[1],1,"exit");
     if(error == 0)
-    {
-        g_global->g_flags = 0;
-        exit(0);
-    }
+        exit(g_global->g_flags);
     else
     {
         g_global->g_flags = 1;
-        exit(0);
+        exit(g_global->g_flags);
     }
 }
 
@@ -86,8 +83,9 @@ void pwd(char **c,int fd,int false)
     {
         if(error == 0)
             g_global->g_flags = 0;
-        exit(0);
+        exit(g_global->g_flags);
     }
+    g_global->g_flags = 0;
 }
 
 /*************** --  env -- ******************/
@@ -136,6 +134,7 @@ void envB(char **c,int fd,int false)
     {
         if(error == 0)
             g_global->g_flags = 0;
-        exit(0);
+        exit(g_global->g_flags);
     }
+    g_global->g_flags = 0;
 }

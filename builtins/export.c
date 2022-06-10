@@ -48,7 +48,7 @@ int input_error(char *c)
     if(c[0] == '-')
     {
         printf("minishell: export: `%c%c': invalid option\n",c[0],c[1]);
-        g_global->g_flags = 4;
+        g_global->g_flags = 1;
         return(1);
     }
     if((ft_isalnum(c) == 1 && ft_isdigit(c) == 0) || (c[0] >= '0' && c[0] <= '9'))
@@ -216,6 +216,6 @@ void export(char **c,int fd,int false)
     {
         if(error == 0)
             g_global->g_flags = 0;
-        exit(0);
+        exit(g_global->g_flags);
     }
 }

@@ -44,4 +44,5 @@ void cd(char **c ,int false)
         g_global->g_flags = 0;
         exit(0);
     }
+    g_global->g_flags = 0;
 }

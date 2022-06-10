@@ -21,6 +21,7 @@ typedef struct s_global
 {
     char **envp;
     int g_flags;
+    int error_her;
     int g_i;
     int g_ii;
 }t_global;

@@ -11,14 +11,8 @@ char** pText(t_template* lst)
     while (lst)
 	{
         exp = ((t_text*)lst->content)->expand;
-        if(((t_text*)lst->content)->data != NULL)
-        {
-            //printf("{%s -> type : %d -> ord : %d} (>>) ",((t_text*)lst->content)->data, ((t_text*)lst->content)->type,((t_text*)lst->content)->order);
-        }
-            
         while(exp) /*   >>>>>   for looping in the expanded link of node text*/
-        { 
-            //printf("{%s ==>> %s}",((t_ExpandData*)exp->content)->expan_data,((t_ExpandData*)exp->content)->key);
+        {
             if(ft_strncmp(((t_ExpandData*)exp->content)->expan_data, "|",1) != 0)
             {
                 c[number_of_cases] = ft_strdup(((t_ExpandData*)exp->content)->expan_data);
@@ -58,13 +52,15 @@ void pMlist(t_template* lst)
     }
     while(tmp)
     {
-        // dprintf(2, "bef************** : [%d]\n", ((t_Mlist *)tmp->content)->pid);
-        waitpid(-1, &g_global->g_flags, 0);
+        if(pMlist_var.enter_built == 0 && g_global->error_her == 0)
+            waitpid(((t_Mlist *)tmp->content)->pid, &g_global->g_flags, 0);
+        else
+            waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
         if(g_global->g_flags == 2)
             g_global->g_flags = 130;
         else if(g_global->g_flags == 3)
             g_global->g_flags = 131;
-        else if(((t_Mlist *)tmp->content)->pid != 0)
+        else if(((t_Mlist *)tmp->content)->pid != 0 && g_global->error_her == 0)
             g_global->g_flags = WEXITSTATUS(g_global->g_flags);
         tmp = tmp->next;
     }

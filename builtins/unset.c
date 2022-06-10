@@ -65,6 +65,6 @@ void unset(char **c,int false)
     {
         if(error == 0)
             g_global->g_flags = 0;
-        exit(0);
+        exit(g_global->g_flags);
     }
 }

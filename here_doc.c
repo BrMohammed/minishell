@@ -18,7 +18,7 @@ void handler(int sig)
 	rl_replace_line("", 0);
 	ft_putchar_fd('\n', 1);
 	rl_on_new_line();
-    exit(2);
+    exit(1);
 }
 
 int	heredoc(char *file)
@@ -53,6 +53,9 @@ int	heredoc(char *file)
 	}
 	else
 		close(fd_herd[1]);
-	waitpid(id, NULL, 0);
+	waitpid(id, &g_global->g_flags, 0);
+	g_global->g_flags = WEXITSTATUS(g_global->g_flags);
+	if(g_global->g_flags == 1)
+		g_global->error_her = 1;
 	return(fd_herd[0]);
 }

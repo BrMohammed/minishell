@@ -189,7 +189,6 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     }
     if(pipe_exist == 0 && pMlist_var->c != NULL && var.fd_Der[1] != -1 && var.fd_Der[0] != -1)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
-    
     if(pMlist_var->enter_built == 0)
     {   
         signal(SIGINT, SIG_IGN);
