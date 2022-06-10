@@ -85,7 +85,8 @@ void pwd(char **c,int fd,int false)
             g_global->g_flags = 0;
         exit(g_global->g_flags);
     }
-    g_global->g_flags = 0;
+    if(error == 0)
+            g_global->g_flags = 0;
 }
 
 /*************** --  env -- ******************/
@@ -136,5 +137,6 @@ void envB(char **c,int fd,int false)
             g_global->g_flags = 0;
         exit(g_global->g_flags);
     }
-    g_global->g_flags = 0;
+   if(error == 0)
+            g_global->g_flags = 0;
 }

@@ -28,37 +28,42 @@ void unset_exist(int br)
     free_table(cr);
 }
 
-void unset(char **c,int false) //?
+void delete(int *error,int *error_out,char *c)
 {
-    int i;
     int y;
     int br;
+
+    if(*error == 1)
+        *error_out = 1;
+    if(*error_out == 0)
+    {
+            y = 0;
+        br = 0;
+        while(g_global->envp[y] != NULL)
+        {
+            if(ft_strncmp(g_global->envp[y], c,ft_strlen(c)) == 0 && 
+                (g_global->envp[y][ft_strlen(c)] == '\0' || g_global->envp[y][ft_strlen(c)] == '='))
+                break;
+            y++;
+            br = y;
+        }
+        if(g_global->envp[y] != NULL)
+            unset_exist(br);
+    }
+}
+
+void unset(char **c,int false) 
+{
+    int i;
     int error;
     int error_out;
 
-    
     i = 0;
     error_out = 0;
     while(c[i + 1] != NULL)
     {
         error = input_error(c[i + 1]); //  error if input take 1 all the comm in the next dont export
-        if(error == 1)
-            error_out = 1;
-        if(error_out == 0)
-        {
-             y = 0;
-            br = 0;
-            while(g_global->envp[y] != NULL)
-            {
-                if(ft_strncmp(g_global->envp[y], c[i + 1],ft_strlen(c[i + 1])) == 0 && 
-                    (g_global->envp[y][ft_strlen(c[i + 1])] == '\0' || g_global->envp[y][ft_strlen(c[i + 1])] == '='))
-                    break;
-                y++;
-                br = y;
-            }
-            if(g_global->envp[y] != NULL)
-                unset_exist(br);
-        }
+        delete(&error,&error_out,c[i + 1]);
         i++;
     }
     if(false == 1)
@@ -67,4 +72,6 @@ void unset(char **c,int false) //?
             g_global->g_flags = 0;
         exit(g_global->g_flags);
     }
+    if(error == 0)
+        g_global->g_flags = 0;
 }
