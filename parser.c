@@ -1,10 +1,10 @@
 # include "minishell.h"
 
-void Makelist(t_lexer *lexer, t_template **list)
+void Makelist(t_lexer *lexer, t_template **list)//?
 {
 	t_token *token;
-	t_template *text; // leaks?
-	t_template *derections; // leaks?
+	t_template *text;
+	t_template *derections;
 	int i = 0;
 	int i2 = 0;
 	char *temp2;
@@ -56,7 +56,6 @@ void Makelist(t_lexer *lexer, t_template **list)
 		i2++;
 	}
 	free(token);
-	//return(*list);
 }
 void free_expand(t_template *lst)
 {

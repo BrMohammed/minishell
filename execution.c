@@ -37,7 +37,7 @@ char **creat_table(t_template *lst)
     return(c);
 }
 
-int *OutDerections(t_template* lst)
+int *OutDerections(t_template* lst)//?
 {
     t_template *exp;
     int i;
@@ -59,8 +59,6 @@ int *OutDerections(t_template* lst)
                 used[1]++;
             }
             fd[1] = ((t_derections*)lst->content)->fd; //out
-            // if(fd[1] == -1)
-            //     printf("minishell: %s: Permission denied \n",((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data);
             used[1]++;
         }  
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
@@ -170,7 +168,7 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     return(0);
 }
 
-int pipeline(t_template *lst,t_pMlist *pMlist_var)
+int pipeline(t_template *lst,t_pMlist *pMlist_var)//?
 {
     t_pipeline var;
     int pipe_exist;

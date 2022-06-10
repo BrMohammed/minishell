@@ -33,8 +33,7 @@ void	signal_handler2(int sig)
 int main(int argc, char** argv, char** envp)
 {
 	char    *all;
-	
-	
+
 	(void)argv;
 	(void) envp;
 	copie_env(envp);

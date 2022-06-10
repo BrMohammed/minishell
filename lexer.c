@@ -9,7 +9,7 @@ int AgrimNextToken(t_lexer* lexer)
 	return(0);
 }
 
-void string_join(t_lexer *lexer, char **text,int *type)
+void string_join(t_lexer *lexer, char **text,int *type)//?
 {
 	char quat;
 	char *Temp_Char;
@@ -54,7 +54,7 @@ void string_join(t_lexer *lexer, char **text,int *type)
 	free(Temp_Char);
 }
 
-char* token_type(t_lexer *lexer, int *type)
+char* token_type(t_lexer *lexer, int *type)//?
 {
 	char* text;
 	char *Temp_Char;

@@ -44,7 +44,7 @@ char* CheckDolar(char *temp,char *key_ex)
     return(key);
 }
 
-void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)
+void DolarWhoutQuat(char *key,char** e,t_template **expand,char *key_ex)//?
 {
     int t;
     t_template *temp00;
@@ -100,7 +100,7 @@ void quat_skip(char *quat,char data,char **e)
     free(temp);
 }
 
-char* MakeTheKey(char *data, int *j,char** key_ex)
+char* MakeTheKey(char *data, int *j,char** key_ex)//?
 {
     char* key;
     int i;
@@ -168,7 +168,7 @@ int chek_if_flag(char *temp)
     return(1);
 }
 
-int Dolar(char *data,char **e,char quat,t_template **expand)
+int Dolar(char *data,char **e,char quat,t_template **expand)//?
 {
     int j;
     int i;
@@ -202,7 +202,7 @@ int Dolar(char *data,char **e,char quat,t_template **expand)
     return(i);
 }
 
-void MaleKeyOfDlar(char *data,t_template **text,int branch)
+void MaleKeyOfDlar(char *data,t_template **text,int branch)//?
 {
     int i;
     char *e;
@@ -264,7 +264,7 @@ int RText(t_template *lst,t_template *Mlst)
     return(0);
 }
 
-int RDerections(t_template* lst)
+int RDerections(t_template* lst)//?
 {
     char* t_temp;
     

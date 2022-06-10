@@ -25,7 +25,7 @@ char** pText(t_template* lst)
     return(c);
 }
 
-void pMlist(t_template* lst)
+void pMlist(t_template* lst)//?
 {
     t_pMlist pMlist_var;
     t_template *tmp; 

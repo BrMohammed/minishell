@@ -61,7 +61,7 @@ int input_error(char *c)
     return(0);
 }
 
-int serch_on_env(char *c,int *error)
+int serch_on_env(char *c,int *error) //?
 {
     int i;
     char *cr;

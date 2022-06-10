@@ -21,7 +21,7 @@ void handler(int sig)
     exit(1);
 }
 
-int	heredoc(char *file)
+int	heredoc(char *file)//?
 {
 	char	r[10240];
 	char	*inputs;
