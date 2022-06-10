@@ -61,18 +61,11 @@ int input_error(char *c)
     return(0);
 }
 
-int serch_on_env(char *c,int *error) //?
+int errorin_args(char *c,int error,int i)
 {
-    int i;
-    char *cr;
-    int j;
-    int x;
     char *befor_equal;
+    int j;
 
-    i = 0;
-   *error = 0;
-    while(c[i] && c[i] != '=' )
-        i++; 
     if(c)
     {
         j = 0;
@@ -85,14 +78,50 @@ int serch_on_env(char *c,int *error) //?
             befor_equal[j] = c[j];
             j++;
         }
-        *error = input_error(befor_equal); //  error if input take 1 all the comm in the next dont export
-        if(*error == 1)
+        error = input_error(befor_equal); //  error if input take 1 all the comm in the next dont export
+        if(error == 1)
         {
             free(befor_equal);
             return(1);
         }
         free(befor_equal);
     }
+    return(0);
+}
+
+int serch_on_env(char *c,int *error) //?
+{
+    int i;
+    char *cr;
+    int j;
+    int x;
+
+    i = 0;
+   *error = 0;
+    while(c[i] && c[i] != '=' )
+        i++; 
+    if(errorin_args(c,*error,i) == 1)
+        return(1);
+    // if(c)
+    // {
+    //     j = 0;
+    //     befor_equal = malloc(i);
+    //     if(!befor_equal)
+    //         return(0);
+    //     befor_equal[i] = '\0';
+    //     while(c[j] && j < i)
+    //     {
+    //         befor_equal[j] = c[j];
+    //         j++;
+    //     }
+    //     *error = input_error(befor_equal); //  error if input take 1 all the comm in the next dont export
+    //     if(*error == 1)
+    //     {
+    //         free(befor_equal);
+    //         return(1);
+    //     }
+    //     free(befor_equal);
+    // }
     if(c[i] == '\0')
     {
         i = 0;

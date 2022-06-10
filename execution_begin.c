@@ -25,7 +25,25 @@ char** pText(t_template* lst)
     return(c);
 }
 
-void pMlist(t_template* lst)//?
+void while_on_wait(t_template* tmp , t_pMlist pMlist_var)
+{
+    while(tmp)
+    {
+        if(pMlist_var.enter_built == 0 && g_global->error_her == 0)
+            waitpid(((t_Mlist *)tmp->content)->pid, &g_global->g_flags, 0);
+        else
+            waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
+        if(g_global->g_flags == 2)
+            g_global->g_flags = 130;
+        else if(g_global->g_flags == 3)
+            g_global->g_flags = 131;
+        else if(((t_Mlist *)tmp->content)->pid != 0 && g_global->error_her == 0)
+            g_global->g_flags = WEXITSTATUS(g_global->g_flags);
+        tmp = tmp->next;
+    }
+}
+
+void pMlist(t_template* lst)
 {
     t_pMlist pMlist_var;
     t_template *tmp; 
@@ -50,18 +68,5 @@ void pMlist(t_template* lst)//?
         }
         lst = lst->next;
     }
-    while(tmp)
-    {
-        if(pMlist_var.enter_built == 0 && g_global->error_her == 0)
-            waitpid(((t_Mlist *)tmp->content)->pid, &g_global->g_flags, 0);
-        else
-            waitpid(((t_Mlist *)tmp->content)->pid, NULL, 0);
-        if(g_global->g_flags == 2)
-            g_global->g_flags = 130;
-        else if(g_global->g_flags == 3)
-            g_global->g_flags = 131;
-        else if(((t_Mlist *)tmp->content)->pid != 0 && g_global->error_her == 0)
-            g_global->g_flags = WEXITSTATUS(g_global->g_flags);
-        tmp = tmp->next;
-    }
+    while_on_wait(tmp,pMlist_var);
 }

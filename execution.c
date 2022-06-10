@@ -37,51 +37,23 @@ char **creat_table(t_template *lst)
     return(c);
 }
 
-int *OutDerections(t_template* lst)//?
+int *OutDerections(t_template* lst)
 {
     t_template *exp;
     int i;
-    int used[2];
     int *fd;
     
     i  = 0;
-    used[1] = 0;
-    used[0] = 0;
     fd = allocation_for_FD();
     while (lst)
 	{
         exp = ((t_derections*)lst->content)->expand;
         if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
-        {
-             if(used[1] % 2 == 1)
-            {
-                close(fd[1]);
-                used[1]++;
-            }
             fd[1] = ((t_derections*)lst->content)->fd; //out
-            used[1]++;
-        }  
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
-        {
-            if(used[0] % 2 == 1)
-            {
-                close(fd[0]);
-                used[0]++;
-            }
             fd[0] = heredoc(((t_derections*)lst->content)->file);
-            used[0]++;
-        }
-            
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
-        {
-            if(used[0] % 2 == 1)
-            {
-                close(fd[0]);
-                used[0]++;
-            }
             fd[0] = ((t_derections*)lst->content)->fd;
-            used[0]++;
-        }
 		lst = lst->next;
 	}
     return(fd);
@@ -168,25 +140,32 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     return(0);
 }
 
-int pipeline(t_template *lst,t_pMlist *pMlist_var)//?
+void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_template *lst)
+{
+    var->i  = 0;
+    pMlist_var->enter_built = 0;
+    *pipe_exist = 0;
+    if(((t_Mlist *)lst->content)->derections)
+        var->fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+    else
+        var->fd_Der = allocation_for_FD();
+    if (lst->next != NULL)
+    {
+        pipe( var->fd);
+        *pipe_exist = 1;
+    }
+    if(*pipe_exist == 0 && pMlist_var->c != NULL &&  var->fd_Der[1] != -1 &&  var->fd_Der[0] != -1)
+        pMlist_var->enter_built = all_builtins(pMlist_var->c, *pipe_exist,  var->fd[1]);
+        
+}
+
+int pipeline(t_template *lst,t_pMlist *pMlist_var)
 {
     t_pipeline var;
     int pipe_exist;
 
-    var.i  = 0;
-    pMlist_var->enter_built = 0;
-    pipe_exist = 0;
-    if(((t_Mlist *)lst->content)->derections)
-        var.fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
-    else
-        var.fd_Der = allocation_for_FD();
-    if (lst->next != NULL)
-    {
-        pipe(var.fd);
-        pipe_exist = 1;
-    }
-    if(pipe_exist == 0 && pMlist_var->c != NULL && var.fd_Der[1] != -1 && var.fd_Der[0] != -1)
-        pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
+    piepe_exist_ans_der(&pipe_exist,&var,pMlist_var,lst);
+    
     if(pMlist_var->enter_built == 0)
     {   
         signal(SIGINT, SIG_IGN);

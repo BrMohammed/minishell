@@ -21,36 +21,41 @@ void handler(int sig)
     exit(1);
 }
 
-int	heredoc(char *file)//?
+void while_on_her(int *fd_herd,char *file)
 {
-	char	r[10240];
 	char	*inputs;
-	int fd_herd[2];
-
-	int id ;
+	char	r[10240];
 	int error;
+
 	inputs = malloc(1);
 	inputs[0] = '\0';
 	r[0] = '\0';
+	error = 1;
+	signal(SIGINT, handler);
+	close(fd_herd[0]);
+	while (ft_strcmp(file, r) != -10 && error != 0)
+	{
+		inputs = ft_strjoin(inputs, r);
+		write(1, "> ", 2);
+		error = read(0, r, 10240);
+		r[error] = '\0';
+	}
+	ft_putstr_fd(inputs, fd_herd[1]);
+	free(inputs);
+	close(fd_herd[1]);
+	exit(0);
+}
+
+int	heredoc(char *file)
+{
+	int fd_herd[2];
+	int id ;
+
 	pipe(fd_herd);
 	signal(SIGINT, SIG_IGN);
 	id = fork();
 	if(id == 0)
-	{
-		signal(SIGINT, handler);
-		close(fd_herd[0]);
-		while (ft_strcmp(file, r) != -10 && error != 0)
-		{
-			inputs = ft_strjoin(inputs, r);
-			write(1, "> ", 2);
-			error = read(0, r, 10240);
-			r[error] = '\0';
-		}
-		ft_putstr_fd(inputs, fd_herd[1]);
-		free(inputs);
-		close(fd_herd[1]);
-		exit(0);
-	}
+		while_on_her(fd_herd,file);
 	else
 		close(fd_herd[1]);
 	waitpid(id, &g_global->g_flags, 0);
