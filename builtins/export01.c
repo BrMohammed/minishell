@@ -11,6 +11,7 @@ void free_table(char **c)
         i++;
     }
     free(c);
+    c = NULL;
 }
 
 void copie_table(char **cp)
@@ -18,16 +19,16 @@ void copie_table(char **cp)
     int i;
 
     i = 0;
-    while(cp[i] != NULL)
+    while(cp[i])
 		i++;
 	g_global->envp = (char **)malloc(sizeof(char *) * i + 1);
-	g_global->envp[i] = NULL;
     i = 0;
-	while(cp[i] != NULL)
+	while(cp[i])
 	{
 		g_global->envp[i] = ft_strdup(cp[i]);
 		i++;
 	}
+    g_global->envp[i] = NULL;
 }
 
 int errorin_args(char *c,int error,int i)

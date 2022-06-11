@@ -57,6 +57,7 @@ void pMlist(t_template* lst)
         pMlist_var.path = NULL;
         if(((t_Mlist *)lst->content)->text || ((t_Mlist *)lst->content)->derections)
         {
+           
             pMlist_var.c = pText(((t_Mlist *)lst->content)->text);
             if(pMlist_var.c != NULL)
                 path_finder(&pMlist_var.path, pMlist_var.c, g_global->envp);

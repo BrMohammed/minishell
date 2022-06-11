@@ -89,12 +89,15 @@ void	path_finder(char **path, char **c, char **envp)
 	if_access = -1;
 	paths02 = NULL;
 	paths03 = path_finder_half(path, paths02, envp);
-	i = midel_of_path(paths03, path, c[0], &if_access);
-	link_ready(if_access, path, c);
-	while (paths03[i])
+	if(paths03 != NULL)
 	{
-		free(paths03[i]);
-		i++;
+		i = midel_of_path(paths03, path, c[0], &if_access);
+		link_ready(if_access, path, c);
+		while (paths03[i])
+		{
+			free(paths03[i]);
+			i++;
+		}
+		free(paths03);
 	}
-	free(paths03);
 }

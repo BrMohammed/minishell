@@ -44,6 +44,7 @@ void unset_exist(int br)
     free_table(g_global->envp);
     copie_table(cr);
     free_table(cr);
+   
 }
 
 void delete(int *error,int *error_out,char *c)
@@ -61,9 +62,11 @@ void delete(int *error,int *error_out,char *c)
         {
             if(ft_strncmp(g_global->envp[y], c,ft_strlen(c)) == 0 && 
                 (g_global->envp[y][ft_strlen(c)] == '\0' || g_global->envp[y][ft_strlen(c)] == '='))
-                break;
+                {
+                    br = y;
+                    break;
+                }
             y++;
-            br = y;
         }
         if(g_global->envp[y] != NULL)
             unset_exist(br);

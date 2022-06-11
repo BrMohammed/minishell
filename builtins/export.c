@@ -83,6 +83,7 @@ void add_in_export(char **c,int *error_out)
             free_table(g_global->envp);
             copie_table(cr);
             free_table(cr);
+            cr = NULL;
         }
         x++;
     }
