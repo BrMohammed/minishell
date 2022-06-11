@@ -94,6 +94,7 @@ void export(char **c,int fd,int false)
     int error;
 
     error = 0;
+    
     if(c[1] == '\0')
         just_export(fd,false);
     else

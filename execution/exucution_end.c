@@ -98,7 +98,6 @@ int  all_builtins(char **c, int pipe_exist, int fd)
 {
     char *temp;
 
-    temp = ft_tolower(c[0]);
     if(all_builtins01(c,pipe_exist,fd) == 1)
         return(1);
     if(ft_strcmp(c[0],"pwd") == 0)
@@ -106,6 +105,7 @@ int  all_builtins(char **c, int pipe_exist, int fd)
         pwd(c,fd,pipe_exist);
         return(1);
     }
+    temp = ft_tolower(c[0]);
     if (ft_strcmp(temp,"echo") == 0)
     {
         echo(c,fd,pipe_exist);
@@ -115,6 +115,7 @@ int  all_builtins(char **c, int pipe_exist, int fd)
     if (ft_strcmp(c[0],"cd") == 0)
     {
         cd(c,pipe_exist);
+        free(temp);
         return(1);
     }
     free(temp);

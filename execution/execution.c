@@ -54,10 +54,9 @@ void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_
         pipe( var->fd);
         *pipe_exist = 1;
     }
-   
+    
     if(*pipe_exist == 0 && pMlist_var->c != NULL &&  var->fd_Der[1] != -1 &&  var->fd_Der[0] != -1)
         pMlist_var->enter_built = all_builtins(pMlist_var->c, *pipe_exist,  var->fd[1]);
-        
 }
 void in_childe(t_template *lst,t_pMlist *pMlist_var,t_pipeline *var,int *pipe_exist)
 {

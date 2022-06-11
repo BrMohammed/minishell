@@ -49,9 +49,9 @@ re:			fclean all
 #?	asdasd |  | asdasd | // syntax error too
 #?	syntax error exit code 258
 #?	|<s Dont show opening file errors after syntax parsing error
+#?	unset path => ls // segfault after unsetting the PATH
+#?	export dsaasd => unset dsadas // Leaks whene running any buildin cmd (cd / pwd) too echo is not leaking
 
-#!	unset path => ls // segfault after unsetting the PATH
-#!	export dsaasd => unset dsadas // Leaks whene running any buildin cmd (cd / pwd) too echo is not leaking
 #!	cd not working alone should gp to home or if home is not in env show home is not set show  cd ~ should go to home no matter if its unset
 #!	cd .. or cd . // segfault // cd not working cd / segfault
 #!	export d="    ls    -la   " => $d // segfault and the value is empty
