@@ -167,7 +167,11 @@ void cd(char **c,int false);
 int serch_on_env(char *c,int *error);
 void copie_table(char **cp);
 void free_table(char **c);
+int errorin_args(char *c,int error,int i);
+void print_export(char *c);
+int replace(int i,char *c);
 int input_error(char *c);
+int args_error(char *c,int false,char *name);
 void free_tree(t_template *lst);
 void signal_callback_handler(int sig);
 #endif

@@ -27,15 +27,15 @@ void qeuat_detect(char *quat,int *type,char c,int *ii)
 		*ii = *ii +1;
 	}
 }
-void string_join(t_lexer *lexer, char **text,int *type)//?
+
+int qaut_detect_and_break_in_other(t_lexer *lexer, char **text,int *type,char quat)
 {
-	char quat;
+	int ii;
 	char *Temp_Char;
-	int ii = 0;
 
 	Temp_Char = malloc(2);
 	Temp_Char[1] = '\0';
-	quat = '\0';
+	ii = 0;
 	while(lexer->i <= lexer->size)
 	{
 		Temp_Char[0] = lexer->c;
@@ -48,35 +48,42 @@ void string_join(t_lexer *lexer, char **text,int *type)//?
 		|| lexer->c  == 32) && ( quat == '\0')))
 			break;
 	}
+	free(Temp_Char);
+	return(ii);
+}
+
+void string_join(t_lexer *lexer, char **text,int *type)
+{
+	char quat;
+	int ii;
+
+	ii = 0;
+	quat = '\0';
+	ii = qaut_detect_and_break_in_other(lexer,text,type,quat);
 	if (lexer->i > lexer->size && ii % 2 != 0)
 		*type = TYPE_ERROR;
 	else if(ii > 0)
 		*type = TYPE_QUOTE;
 	else
 		*type = TYPE_TEXT;
-	free(Temp_Char);
 }
 
-void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)//?
+void skip_redir(t_lexer *lexer, int *type,char** text,char **Temp_Char)
+{
+	*text[0] = lexer->c;
+	AgrimNextToken(lexer);
+	*Temp_Char[0] = lexer->c;
+	*text = ft_strjoin(*text,*Temp_Char);
+	*type = TYPE_DLredirection;
+	AgrimNextToken(lexer);
+}
+
+void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)
 {
 	if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
-	{
-		*text[0] = lexer->c;
-		AgrimNextToken(lexer);
-		*Temp_Char[0] = lexer->c;
-		*text = ft_strjoin(*text,*Temp_Char);
-		*type = TYPE_DLredirection;
-		AgrimNextToken(lexer);
-	}
+		skip_redir(lexer,type,text,Temp_Char);
 	else if(lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
-	{
-		*text[0] = lexer->c;
-		AgrimNextToken(lexer);
-		*Temp_Char[0] = lexer->c;
-		*text = ft_strjoin(*text,*Temp_Char);
-		*type = TYPE_DRredirection;
-		AgrimNextToken(lexer);
-	}
+		skip_redir(lexer,type,text,Temp_Char);
 	else if(lexer->c == '|')
 		*type = TYPE_PIPE;
 	else if(lexer->c == '<')
@@ -85,9 +92,22 @@ void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)//?
 		*type = TYPE_Rredirection;
 	else
 		string_join(lexer, text, type);
+	if(*text[0] == '\0')
+	{
+		*text[0] = lexer->c;
+		if(lexer->i <= lexer->size)
+			AgrimNextToken(lexer);
+	}
+	if(*text[0] == '\0')
+	{
+		*type = TYPE_EOF;
+		free(*text);
+		*text = NULL;
+	}
+	free(*Temp_Char);
 }
 
-char* token_type(t_lexer *lexer, int *type)//?
+char* token_type(t_lexer *lexer, int *type)
 {
 	char* text;
 	char *Temp_Char;
@@ -101,19 +121,6 @@ char* token_type(t_lexer *lexer, int *type)//?
 	Temp_Char[0] = lexer->c;
 	Temp_Char[1] = '\0';
 	give_the_type(lexer,type,&text,&Temp_Char);
-	if(text[0] == '\0')
-	{
-		text[0] = lexer->c;
-		if(lexer->i <= lexer->size)
-			AgrimNextToken(lexer);
-	}
-	if(text[0] == '\0')
-	{
-		*type = TYPE_EOF;
-		free(text);
-		text = NULL;
-	}
-	free(Temp_Char);
 	return(text);
 }
 

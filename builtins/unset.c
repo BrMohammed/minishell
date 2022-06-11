@@ -1,5 +1,23 @@
 # include "../minishell.h"
 
+int input_error(char *c)
+{
+    if(c[0] == '-')
+    {
+        printf("minishell: export: `%c%c': invalid option\n",c[0],c[1]);
+        g_global->g_flags = 1;
+        return(1);
+    }
+    if((ft_isalnum(c) == 1 && ft_isdigit(c) == 0) || (c[0] >= '0' && c[0] <= '9'))
+    {
+        printf("minishell: export: `%s': not a valid identifier\n",c);
+        g_global->g_flags = 1;
+        return(1);
+    }
+
+    return(0);
+}
+
 void unset_exist(int br)
 {
     int y;

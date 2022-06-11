@@ -100,7 +100,7 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
         close(var.fd_Der[0]);
 }
 
-int  all_builtins(char **c, int pipe_exist, int fd)//?
+int all_builtins01(char **c, int pipe_exist, int fd)
 {
     if(ft_strcmp(c[0],"export") == 0)
     {
@@ -122,6 +122,13 @@ int  all_builtins(char **c, int pipe_exist, int fd)//?
         envB(c,fd,pipe_exist);
         return(1);
     }
+    return(0);
+}
+
+int  all_builtins(char **c, int pipe_exist, int fd)
+{
+    if(all_builtins01(c,pipe_exist,fd) == 1)
+        return(1);
     if(ft_strcmp(c[0],"pwd") == 0)
     {
         pwd(c,fd,pipe_exist);
@@ -158,35 +165,35 @@ void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_
         pMlist_var->enter_built = all_builtins(pMlist_var->c, *pipe_exist,  var->fd[1]);
         
 }
-
-int pipeline(t_template *lst,t_pMlist *pMlist_var)//?
+void in_childe(t_template *lst,t_pMlist *pMlist_var,t_pipeline *var,int *pipe_exist)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+    duplicate(var->fd_Der,pMlist_var->lastFd,lst,var->fd);
+    if(*pipe_exist == 1 && pMlist_var->c != NULL)
+        pMlist_var->enter_built = all_builtins(pMlist_var->c, *pipe_exist, var->fd[1]);
+    if(pMlist_var->enter_built == 0)
+    {
+        if (execve(pMlist_var->path, &pMlist_var->c[0], g_global->envp) == -1)
+        {
+            printf("minishel: %s: command not found\n",pMlist_var->c[0]);
+            exit(127);
+        }
+    }
+}
+int pipeline(t_template *lst,t_pMlist *pMlist_var)
 {
     t_pipeline var;
     int pipe_exist;
 
     piepe_exist_ans_der(&pipe_exist,&var,pMlist_var,lst);
-    
     if(pMlist_var->enter_built == 0)
     {   
         signal(SIGINT, SIG_IGN);
         signal(SIGQUIT, SIG_IGN);
         var.id = fork(); 
         if (var.id == 0)
-        {  
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
-            duplicate(var.fd_Der,pMlist_var->lastFd,lst,var.fd);
-            if(pipe_exist == 1 && pMlist_var->c != NULL)
-                pMlist_var->enter_built = all_builtins(pMlist_var->c, pipe_exist, var.fd[1]);
-            if(pMlist_var->enter_built == 0)
-            {
-                if (execve(pMlist_var->path, &pMlist_var->c[0], g_global->envp) == -1)
-                {
-                    printf("minishel: %s: command not found\n",pMlist_var->c[0]);
-                    exit(127);
-                }
-            }
-        } 
+            in_childe(lst,pMlist_var,&var,&pipe_exist);
     }
     close_parent(var,&pMlist_var->lastFd,lst);
     free(var.fd_Der);
