@@ -20,23 +20,27 @@ void nl_not_exist(int *nl_exist,char **c,int *i)
 void nl__exist(int nl_exist,int *skip,char *c)
 {
     int y;
-    if(nl_exist == 0)
+    if(c != NULL)
     {
-        if(c[0] == '-' && *skip == 1)
-        {  
-            y = 1;
-            while(c[y] && c[y] == 'n')
-                y++;
-            if(c[y] != '\0')
+        if(nl_exist == 0)
+        {
+            if(c[0] == '-' && *skip == 1)
+            {  
+                y = 1;
+                while(c[y] && c[y] == 'n')
+                    y++;
+                if(c[y] != '\0')
+                    skip = 0;
+            }
+            else
                 skip = 0;
+            if(skip == 0 && c != NULL)
+                printf("%s ",c);
         }
         else
-            skip = 0;
-        if(skip == 0 && c != NULL)
             printf("%s ",c);
     }
-    else if(c != NULL)
-        printf("%s ",c);
+    
 }
 
 void echo(char **c,int fd,int false)

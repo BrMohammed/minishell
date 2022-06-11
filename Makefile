@@ -43,16 +43,17 @@ re:			fclean all
 #TODO:
 #?	ls -la < adf  > ssaaa // dont create second file out if file one has error
 #?	ls << aaaa > asdadaasdasdadas  //  ls > asdadaasdasdadas << asaa // dont create file if herdoc is interpted ctrl + c
-#!	echo -n // segfault
+#?	echo -n // segfault
+#?	<<< this is syntax error dont show heredoc
+#?	asdasd |  | asdasd // syntax error
+#?	asdasd |  | asdasd | // syntax error too
+#?	syntax error exit code 258
+#?	|<s Dont show opening file errors after syntax parsing error
+
 #!	unset path => ls // segfault after unsetting the PATH
 #!	export dsaasd => unset dsadas // Leaks whene running any buildin cmd (cd / pwd) too echo is not leaking
 #!	cd not working alone should gp to home or if home is not in env show home is not set show  cd ~ should go to home no matter if its unset
 #!	cd .. or cd . // segfault // cd not working cd / segfault
-#!	<<< this is syntax error dont show heredoc
-#!	asdasd |  | asdasd // syntax error
-#!	asdasd |  | asdasd | // syntax error too
-#!	syntax error exit code 258
-#!	|<s Dont show opening file errors after syntax parsing error
 #!	export d="    ls    -la   " => $d // segfault and the value is empty
 
 

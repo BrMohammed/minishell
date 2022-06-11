@@ -8,15 +8,21 @@ int RText(t_template *lst,t_template *Mlst)
         if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1))
         {
             printf("minishael :syntax error near unexpected token '%s'\n","|");
+            g_global->g_flags = 258;
             return(1);
         }
         if(((t_text*)lst->content)->type == TYPE_ERROR)
         {
             printf("Syntax Error\n");
+            g_global->g_flags = 1;
             return(1);
         }
         if((((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
+        {
+            printf("minishael :syntax error near unexpected token '%s'\n","|");
+            g_global->g_flags = 258;
             return(2);
+        }
         MakeKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
 		lst = lst->next;
 	}
@@ -71,13 +77,17 @@ int RDerections(t_template* lst)
             t_temp = "<<";
         if(((t_derections*)lst->content)->type == TYPE_DRredirection)
             t_temp = ">>";
-        if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0)
+        if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || 
+            ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0 ||
+            ft_strncmp(((t_derections*)lst->content)->file,">", 1) == 0 ||
+            ft_strncmp(((t_derections*)lst->content)->file,"<", 1) == 0)
         {
             printf("minishael :syntax error near unexpected token '%s'\n",t_temp);
+            g_global->g_flags = 258;
             return(1);
         }
+
         MakeKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
-        //?generate_rederaction(int type,t_template *lst);
 		lst = lst->next;
 	}
     return(3);
@@ -94,9 +104,8 @@ int RMlist(t_template* lst)
         r2 = 0;
         if(((t_Mlist *)lst->content)->text)
 	        r = RText(((t_Mlist *)lst->content)->text,lst);
-        if(((t_Mlist *)lst->content)->derections)
+        if(((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
 	       r2 =  RDerections(((t_Mlist *)lst->content)->derections);
-        
         if(r == 2 & r2 == 0)
             return(1);
         lst = lst->next;
