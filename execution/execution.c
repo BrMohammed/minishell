@@ -12,23 +12,28 @@ int *allocation_for_FD()
 
 int *OutDerections(t_template* lst)
 {
-    t_template *exp;
+    t_template *tmp;
     int i;
     int *fd;
     
     i  = 0;
     fd = allocation_for_FD();
+    tmp = lst;
     while (lst)
 	{
-        exp = ((t_derections*)lst->content)->expand;
-        if(((t_derections*)lst->content)->file != NULL && (((t_derections*)lst->content)->type == TYPE_Rredirection || ((t_derections*)lst->content)->type == TYPE_DRredirection))
-            fd[1] = ((t_derections*)lst->content)->fd; //out
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
             fd[0] = heredoc(((t_derections*)lst->content)->file);
-        if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_Lredirection)
-            fd[0] = ((t_derections*)lst->content)->fd;
 		lst = lst->next;
 	}
+    while(tmp)
+    {
+        generate_rederaction(((t_derections*)tmp->content)->type,tmp);
+        if(((t_derections*)tmp->content)->file != NULL && (((t_derections*)tmp->content)->type == TYPE_Rredirection || ((t_derections*)tmp->content)->type == TYPE_DRredirection))
+            fd[1] = ((t_derections*)tmp->content)->fd; //out
+        if(((t_derections*)tmp->content)->file != NULL && ((t_derections*)tmp->content)->type == TYPE_Lredirection)
+            fd[0] = ((t_derections*)tmp->content)->fd;
+        tmp = tmp->next;
+    }
     return(fd);
 }
 

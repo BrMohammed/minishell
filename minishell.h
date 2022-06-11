@@ -181,4 +181,5 @@ int args_error(char *c,int false,char *name);
 void free_tree(t_template *lst);
 void signal_callback_handler(int sig);
 char **creat_table(t_template *lst);
+void generate_rederaction(int type,t_template *lst);
 #endif

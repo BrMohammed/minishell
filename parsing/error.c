@@ -77,7 +77,7 @@ int RDerections(t_template* lst)
             return(1);
         }
         MakeKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
-        generate_rederaction(((t_derections*)lst->content)->type,lst);
+        //?generate_rederaction(int type,t_template *lst);
 		lst = lst->next;
 	}
     return(3);
