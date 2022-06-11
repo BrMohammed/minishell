@@ -1,4 +1,4 @@
-# include "minishell.h"
+# include "../minishell.h"
 
 void free_expand(t_template *lst)
 {

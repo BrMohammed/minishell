@@ -1,4 +1,4 @@
-# include "minishell.h"
+# include "../minishell.h"
 
 void der_or_text(t_Makelist *var,t_lexer *lexer)
 {

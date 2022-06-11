@@ -1,4 +1,4 @@
-# include "minishell.h"
+# include "../minishell.h"
 
 t_ExpandData *new_expand(char* expand_data, char*key)
 {

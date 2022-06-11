@@ -149,6 +149,10 @@ t_ExpandData *new_expand(char* expand_data, char*key);
 void *minishell(char* all);
 void pMlist(t_template* lst);
 int RMlist(t_template* lst);
+void MakeKeyOfDlar(char *data,t_template **text,int branch);
+void Begin_Dolar(char* data,t_Dolar *var);
+void detect_dolar(t_Dolar *var);
+void if_dolar_in_env(char *data,t_Dolar *var);
 
 void	path_finder(char **path, char **c, char **envp);
 int pipeline(t_template *lst,t_pMlist *pMlist_var);

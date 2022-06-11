@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../minishell.h"
 
 int AgrimNextToken(t_lexer* lexer)
 {
