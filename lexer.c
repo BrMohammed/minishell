@@ -27,7 +27,7 @@ void qeuat_detect(char *quat,int *type,char c,int *ii)
 		*ii = *ii +1;
 	}
 }
-void string_join(t_lexer *lexer, char **text,int *type)
+void string_join(t_lexer *lexer, char **text,int *type)//?
 {
 	char quat;
 	char *Temp_Char;
@@ -57,7 +57,7 @@ void string_join(t_lexer *lexer, char **text,int *type)
 	free(Temp_Char);
 }
 
-void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)
+void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)//?
 {
 	if(lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 	{
@@ -87,7 +87,7 @@ void give_the_type(t_lexer *lexer, int *type,char** text,char **Temp_Char)
 		string_join(lexer, text, type);
 }
 
-char* token_type(t_lexer *lexer, int *type)
+char* token_type(t_lexer *lexer, int *type)//?
 {
 	char* text;
 	char *Temp_Char;

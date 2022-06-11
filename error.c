@@ -44,13 +44,30 @@ char* CheckDolar(char *temp,char *key_ex)
     return(key);
 }
 
-void DolarWhoutQuat(t_Dolar *var)//?
+void finde_another_arg(t_Dolar *var,int *t)
 {
-    int t;
     t_template *temp00;
-    char *for_expand;
 
     temp00 = NULL;
+    temp00 = var->expand;
+    if (temp00)
+    {
+        while (temp00->next != NULL)
+            temp00 = temp00->next;
+    }
+    ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(var->e);
+    ((t_ExpandData*)temp00->content)->key = var->key_ex;
+    free(var->e);
+    var->e = ft_strdup(""); 
+    lstadd_back(&var->expand, new_template(new_expand(var->e,var->key_ex)));
+    while(var->key[*t] == 32)
+        *t = *t + 1;;
+}
+void DolarWhoutQuat(t_Dolar *var)
+{
+    int t;
+    char *for_expand;
+
     for_expand = malloc(2);
     for_expand[1] = '\0';
     t = 0;
@@ -60,21 +77,7 @@ void DolarWhoutQuat(t_Dolar *var)//?
         var->e = ft_strjoin(var->e,for_expand);
         t++;
         if(var->key[t] == 32)
-        {
-            temp00 = var->expand;
-            if (temp00)
-            {
-                while (temp00->next != NULL)
-                    temp00 = temp00->next;
-            }
-            ((t_ExpandData*)temp00->content)->expan_data = ft_strdup(var->e);
-            ((t_ExpandData*)temp00->content)->key = var->key_ex;
-            free(var->e);
-            var->e = ft_strdup(""); 
-            lstadd_back(&var->expand, new_template(new_expand(var->e,var->key_ex)));
-            while(var->key[t] == 32)
-                t++;
-        }
+            finde_another_arg(var,&t);
     }
     free(for_expand);
 }

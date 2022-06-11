@@ -100,7 +100,7 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst)
         close(var.fd_Der[0]);
 }
 
-int  all_builtins(char **c, int pipe_exist, int fd)
+int  all_builtins(char **c, int pipe_exist, int fd)//?
 {
     if(ft_strcmp(c[0],"export") == 0)
     {
@@ -159,7 +159,7 @@ void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_
         
 }
 
-int pipeline(t_template *lst,t_pMlist *pMlist_var)
+int pipeline(t_template *lst,t_pMlist *pMlist_var)//?
 {
     t_pipeline var;
     int pipe_exist;
