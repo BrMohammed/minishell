@@ -29,6 +29,7 @@ typedef struct s_global
 t_global *g_global;
 
 
+
 typedef struct s_pipeline
 {
     int fd[2];
@@ -109,7 +110,16 @@ typedef struct s_Mlist
     int order;
 }t_Mlist;
 
-
+typedef struct s_Makelist
+{
+    t_token *token;
+	t_template *text;
+	t_template *derections;
+	int i;
+	int i2;
+	char *temp2;
+	int temp;
+}t_Makelist;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);

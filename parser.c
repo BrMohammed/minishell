@@ -1,61 +1,60 @@
 # include "minishell.h"
 
-void Makelist(t_lexer *lexer, t_template **list)//?
+void der_or_text(t_Makelist *var,t_lexer *lexer)
 {
-	t_token *token;
-	t_template *text;
-	t_template *derections;
-	int i = 0;
-	int i2 = 0;
-	char *temp2;
-	int temp;
-	
-	token = GetNextToken(lexer);
-	if(token->type == TYPE_EOF)
-		free(token);
-	while(token->type != TYPE_EOF || token->value != NULL)
+	if(var->token->type == TYPE_TEXT || var->token->type == TYPE_ERROR || var->token->type == TYPE_QUOTE)
 	{
-		text = NULL;
-		derections = NULL;
-		if (token->type == TYPE_PIPE)
-		{
-			i++;
-			lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
-			free(token);
-			token = GetNextToken(lexer);
-		}
-		while (token->type != TYPE_PIPE && token->type != TYPE_EOF)
-		{
-			if(token->type == TYPE_TEXT || token->type == TYPE_ERROR || token->type == TYPE_QUOTE)
-			{
-				i++;
-				lstadd_back(&text, new_template((void*)new_text(token->value,token->type,i)));
-				free(token);
-				token = GetNextToken(lexer);
-			}
-			else if(token->type == TYPE_DLredirection || token->type == TYPE_DRredirection || token->type == TYPE_Lredirection || token->type == TYPE_Rredirection)
-			{
-				i++;
-				temp = token->type;
-				free(token);
-				token = GetNextToken(lexer);
-				if(token->type != TYPE_EOF)
-					temp2 = ft_strdup(token->value);
-				free(token);
-				if(token->type == TYPE_EOF)
-				{
-					temp2 = malloc(1);
-					temp2[0] = '\0';
-				}
-				lstadd_back(&derections,new_template((void*)new_derections(temp2,temp,i)));
-				free(temp2);
-				token = GetNextToken(lexer);
-			}
-		}
-		lstadd_back(list,new_template((void*)new_list(text,derections,i2)));
-		i2++;
+		var->i++;
+		lstadd_back(&var->text, new_template((void*)new_text(var->token->value,var->token->type,var->i)));
+		free(var->token);
+		var->token = GetNextToken(lexer);
 	}
-	free(token);
+	else if(var->token->type == TYPE_DLredirection || var->token->type == TYPE_DRredirection || var->token->type == TYPE_Lredirection || var->token->type == TYPE_Rredirection)
+	{
+		var->i++;
+		var->temp = var->token->type;
+		free(var->token);
+		var->token = GetNextToken(lexer);
+		if(var->token->type != TYPE_EOF)
+			var->temp2 = ft_strdup(var->token->value);
+		free(var->token);
+		if(var->token->type == TYPE_EOF)
+		{
+			var->temp2 = malloc(1);
+			var->temp2[0] = '\0';
+		}
+		lstadd_back(&var->derections,new_template((void*)new_derections(var->temp2,var->temp,var->i)));
+		free(var->temp2);
+		var->token = GetNextToken(lexer);
+	}
+}
+
+void Makelist(t_lexer *lexer, t_template **list)
+{
+	t_Makelist var;
+
+	var.i = 0;
+	var.i2 = 0;
+	var.token = GetNextToken(lexer);
+	if(var.token->type == TYPE_EOF)
+		free(var.token);
+	while(var.token->type != TYPE_EOF || var.token->value != NULL)
+	{
+		var.text = NULL;
+		var.derections = NULL;
+		if (var.token->type == TYPE_PIPE)
+		{
+			var.i++;
+			lstadd_back(&var.text, new_template((void*)new_text(var.token->value,var.token->type,var.i)));
+			free(var.token);
+			var.token = GetNextToken(lexer);
+		}
+		while (var.token->type != TYPE_PIPE && var.token->type != TYPE_EOF)
+			der_or_text(&var,lexer);
+		lstadd_back(list,new_template((void*)new_list(var.text,var.derections,var.i2)));
+		var.i2++;
+	}
+	free(var.token);
 }
 void free_expand(t_template *lst)
 {
