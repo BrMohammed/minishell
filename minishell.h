@@ -153,7 +153,9 @@ void MakeKeyOfDlar(char *data,t_template **text,int branch);
 void Begin_Dolar(char* data,t_Dolar *var);
 void detect_dolar(t_Dolar *var);
 void if_dolar_in_env(char *data,t_Dolar *var);
-
+int  all_builtins(char **c, int pipe_exist, int fd);
+void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd);
+void close_parent(t_pipeline var,int *lastFd,t_template *lst);
 void	path_finder(char **path, char **c, char **envp);
 int pipeline(t_template *lst,t_pMlist *pMlist_var);
 char **creat_table(t_template *lst);
@@ -178,4 +180,5 @@ int input_error(char *c);
 int args_error(char *c,int false,char *name);
 void free_tree(t_template *lst);
 void signal_callback_handler(int sig);
+char **creat_table(t_template *lst);
 #endif

@@ -1,4 +1,4 @@
-# include "minishell.h"
+# include "../minishell.h"
 
 char** pText(t_template* lst)
 {
