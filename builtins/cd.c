@@ -1,12 +1,22 @@
 # include "../minishell.h"
 
-void move_to_dir(char *c)
+int move_to_dir(char *c)
 {
     char cwd[256];
     char *old;
     char **temp;
+    DIR *dir;
 
-    temp = malloc(3);
+    if ((dir = opendir (c)) == NULL) 
+    {
+        printf("minishael: cd: %s: No such file or directory\n",c);
+        g_global->g_flags = 1;
+        closedir(dir);
+        return(1);
+    }
+    closedir(dir);
+    
+    temp = (char **)malloc(sizeof(char *) * 3);
     temp[2] = NULL;
     old = ft_strdup("OLDPWD=");
     temp[0] = ft_strdup("export");
@@ -23,26 +33,29 @@ void move_to_dir(char *c)
     temp[1] = ft_strdup(old);
     export(temp,0,0);
     free_table(temp);
+    temp = NULL;
     free(old);
+    old = NULL;
+    return (0);
 }
 
 void cd(char **c ,int false)
 {
-    if(c[2] != NULL)
-        printf("cd : to many argiment\n");
-    else
-    {
-        if(opendir(c[1]) == NULL)
-            printf("cd: no such file or directory: %s\n",c[1]);
-        else if(c[1] != NULL)
-            move_to_dir(c[1]);
-        else
-            move_to_dir(getenv("HOME"));
-    }
+    int i;
+    int error;
+
+    i = 0;
+    error = 0;
+    if(c[1] != NULL)
+        error = move_to_dir(c[1]);
+    else if (c[1] == NULL)
+        error = move_to_dir(getenv("HOME"));
     if(false == 1)
     {
-        g_global->g_flags = 0;
-        exit(0);
+       if(error == 0)
+            g_global->g_flags = 0;
+        exit( g_global->g_flags);
     }
-    g_global->g_flags = 0;
+    if(error == 0)
+        g_global->g_flags = 0;
 }
