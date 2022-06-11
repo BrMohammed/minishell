@@ -41,8 +41,8 @@ re:			fclean all
 # git pull --rebase origin main
 
 #TODO:
-#!	ls -la < adf  > ssaaa // dont create second file out if file one has error
-#!	ls << aaaa > asdadaasdasdadas  //  ls > asdadaasdasdadas << asaa // dont create file if herdoc is interpted ctrl + c
+#?	ls -la < adf  > ssaaa // dont create second file out if file one has error
+#?	ls << aaaa > asdadaasdasdadas  //  ls > asdadaasdasdadas << asaa // dont create file if herdoc is interpted ctrl + c
 #!	echo -n // segfault
 #!	unset path => ls // segfault after unsetting the PATH
 #!	export dsaasd => unset dsadas // Leaks whene running any buildin cmd (cd / pwd) too echo is not leaking

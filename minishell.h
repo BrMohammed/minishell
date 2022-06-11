@@ -35,6 +35,7 @@ typedef struct s_pipeline
     int *fd_Der;
     int id;
     int i;
+    int interpted;
 }t_pipeline;
 
 typedef struct s_pMlist
@@ -159,10 +160,10 @@ void close_parent(t_pipeline var,int *lastFd,t_template *lst);
 void	path_finder(char **path, char **c, char **envp);
 int pipeline(t_template *lst,t_pMlist *pMlist_var);
 char **creat_table(t_template *lst);
-int	heredoc(char *name);
+int	heredoc(char *file,int *error);
 int main(int argc, char** argv, char** envp);
 int *allocation_for_FD();
-int *OutDerections(t_template* lst);
+int *OutDerections(t_template* lst,int *interpted);
 void export(char **c,int fd,int false);
 void unset(char **c,int false);
 void exitB(char **c);

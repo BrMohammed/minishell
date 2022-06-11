@@ -34,7 +34,7 @@ void while_on_her(int *fd_herd,char *file)
 	exit(0);
 }
 
-int	heredoc(char *file)
+int	heredoc(char *file,int *error)
 {
 	int fd_herd[2];
 	int id ;
@@ -49,6 +49,9 @@ int	heredoc(char *file)
 	waitpid(id, &g_global->g_flags, 0);
 	g_global->g_flags = WEXITSTATUS(g_global->g_flags);
 	if(g_global->g_flags == 1)
+	{
 		g_global->error_her = 1;
+		*error = 1;
+	}
 	return(fd_herd[0]);
 }

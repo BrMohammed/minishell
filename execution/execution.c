@@ -10,7 +10,7 @@ int *allocation_for_FD()
     return(fd);
 }
 
-int *OutDerections(t_template* lst)
+int *OutDerections(t_template* lst,int *interpted)
 {
     t_template *tmp;
     int i;
@@ -22,16 +22,19 @@ int *OutDerections(t_template* lst)
     while (lst)
 	{
         if(((t_derections*)lst->content)->file != NULL && ((t_derections*)lst->content)->type == TYPE_DLredirection)
-            fd[0] = heredoc(((t_derections*)lst->content)->file);
+            fd[0] = heredoc(((t_derections*)lst->content)->file,interpted);
 		lst = lst->next;
 	}
-    while(tmp)
+    while(tmp && *interpted != 1)
     {
         generate_rederaction(((t_derections*)tmp->content)->type,tmp);
-        if(((t_derections*)tmp->content)->file != NULL && (((t_derections*)tmp->content)->type == TYPE_Rredirection || ((t_derections*)tmp->content)->type == TYPE_DRredirection))
-            fd[1] = ((t_derections*)tmp->content)->fd; //out
         if(((t_derections*)tmp->content)->file != NULL && ((t_derections*)tmp->content)->type == TYPE_Lredirection)
             fd[0] = ((t_derections*)tmp->content)->fd;
+        if(fd[0] == -1 || fd[1] == -1)
+            *interpted = 1;
+        if(*interpted != 1 && ((t_derections*)tmp->content)->file != NULL && (((t_derections*)tmp->content)->type == TYPE_Rredirection ||
+             ((t_derections*)tmp->content)->type == TYPE_DRredirection))
+            fd[1] = ((t_derections*)tmp->content)->fd; //out
         tmp = tmp->next;
     }
     return(fd);
@@ -43,7 +46,7 @@ void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_
     pMlist_var->enter_built = 0;
     *pipe_exist = 0;
     if(((t_Mlist *)lst->content)->derections)
-        var->fd_Der = OutDerections(((t_Mlist *)lst->content)->derections);
+        var->fd_Der = OutDerections(((t_Mlist *)lst->content)->derections,&var->interpted);
     else
         var->fd_Der = allocation_for_FD();
     if (lst->next != NULL)
@@ -58,6 +61,8 @@ void piepe_exist_ans_der(int *pipe_exist,t_pipeline *var,t_pMlist *pMlist_var,t_
 }
 void in_childe(t_template *lst,t_pMlist *pMlist_var,t_pipeline *var,int *pipe_exist)
 {
+    if(var->interpted == 1)
+        exit(1);
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
     duplicate(var->fd_Der,pMlist_var->lastFd,lst,var->fd);
@@ -77,6 +82,7 @@ int pipeline(t_template *lst,t_pMlist *pMlist_var)
     t_pipeline var;
     int pipe_exist;
 
+    var.interpted = 0;
     piepe_exist_ans_der(&pipe_exist,&var,pMlist_var,lst);
     if(pMlist_var->enter_built == 0)
     {   
