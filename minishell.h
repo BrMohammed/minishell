@@ -23,7 +23,6 @@ typedef struct s_global
     int g_flags;
     int error_her;
     int g_i;
-    int g_ii;
 }t_global;
 
 t_global *g_global;
@@ -120,6 +119,18 @@ typedef struct s_Makelist
 	char *temp2;
 	int temp;
 }t_Makelist;
+
+typedef struct s_Dolar
+{
+    int i;
+    int j;
+    char *e;
+    char quat;
+    t_template *expand;
+    char* temp;
+    char* key_ex;
+    char* key;
+}t_Dolar;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);

@@ -27,7 +27,7 @@ void qeuat_detect(char *quat,int *type,char c,int *ii)
 		*ii = *ii +1;
 	}
 }
-void string_join(t_lexer *lexer, char **text,int *type)//?
+void string_join(t_lexer *lexer, char **text,int *type)
 {
 	char quat;
 	char *Temp_Char;
