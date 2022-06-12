@@ -1,19 +1,31 @@
-# include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 05:27:13 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 05:27:46 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void handler(int sig)
+#include "../minishell.h"
+
+void	handler(int sig)
 {
 	(void)sig;
 	rl_replace_line("", 0);
 	ft_putchar_fd('\n', 1);
 	rl_on_new_line();
-    exit(1);
+	exit(1);
 }
 
-void while_on_her(int *fd_herd,char *file)
+void	while_on_her(int *fd_herd, char *file)
 {
 	char	*inputs;
 	char	r[10240];
-	int error;
+	int		error;
 
 	inputs = malloc(1);
 	inputs[0] = '\0';
@@ -34,24 +46,24 @@ void while_on_her(int *fd_herd,char *file)
 	exit(0);
 }
 
-int	heredoc(char *file,int *error)
+int	heredoc(char *file, int *error)
 {
-	int fd_herd[2];
-	int id ;
+	int	fd_herd[2];
+	int	id;
 
 	pipe(fd_herd);
 	signal(SIGINT, SIG_IGN);
 	id = fork();
-	if(id == 0)
-		while_on_her(fd_herd,file);
+	if (id == 0)
+		while_on_her(fd_herd, file);
 	else
 		close(fd_herd[1]);
 	waitpid(id, &g_global->g_flags, 0);
 	g_global->g_flags = WEXITSTATUS(g_global->g_flags);
-	if(g_global->g_flags == 1)
+	if (g_global->g_flags == 1)
 	{
 		g_global->error_her = 1;
 		*error = 1;
 	}
-	return(fd_herd[0]);
+	return (fd_herd[0]);
 }

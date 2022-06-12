@@ -55,6 +55,8 @@ re:			fclean all
 #?	cd .. or cd . // segfault // cd not working cd / segfault
 #?	export d="    ls    -la   " => $d // segfault and the value is empty
 #? echo ls | bash // segfault
+#? dfsa|asff
+#? >>r  // here_doce !
 
 
 

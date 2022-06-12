@@ -1,17 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 05:31:11 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 05:33:21 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void copie_env(char **envp)
+void	copie_env(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	g_global = malloc(sizeof(t_global));
-	while(envp[i] != NULL)
+	while (envp[i] != NULL)
 		i++;
 	g_global->envp = (char **)malloc(sizeof(char *) * (i + 1));
 	g_global->envp[i] = NULL;
 	i = 0;
-	while(envp[i] != NULL)
+	while (envp[i] != NULL)
 	{
 		g_global->envp[i] = ft_strdup(envp[i]);
 		i++;
@@ -30,15 +42,15 @@ void	signal_handler2(int sig)
 	}
 }
 
-int main(int argc, char** argv, char** envp)
+int	main(int argc, char **argv, char **envp)
 {
-	char    *all;
+	char	*all;
 
 	(void)argv;
 	(void) envp;
 	copie_env(envp);
 	all = ft_strdup("");
-	if(argc == 1)
+	if (argc == 1)
 	{
 		while (1 && all != NULL)
 		{
@@ -47,15 +59,14 @@ int main(int argc, char** argv, char** envp)
 			free(all);
 			g_global->error_her = 0;
 			all = readline("minishell? ");
-			add_history(all);	    
-			if(all != NULL && all[0] != '\0')
+			add_history(all);
+			if (all != NULL && all[0] != '\0')
 				minishell(all);
 		}
-		free(all);
 	}
-	if(g_global->g_flags == 130)
+	if (g_global->g_flags == 130)
 		g_global->g_flags = 2;
-	if(g_global->g_flags == 131)
+	if (g_global->g_flags == 131)
 		g_global->g_flags = 3;
 	exit(g_global->g_flags);
 }
