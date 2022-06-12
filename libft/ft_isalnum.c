@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brmohamm <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 12:05:27 by brmohamm          #+#    #+#             */
-/*   Updated: 2021/11/01 12:05:52 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:51:42 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	ft_isalnum(char *c)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(c[i])
+	while (c[i])
 	{
 		if ((c[i] < 'a' && c[i] > 'z') || (c[i] < 'A' && c[i] > 'Z')
 			|| (c[i] < '0' && c[i] > '9'))

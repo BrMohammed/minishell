@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:48:56 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:57:57 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_token
 		TYPE_PIPE,
 		TYPE_EOF,
 		TYPE_ERROR,
-	}type;
+	}e_type;
 }t_token;
 
 typedef struct s_lexer
@@ -144,7 +144,7 @@ typedef struct s_dolar
 
 t_token			*init_token(char *value, int type);
 t_lexer			*init_lexer(char *src);
-t_token			*GetNextToken(t_lexer *lexer);
+t_token			*get_next_token(t_lexer *lexer);
 
 t_template		*new_template(void *content);
 void			lstadd_back(t_template **lst, t_template *new);

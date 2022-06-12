@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 21:13:32 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:56:54 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ambiguous_redir(int *fd, char *file)
 	*fd = -1;
 }
 
+/*TYPE_DRredirection => out >>*/
 void	generate_rederaction(int type, t_template *lst)
 {
 	t_derections	*temp;
@@ -68,8 +69,8 @@ void	generate_rederaction(int type, t_template *lst)
 			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
 			ambiguous_redir(&temp->fd, temp->file);
 		else
-			temp->fd = open(((t_expand_data *)temp->expand->content)->expan_data,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);//out >>
+			temp->fd = open(((t_expand_data *)temp->expand->content)
+					->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
 	if (type == TYPE_Lredirection)
 	{
@@ -91,13 +92,13 @@ int	rderections(t_template *lst)
 
 	while (lst)
 	{
-		if (((t_derections*)lst->content)->type == TYPE_Lredirection)
+		if (((t_derections *)lst->content)->type == TYPE_Lredirection)
 			t_temp = "<";
-		if (((t_derections*)lst->content)->type == TYPE_Rredirection)
+		if (((t_derections *)lst->content)->type == TYPE_Rredirection)
 			t_temp = ">";
-		if (((t_derections*)lst->content)->type == TYPE_DLredirection)
+		if (((t_derections *)lst->content)->type == TYPE_DLredirection)
 			t_temp = "<<";
-		if (((t_derections*)lst->content)->type == TYPE_DRredirection)
+		if (((t_derections *)lst->content)->type == TYPE_DRredirection)
 			t_temp = ">>";
 		if (ft_strncmp(((t_derections *)lst->content)->file, "", 1) == 0
 			|| ft_strncmp(((t_derections *)lst->content)->file, "|", 1) == 0
@@ -109,7 +110,8 @@ int	rderections(t_template *lst)
 			g_global->g_flags = 258;
 			return (1);
 		}
-		make_key_of_dolar(((t_derections *)lst->content)->file, &lst, DERECYION);
+		make_key_of_dolar(((t_derections *)lst->content)->file,
+			&lst, DERECYION);
 		lst = lst->next;
 	}
 	return (3);

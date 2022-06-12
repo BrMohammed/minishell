@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 21:39:49 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:33:59 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:57:57 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char	*token_type(t_lexer *lexer, int *type)
 	return (text);
 }
 
-t_token	*GetNextToken(t_lexer *lexer)
+t_token	*get_next_token(t_lexer *lexer)
 {
 	t_token	*token;
 	char	*temp_text;

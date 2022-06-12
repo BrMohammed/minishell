@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brmohamm <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:17:32 by brmohamm          #+#    #+#             */
-/*   Updated: 2021/11/05 15:17:34 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:53:15 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ char	**ft_split(char const *s, char c)
 {
 	int		countpart;
 	char	**c1;
+	int		i;
 
 	if (!s)
 		return (NULL);
@@ -122,15 +123,15 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	c1[countpart] = NULL;
 	countpart = 0;
-	int i = 0;
-	while(c1[i])
+	i = 0;
+	while (c1[i])
 		i++;
 	countstr_lop(s, c, c1, countpart);
 	if (!c1)
 		return (NULL);
 	countpart = 0;
 	contaner_lop(s, c, c1, countpart);
-	if(ft_strncmp(s,"",1) == 0)
+	if (ft_strncmp(s, "", 1) == 0)
 		c1[0] = "";
 	return (c1);
 }

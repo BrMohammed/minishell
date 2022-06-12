@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 21:03:44 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 21:04:59 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:49:54 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_token	*init_token(char *value, int type)
 	token = NULL;
 	token = malloc(sizeof(t_token));
 	token->value = value;
-	token->type = type;
+	token->e_type = type;
 	return (token);
 }
 

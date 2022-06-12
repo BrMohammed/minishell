@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brmohamm <brmohamm@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:18:16 by brmohamm          #+#    #+#             */
-/*   Updated: 2021/11/20 16:23:39 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:53:28 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ char	*ft_strchr( const char *str, int c )
 	{
 		if (st[n] == chr)
 		{
-			return ((char*)1);
+			return ((char *)1);
 		}
 		n++;
 	}
-		return (0);
+	return (0);
 }

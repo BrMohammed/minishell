@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brmohamm <brmohamm@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 14:59:44 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/03/03 02:22:57 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:51:21 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	ft_isdigit(char *c)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(c[i])
+	while (c[i])
 	{
 		if (c[i] < '0' && c[i] > '9')
 			return (1);
