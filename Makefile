@@ -1,8 +1,8 @@
 NAME = minishell
 
-SRC_P = parsing/lexer.c parsing/parser.c parsing/error.c parsing/struct_tool.c\
+SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsing/struct_tool.c\
 		parsing/path_finder.c parsing/free_tree.c parsing/struct_tool01.c parsing/handling_data.c parsing/handling_data01.c\
-		parsing/handling_data02.c \
+		parsing/handling_data02.c\
 		execution/execution.c  execution/execution2.c execution/here_doc.c execution/execution_begin.c execution/exucution_end.c\
 		builtins/export.c builtins/export01.c builtins/unset.c builtins/exit_pwd.c builtins/echo.c builtins/cd.c\
 		builtins/env.c\
@@ -63,8 +63,7 @@ re:			fclean all
 #! echo hello >. >test1 <asdjkhakshd >hi >hello  // <test1 should not be created>
 #! ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
 #! ls | cat | <<k
-
-
+#! cd ~- // or cd - => switch betwin home and old dir
 
 
 
