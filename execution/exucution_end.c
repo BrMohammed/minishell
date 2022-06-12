@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 21:12:14 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:41:04 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,24 @@ char	**creat_table(t_template *lst)
 	return (c);
 }
 
-void	duplicate(int *fd_Der, int lastFd, t_template *lst, int *fd)
+void	duplicate(int *fd_der, int lastfd, t_template *lst, int *fd)
 {
-	if (fd_Der[0] == -1 || fd_Der[1] == -1)
+	if (fd_der[0] == -1 || fd_der[1] == -1)
 		exit(1);
-	if (fd_Der[0] > 0)
+	if (fd_der[0] > 0)
 	{
-		dup2(fd_Der[0], 0);
-		close(fd_Der[0]);
+		dup2(fd_der[0], 0);
+		close(fd_der[0]);
 	}
-	else if (lastFd != -1)
+	else if (lastfd != -1)
 	{
-		dup2(lastFd, 0);
-		close(lastFd);
+		dup2(lastfd, 0);
+		close(lastfd);
 	}
-	if (fd_Der[1] > 0)
+	if (fd_der[1] > 0)
 	{
-		dup2(fd_Der[1], 1);
-		close(fd_Der[1]);
+		dup2(fd_der[1], 1);
+		close(fd_der[1]);
 	}
 	else if (lst->next != NULL)
 	{
@@ -67,18 +67,18 @@ void	duplicate(int *fd_Der, int lastFd, t_template *lst, int *fd)
 	}
 }
 
-void	close_parent(t_pipeline var, int *lastFd, t_template *lst)
+void	close_parent(t_pipeline var, int *lastfd, t_template *lst)
 {
 	((t_Mlist *)lst->content)->pid = var.id;
-	if (*lastFd != -1)
-		close(*lastFd);
-	*lastFd = var.fd[0];
+	if (*lastfd != -1)
+		close(*lastfd);
+	*lastfd = var.fd[0];
 	if (lst->next != NULL)
 		close(var.fd[1]);
-	if (var.fd_Der[1] > 0)
-		close(var.fd_Der[1]);
-	if (var.fd_Der[0] > 0)
-		close(var.fd_Der[0]);
+	if (var.fd_der[1] > 0)
+		close(var.fd_der[1]);
+	if (var.fd_der[0] > 0)
+		close(var.fd_der[0]);
 }
 
 int	all_builtins01(char **c, int pipe_exist, int fd)
