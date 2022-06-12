@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:05:32 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:28:09 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 04:52:44 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ char	**error_handel(char *c, char **old)
 	dir = opendir(c);
 	if (dir == NULL)
 	{
-		printf("minishael: cd: %s: No such file or directory\n", c);
+		write(2, "minishel: cd: ", 14);
+		write(2, c, ft_strlen(c));
+		write(2, ": No such file or directory\n", 28);
 		g_global->g_flags = 1;
 		return (NULL);
 	}

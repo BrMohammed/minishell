@@ -38,13 +38,13 @@ typedef struct s_pipeline
     int interpted;
 }t_pipeline;
 
-typedef struct s_pMlist
+typedef struct s_pmlist
 {
     char	**c;
     char	*path;
     int lastFd;
     int enter_built;
-}t_pMlist;
+}t_pmlist;
 
 typedef struct s_template
 {
@@ -148,7 +148,7 @@ t_text *new_text(char *data,int type,int order);
 t_ExpandData *new_expand(char* expand_data, char*key);
 
 void *minishell(char* all);
-void pMlist(t_template* lst);
+void pmlist(t_template* lst);
 int RMlist(t_template* lst);
 void MakeKeyOfDlar(char *data,t_template **text,int branch);
 void Begin_Dolar(char* data,t_Dolar *var);
@@ -158,12 +158,12 @@ int  all_builtins(char **c, int pipe_exist, int fd);
 void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd);
 void close_parent(t_pipeline var,int *lastFd,t_template *lst);
 void	path_finder(char **path, char **c, char **envp);
-int pipeline(t_template *lst,t_pMlist *pMlist_var);
+int pipeline(t_template *lst,t_pmlist *pmlist_var);
 char **creat_table(t_template *lst);
 int	heredoc(char *file,int *error);
 int main(int argc, char** argv, char** envp);
-int *allocation_for_FD();
-int *OutDerections(t_template* lst,int *interpted);
+int *allocation_for_fd();
+int *out_derections(t_template* lst,int *interpted);
 void export(char **c,int fd,int false);
 void unset(char **c,int false);
 void exitm(char **c);
@@ -183,4 +183,5 @@ void free_tree(t_template *lst);
 void signal_callback_handler(int sig);
 char **creat_table(t_template *lst);
 void generate_rederaction(int type,t_template *lst);
+void fd_of_redir(t_template	*tmp, int *fd, int *interpted);
 #endif

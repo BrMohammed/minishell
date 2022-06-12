@@ -6,25 +6,11 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:44:39 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:47:16 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 04:48:33 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_table(char **c)
-{
-	int	i;
-
-	i = 0;
-	while (c[i])
-	{
-		free(c[i]);
-		i++;
-	}
-	free(c);
-	c = NULL;
-}
 
 void	copie_table(char **cp)
 {
@@ -41,6 +27,18 @@ void	copie_table(char **cp)
 		i++;
 	}
 	g_global->envp[i] = NULL;
+}
+
+void	print_error_of_equal(char *c, int *error)
+{
+	if (c[0] == '=')
+	{
+		*error = 1;
+		write(2, "minishel: export: `", 19);
+		write(2, c, ft_strlen(c));
+		write(2, "': not a valid identifier\n", 26);
+		g_global->g_flags = 1;
+	}
 }
 
 /*error if input take 1 all the comm in the next dont export*/
@@ -62,6 +60,7 @@ int	errorin_args(char *c, int error, int i)
 			j++;
 		}
 		error = input_error(befor_equal);
+		print_error_of_equal(c, &error);
 		if (error == 1)
 		{
 			free(befor_equal);

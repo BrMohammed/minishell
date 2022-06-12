@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:36:03 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:38:54 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 04:51:04 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,20 @@ int	args_error(char *c, int false, char *name)
 {
 	if (c[0] == '-')
 	{
-		printf("%s: `%c%c': put commend without option\n", name, c[0], c[1]);
+		write(2, name, ft_strlen(name));
+		write(2, ": `", 3);
+		write(2, &c[0], 1);
+		write(2, &c[1], 1);
+		write(2, "': put commend without option\n", 30);
 		g_global->g_flags = 1;
 		return (1);
 	}
 	else if (false == 1)
 	{
-		printf("%s: `%s': put commend without args \n", name, c);
+		write(2, name, ft_strlen(name));
+		write(2, ": `", 3);
+		write(2, c, ft_strlen(c));
+		write(2, "': put commend without args \n", 29);
 		g_global->g_flags = 1;
 		return (1);
 	}

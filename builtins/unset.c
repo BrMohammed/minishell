@@ -6,24 +6,45 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:47:35 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:51:46 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 04:50:12 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	free_table(char **c)
+{
+	int	i;
+
+	i = 0;
+	while (c[i])
+	{
+		free(c[i]);
+		i++;
+	}
+	free(c);
+	c = NULL;
+}
+
 int	input_error(char *c)
 {
 	if (c[0] == '-')
 	{
-		printf("minishell: export: `%c%c': invalid option\n", c[0], c[1]);
+		write(2, "minishel: export: `", 19);
+		write(2, ": `", 3);
+		write(2, &c[0], 1);
+		write(2, &c[1], 1);
+		write(2, "': invalid option\n", 18);
 		g_global->g_flags = 1;
 		return (1);
 	}
 	if ((ft_isalnum(c) == 1 && ft_isdigit(c) == 0)
 		|| (c[0] >= '0' && c[0] <= '9'))
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", c);
+		write(2, "minishel: export: `", 19);
+		write(2, ": `", 3);
+		write(2, c, ft_strlen(c));
+		write(2, "': not a valid identifier\n", 28);
 		g_global->g_flags = 1;
 		return (1);
 	}

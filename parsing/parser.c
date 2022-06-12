@@ -78,7 +78,7 @@ void *minishell(char* all)
 		}
 	}
 	if(list)
-		pMlist(list);
+		pmlist(list);
 	free_tree(list);
 	return(0);
 }
