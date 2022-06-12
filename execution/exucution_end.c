@@ -83,12 +83,12 @@ int all_builtins01(char **c, int pipe_exist, int fd)
     }
     if(ft_strcmp(c[0],"exit") == 0)
     {
-        exitB(c);
+        exitm(c);
         return(1);
     }
     if(ft_strcmp(c[0],"env") == 0)
     {
-        envB(c,fd,pipe_exist);
+        envm(c,fd,pipe_exist);
         return(1);
     }
     return(0);

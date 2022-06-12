@@ -1,58 +1,81 @@
-# include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 02:05:32 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 02:28:09 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int move_to_dir(char *c)
+#include "../minishell.h"
+
+char	**error_handel(char *c, char **old)
 {
-    char cwd[256];
-    char *old;
-    char **temp;
-    DIR *dir;
+	DIR		*dir;
+	char	**temp;
 
-    if ((dir = opendir (c)) == NULL) 
-    {
-        printf("minishael: cd: %s: No such file or directory\n",c);
-        g_global->g_flags = 1;
-        return(1);
-    }
-    temp = (char **)malloc(sizeof(char *) * 3);
-    temp[2] = NULL;
-    old = ft_strdup("OLDPWD=");
-    temp[0] = ft_strdup("export");
-    getcwd(cwd, sizeof(cwd));
-    old = ft_strjoin(old,cwd);
-    temp[1] = ft_strdup(old);
-    export(temp,0,0);
-    free(old);
-    free(temp[1]);
-    chdir(c);
-    old = ft_strdup("PWD=");
-    getcwd(cwd, sizeof(cwd));
-    old = ft_strjoin(old,cwd);
-    temp[1] = ft_strdup(old);
-    export(temp,0,0);
-    free_table(temp);
-    temp = NULL;
-    free(old);
-    old = NULL;
-    return (0);
+	dir = opendir(c);
+	if (dir == NULL)
+	{
+		printf("minishael: cd: %s: No such file or directory\n", c);
+		g_global->g_flags = 1;
+		return (NULL);
+	}
+	temp = (char **)malloc(sizeof(char *) * 3);
+	temp[2] = NULL;
+	*old = ft_strdup("OLDPWD=");
+	temp[0] = ft_strdup("export");
+	return (temp);
 }
 
-void cd(char **c ,int false)
+int	move_to_dir(char *c)
 {
-    int i;
-    int error;
+	char	cwd[256];
+	char	*old;
+	char	**temp;
 
-    i = 0;
-    error = 0;
-    if(c[1] != NULL)
-        error = move_to_dir(c[1]);
-    else if (c[1] == NULL)
-        error = move_to_dir(getenv("HOME"));
-    if(false == 1)
-    {
-       if(error == 0)
-            g_global->g_flags = 0;
-        exit( g_global->g_flags);
-    }
-    if(error == 0)
-        g_global->g_flags = 0;
+	temp = error_handel(c, &old);
+	if (temp == NULL)
+		return (0);
+	getcwd(cwd, sizeof(cwd));
+	old = ft_strjoin(old, cwd);
+	temp[1] = ft_strdup(old);
+	export(temp, 0, 0);
+	free(old);
+	free(temp[1]);
+	chdir(c);
+	old = ft_strdup("PWD=");
+	getcwd(cwd, sizeof(cwd));
+	old = ft_strjoin(old, cwd);
+	temp[1] = ft_strdup(old);
+	export(temp, 0, 0);
+	free_table(temp);
+	temp = NULL;
+	free(old);
+	old = NULL;
+	return (0);
+}
+
+void	cd(char **c, int false)
+{
+	int	i;
+	int	error;
+
+	i = 0;
+	error = 0;
+	if (c[1] != NULL)
+		error = move_to_dir(c[1]);
+	else if (c[1] == NULL)
+		error = move_to_dir(getenv("HOME"));
+	if (false == 1)
+	{
+		if (error == 0)
+			g_global->g_flags = 0;
+		exit(g_global->g_flags);
+	}
+	if (error == 0)
+		g_global->g_flags = 0;
 }
