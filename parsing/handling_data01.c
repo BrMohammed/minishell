@@ -36,7 +36,7 @@ char* CheckDolar(char *temp,char *key_ex)
     return(key);
 }
 
-void finde_another_arg(t_Dolar *var,int *t)
+void finde_another_arg(t_Dolar *var)
 {
     t_template *temp00;
 
@@ -52,8 +52,6 @@ void finde_another_arg(t_Dolar *var,int *t)
     free(var->e);
     var->e = ft_strdup(""); 
     lstadd_back(&var->expand, new_template(new_expand(var->e,var->key_ex)));
-    while(var->key[*t] == 32)
-        *t = *t + 1;;
 }
 
 void DolarWhoutQuat(t_Dolar *var)
@@ -66,11 +64,18 @@ void DolarWhoutQuat(t_Dolar *var)
     t = 0;
     while(var->key[t] != '\0' )
     {
+        while(var->key[t] == 32)
+            t++;
         for_expand[0] = var->key[t];
         var->e = ft_strjoin(var->e,for_expand);
         t++;
         if(var->key[t] == 32)
-            finde_another_arg(var,&t);
+        {
+            while(var->key[t] == 32)
+                t++;
+            if(var->key[t] != '\0')
+                finde_another_arg(var);
+        }
     }
     free(for_expand);
 }
