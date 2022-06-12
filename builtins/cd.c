@@ -11,11 +11,8 @@ int move_to_dir(char *c)
     {
         printf("minishael: cd: %s: No such file or directory\n",c);
         g_global->g_flags = 1;
-        closedir(dir);
         return(1);
     }
-    closedir(dir);
-    
     temp = (char **)malloc(sizeof(char *) * 3);
     temp[2] = NULL;
     old = ft_strdup("OLDPWD=");
