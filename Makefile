@@ -56,7 +56,14 @@ re:			fclean all
 #?	export d="    ls    -la   " => $d // segfault and the value is empty
 #? echo ls | bash // segfault
 #? dfsa|asff
-#? >>r  // here_doce !
+
+#! >>r  // here_doce !
+#! <<k <<L <<i ls | echo hello  // <You need to quit all the heredocs>
+#! echo hello | ls >. // <print error>
+#! echo hello >. >test1 <asdjkhakshd >hi >hello  // <test1 should not be created>
+#! ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
+#! ls | cat | <<k
+
 
 
 
