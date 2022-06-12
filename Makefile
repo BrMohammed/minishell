@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsing/struct_tool.c\
+SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsing/error01.c parsing/struct_tool.c\
 		parsing/path_finder.c parsing/free_tree.c parsing/struct_tool01.c parsing/handling_data.c parsing/handling_data01.c\
 		parsing/handling_data02.c\
 		execution/execution.c  execution/execution2.c execution/here_doc.c execution/execution_begin.c execution/exucution_end.c\

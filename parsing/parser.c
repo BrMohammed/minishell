@@ -6,11 +6,31 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:34:20 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:57:57 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 23:27:30 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	type_redir(t_makelist *var, t_lexer *lexer)
+{
+	var->i++;
+	var->temp = var->token->e_type;
+	free(var->token);
+	var->token = get_next_token(lexer);
+	if (var->token->e_type != TYPE_EOF)
+		var->temp2 = ft_strdup(var->token->value);
+	free(var->token);
+	if (var->token->e_type == TYPE_EOF)
+	{
+		var->temp2 = malloc(1);
+		var->temp2[0] = '\0';
+	}
+	lstadd_back(&var->derections, new_template((void *)new_derections(
+				var->temp2, var->temp, var->i)));
+	free(var->temp2);
+	var->token = get_next_token(lexer);
+}
 
 void	der_or_text(t_makelist *var, t_lexer *lexer)
 {
@@ -28,22 +48,7 @@ void	der_or_text(t_makelist *var, t_lexer *lexer)
 		|| var->token->e_type == TYPE_Lredirection
 		|| var->token->e_type == TYPE_Rredirection)
 	{
-		var->i++;
-		var->temp = var->token->e_type;
-		free(var->token);
-		var->token = get_next_token(lexer);
-		if (var->token->e_type != TYPE_EOF)
-			var->temp2 = ft_strdup(var->token->value);
-		free(var->token);
-		if (var->token->e_type == TYPE_EOF)
-		{
-			var->temp2 = malloc(1);
-			var->temp2[0] = '\0';
-		}
-		lstadd_back(&var->derections, new_template((void *)new_derections(
-					var->temp2, var->temp, var->i)));
-		free(var->temp2);
-		var->token = get_next_token(lexer);
+		type_redir(var, lexer);
 	}
 }
 
@@ -51,8 +56,6 @@ void	makelist(t_lexer *lexer, t_template **list)
 {
 	t_makelist	var;
 
-	var.i = 0;
-	var.i2 = 0;
 	var.token = get_next_token(lexer);
 	if (var.token->e_type == TYPE_EOF)
 		free(var.token);

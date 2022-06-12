@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:56:54 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 23:21:51 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,7 @@ void	generate_rederaction(int type, t_template *lst)
 			temp->fd = open(((t_expand_data *)temp->expand->content)
 					->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
-	if (type == TYPE_Lredirection)
-	{
-		if (temp->expand->next != NULL
-			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
-			ambiguous_redir(&temp->fd, temp->file);
-		else
-		{
-			temp->fd = open(temp->file, O_RDONLY);
-			if (temp->fd == -1)
-				printf("minishell: %s: No such file or directory\n", temp->file);
-		}
-	}
+	if_type_def_left_redirection(type, temp);
 }
 
 int	rderections(t_template *lst)
@@ -92,14 +81,7 @@ int	rderections(t_template *lst)
 
 	while (lst)
 	{
-		if (((t_derections *)lst->content)->type == TYPE_Lredirection)
-			t_temp = "<";
-		if (((t_derections *)lst->content)->type == TYPE_Rredirection)
-			t_temp = ">";
-		if (((t_derections *)lst->content)->type == TYPE_DLredirection)
-			t_temp = "<<";
-		if (((t_derections *)lst->content)->type == TYPE_DRredirection)
-			t_temp = ">>";
+		t_temp = redir_type(lst);
 		if (ft_strncmp(((t_derections *)lst->content)->file, "", 1) == 0
 			|| ft_strncmp(((t_derections *)lst->content)->file, "|", 1) == 0
 			|| ft_strncmp(((t_derections *)lst->content)->file, ">", 1) == 0
