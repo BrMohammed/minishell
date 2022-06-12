@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:55:22 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 05:11:36 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 21:12:14 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ char	**ptext(t_template *lst)
 		while (exp)
 		{
 			if (ft_strncmp(
-					((t_ExpandData *)exp->content)->expan_data, "|", 1) != 0)
+					((t_expand_data *)exp->content)->expan_data, "|", 1) != 0)
 			{
 				c[number_of_cases] = ft_strdup(
-						((t_ExpandData *)exp->content)->expan_data);
+						((t_expand_data *)exp->content)->expan_data);
 				number_of_cases++;
 			}
 			exp = exp->next;

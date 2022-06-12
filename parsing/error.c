@@ -1,116 +1,138 @@
-# include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 21:13:32 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int RText(t_template *lst,t_template *Mlst)
+#include "../minishell.h"
+
+int	rtext(t_template *lst)
 {
-    (void)Mlst;
-    while (lst)
+	while (lst)
 	{
-        if((((t_text*)lst->content)->data[0] == '|' && ((t_text*)lst->content)->order == 1))
-        {
-            printf("minishael :syntax error near unexpected token '%s'\n","|");
-            g_global->g_flags = 258;
-            return(1);
-        }
-        if(((t_text*)lst->content)->type == TYPE_ERROR)
-        {
-            printf("Syntax Error\n");
-            g_global->g_flags = 1;
-            return(1);
-        }
-        if((((t_text*)lst->content)->data[0] == '|' && lst->next == NULL))
-        {
-            printf("minishael :syntax error near unexpected token '%s'\n","|");
-            g_global->g_flags = 258;
-            return(2);
-        }
-        MakeKeyOfDlar(((t_text*)lst->content)->data,&lst,TEXT);
+		if ((((t_text *)lst->content)->data[0] == '|'
+				&& ((t_text *)lst->content)->order == 1))
+		{
+			printf("minishael :syntax error near unexpected token '%s'\n", "|");
+			g_global->g_flags = 258;
+			return (1);
+		}
+		if (((t_text *)lst->content)->type == TYPE_ERROR)
+		{
+			printf("Syntax Error\n");
+			g_global->g_flags = 1;
+			return (1);
+		}
+		if ((((t_text *)lst->content)->data[0] == '|' && lst->next == NULL))
+		{
+			printf("minishael :syntax error near unexpected token '%s'\n", "|");
+			g_global->g_flags = 258;
+			return (2);
+		}
+		make_key_of_dolar(((t_text *)lst->content)->data, &lst, TEXT);
 		lst = lst->next;
 	}
-    return(0);
+	return (0);
 }
 
-void ambiguous_redir(int *fd,char *file)
+void	ambiguous_redir(int *fd, char *file)
 {
-    printf("minishell: %s: ambiguous redirect\n",file);
-    *fd = -1;
+	printf("minishell: %s: ambiguous redirect\n", file);
+	*fd = -1;
 }
 
-void generate_rederaction(int type,t_template *lst)
+void	generate_rederaction(int type, t_template *lst)
 {
-    if(type == TYPE_Rredirection)
-    {
-        if(((t_derections*)lst->content)->expand->next != NULL || ((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data[0] == '\0')
-                ambiguous_redir(&((t_derections*)lst->content)->fd ,((t_derections*)lst->content)->file);
-        else
-            ((t_derections*)lst->content)->fd = open(((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data, O_WRONLY | O_CREAT | O_TRUNC, 0644);  //out >
-    }
-    if(type == TYPE_DRredirection)
-    {
-        if(((t_derections*)lst->content)->expand->next != NULL || ((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data[0] == '\0')
-            ambiguous_redir(&((t_derections*)lst->content)->fd ,((t_derections*)lst->content)->file);
-        else
-            ((t_derections*)lst->content)->fd = open(((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);  //out >>
-    }
-    if(type == TYPE_Lredirection)
-    {
-        if(((t_derections*)lst->content)->expand->next != NULL || ((t_ExpandData *)((t_derections*)lst->content)->expand->content)->expan_data[0] == '\0')
-            ambiguous_redir(&((t_derections*)lst->content)->fd ,((t_derections*)lst->content)->file);
-        else
-        {
-            ((t_derections*)lst->content)->fd = open(((t_derections*)lst->content)->file, O_RDONLY);
-            if(((t_derections*)lst->content)->fd == -1)
-                printf("minishell: %s: No such file or directory\n",((t_derections*)lst->content)->file);
-        }
-    }
-}
-int RDerections(t_template* lst)
-{
-    char* t_temp;
-    
-    while (lst)
+	t_derections	*temp;
+
+	temp = (t_derections *)lst->content;
+	if (type == TYPE_Rredirection)
 	{
-        if(((t_derections*)lst->content)->type == TYPE_Lredirection)
-            t_temp = "<";
-        if(((t_derections*)lst->content)->type == TYPE_Rredirection)
-            t_temp = ">";
-        if(((t_derections*)lst->content)->type == TYPE_DLredirection)
-            t_temp = "<<";
-        if(((t_derections*)lst->content)->type == TYPE_DRredirection)
-            t_temp = ">>";
-        if(ft_strncmp(((t_derections*)lst->content)->file,"", 1) == 0 || 
-            ft_strncmp(((t_derections*)lst->content)->file,"|", 1) == 0 ||
-            ft_strncmp(((t_derections*)lst->content)->file,">", 1) == 0 ||
-            ft_strncmp(((t_derections*)lst->content)->file,"<", 1) == 0)
-        {
-            printf("minishael :syntax error near unexpected token '%s'\n",t_temp);
-            g_global->g_flags = 258;
-            return(1);
-        }
+		if (temp->expand->next != NULL
+			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
+			ambiguous_redir(&(temp)->fd,
+				(temp)->file);
+		else
+			(temp)->fd = open(((t_expand_data *)temp->expand->content)
+					->expan_data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
+	if (type == TYPE_DRredirection)
+	{
+		if (temp->expand->next != NULL
+			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
+			ambiguous_redir(&temp->fd, temp->file);
+		else
+			temp->fd = open(((t_expand_data *)temp->expand->content)->expan_data,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);//out >>
+	}
+	if (type == TYPE_Lredirection)
+	{
+		if (temp->expand->next != NULL
+			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
+			ambiguous_redir(&temp->fd, temp->file);
+		else
+		{
+			temp->fd = open(temp->file, O_RDONLY);
+			if (temp->fd == -1)
+				printf("minishell: %s: No such file or directory\n", temp->file);
+		}
+	}
+}
 
-        MakeKeyOfDlar(((t_derections*)lst->content)->file,&lst,DERECYION);
+int	rderections(t_template *lst)
+{
+	char	*t_temp;
+
+	while (lst)
+	{
+		if (((t_derections*)lst->content)->type == TYPE_Lredirection)
+			t_temp = "<";
+		if (((t_derections*)lst->content)->type == TYPE_Rredirection)
+			t_temp = ">";
+		if (((t_derections*)lst->content)->type == TYPE_DLredirection)
+			t_temp = "<<";
+		if (((t_derections*)lst->content)->type == TYPE_DRredirection)
+			t_temp = ">>";
+		if (ft_strncmp(((t_derections *)lst->content)->file, "", 1) == 0
+			|| ft_strncmp(((t_derections *)lst->content)->file, "|", 1) == 0
+			|| ft_strncmp(((t_derections *)lst->content)->file, ">", 1) == 0
+			|| ft_strncmp(((t_derections *)lst->content)->file, "<", 1) == 0)
+		{
+			printf("minishael :syntax error near unexpected token '%s'\n",
+				t_temp);
+			g_global->g_flags = 258;
+			return (1);
+		}
+		make_key_of_dolar(((t_derections *)lst->content)->file, &lst, DERECYION);
 		lst = lst->next;
 	}
-    return(3);
+	return (3);
 }
 
-int RMlist(t_template* lst)
+int	rmlist(t_template *lst)
 {
-    int r;
-    int r2;
+	int	r;
+	int	r2;
 
-    while(lst)
-    { 
-        r = 0;
-        r2 = 0;
-        if(((t_Mlist *)lst->content)->text)
-	        r = RText(((t_Mlist *)lst->content)->text,lst);
-        if(((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
-	       r2 =  RDerections(((t_Mlist *)lst->content)->derections);
-        if(r == 2 & r2 == 0)
-            return(1);
-        lst = lst->next;
-        if (r == 1 || r2 == 1)
-            return(1);
-    }
-    return(0);
+	while (lst)
+	{
+		r = 0;
+		r2 = 0;
+		if (((t_Mlist *)lst->content)->text)
+			r = rtext(((t_Mlist *)lst->content)->text);
+		if (((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
+			r2 = rderections(((t_Mlist *)lst->content)->derections);
+		if (r == 2 & r2 == 0)
+			return (1);
+		lst = lst->next;
+		if (r == 1 || r2 == 1)
+			return (1);
+	}
+	return (0);
 }

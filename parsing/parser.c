@@ -71,7 +71,7 @@ void *minishell(char* all)
 	error = list;
 	if(error)
 	{
-		if(RMlist(error) == 1)
+		if(rmlist(error) == 1)
 		{		
 			free_tree(list);
 			return(0);

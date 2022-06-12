@@ -19,10 +19,10 @@
 
 typedef struct s_global
 {
-    char **envp;
-    int g_flags;
-    int error_her;
-    int g_i;
+	char **envp;
+	int g_flags;
+	int error_her;
+	int g_i;
 }t_global;
 
 t_global *g_global;
@@ -31,88 +31,88 @@ t_global *g_global;
 
 typedef struct s_pipeline
 {
-    int fd[2];
-    int *fd_Der;
-    int id;
-    int i;
-    int interpted;
+	int fd[2];
+	int *fd_Der;
+	int id;
+	int i;
+	int interpted;
 }t_pipeline;
 
 typedef struct s_pmlist
 {
-    char	**c;
-    char	*path;
-    int lastFd;
-    int enter_built;
+	char	**c;
+	char	*path;
+	int lastFd;
+	int enter_built;
 }t_pmlist;
 
 typedef struct s_template
 {
-    void    *content;
-    struct  s_template *next;
-    struct  s_template *prev;
+	void    *content;
+	struct  s_template *next;
+	struct  s_template *prev;
 }t_template;
 
 typedef struct s_token
 {
-    char* value;
-    enum
-    { 
-        TYPE_TEXT ,
-        TYPE_QUOTE,
-        TYPE_DLredirection,
-        TYPE_DRredirection,
-        TYPE_Lredirection,
-        TYPE_Rredirection,
-        TYPE_PIPE,
-        TYPE_EOF,
-        TYPE_ERROR,
-    }type;
+	char* value;
+	enum
+	{ 
+		TYPE_TEXT ,
+		TYPE_QUOTE,
+		TYPE_DLredirection,
+		TYPE_DRredirection,
+		TYPE_Lredirection,
+		TYPE_Rredirection,
+		TYPE_PIPE,
+		TYPE_EOF,
+		TYPE_ERROR,
+	}type;
 }t_token;
 
 typedef struct s_lexer
 {
-    char* src;
-    unsigned int size;
-    unsigned int i;
-    char c;
+	char* src;
+	unsigned int size;
+	unsigned int i;
+	char c;
 
 }t_lexer;
 
-typedef struct s_ExpandData
+typedef struct s_expand_data
 {
-    char* expan_data;
-    char* key;
-}t_ExpandData;
+	char* expan_data;
+	char* key;
+}t_expand_data;
 
 typedef struct s_text
 {
-    char *data;
-    t_template *expand;
-    int order;
-    int type;
+	char *data;
+	t_template *expand;
+	int order;
+	int type;
 }t_text;
 
 typedef struct s_derections
 {
-    char *file;
-    t_template *expand;
-    int order;
-    int type;
-    int fd;
+	char *file;
+	t_template *expand;
+	int order;
+	int type;
+	int fd;
 }t_derections;
 
 typedef struct s_Mlist
 {
-    t_template *text;
-    t_template *derections;
-    pid_t pid;
-    int order;
+	t_template *text;
+	t_template *derections;
+	pid_t pid;
+	int order;
 }t_Mlist;
 
 typedef struct s_Makelist
 {
-    t_token *token;
+	t_token *token;
 	t_template *text;
 	t_template *derections;
 	int i;
@@ -121,17 +121,17 @@ typedef struct s_Makelist
 	int temp;
 }t_Makelist;
 
-typedef struct s_Dolar
+typedef struct s_dolar
 {
-    int i;
-    int j;
-    char *e;
-    char quat;
-    t_template *expand;
-    char* temp;
-    char* key_ex;
-    char* key;
-}t_Dolar;
+	int i;
+	int j;
+	char *e;
+	char quat;
+	t_template *expand;
+	char* temp;
+	char* key_ex;
+	char* key;
+}t_dolar;
 
 t_token* init_token(char* value,int type);
 t_lexer* init_lexer(char* src);
@@ -145,15 +145,15 @@ void	lstiter(t_template *lst, void (*f)(void *));
 t_Mlist* new_list( t_template* text,t_template* derections, int order);
 t_derections *new_derections(char *file,int type,int order);
 t_text *new_text(char *data,int type,int order);
-t_ExpandData *new_expand(char* expand_data, char*key);
+t_expand_data *new_expand(char* expand_data, char*key);
 
 void *minishell(char* all);
 void pmlist(t_template* lst);
-int RMlist(t_template* lst);
-void MakeKeyOfDlar(char *data,t_template **text,int branch);
-void Begin_Dolar(char* data,t_Dolar *var);
-void detect_dolar(t_Dolar *var);
-void if_dolar_in_env(char *data,t_Dolar *var);
+int rmlist(t_template* lst);
+void make_key_of_dolar(char *data,t_template **text,int branch);
+void begin_dolar(char* data,t_dolar *var);
+void detect_dolar(t_dolar *var);
+void if_dolar_in_env(char *data,t_dolar *var);
 int  all_builtins(char **c, int pipe_exist, int fd);
 void duplicate(int *fd_Der,int lastFd,t_template *lst,int *fd);
 void close_parent(t_pipeline var,int *lastFd,t_template *lst);

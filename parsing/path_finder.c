@@ -1,4 +1,16 @@
-# include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path_finder.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 21:02:54 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 21:03:00 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
 
 char	**path_finder_half(char **path, char **paths02, char **envp)
 {
@@ -89,7 +101,7 @@ void	path_finder(char **path, char **c, char **envp)
 	if_access = -1;
 	paths02 = NULL;
 	paths03 = path_finder_half(path, paths02, envp);
-	if(paths03 != NULL)
+	if (paths03 != NULL)
 	{
 		i = midel_of_path(paths03, path, c[0], &if_access);
 		link_ready(if_access, path, c);

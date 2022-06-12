@@ -1,13 +1,25 @@
-# include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct_tool.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/12 21:03:07 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/12 21:12:14 by brmohamm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_ExpandData *new_expand(char* expand_data, char*key)
+#include "../minishell.h"
+
+t_expand_data	*new_expand(char *expand_data, char *key)
 {
-    t_ExpandData *expand;
+	t_expand_data	*expand;
 
-    expand = malloc(sizeof(t_ExpandData));
-    expand->expan_data = expand_data;
-    expand->key = key;
-    return(expand);
+	expand = malloc(sizeof(t_expand_data));
+	expand->expan_data = expand_data;
+	expand->key = key;
+	return (expand);
 }
 
 void	lstadd_back(t_template **lst, t_template *new)
@@ -17,7 +29,7 @@ void	lstadd_back(t_template **lst, t_template *new)
 	if (*lst)
 	{	
 		temp = lstlast(*lst);
-        new->prev = temp;
+		new->prev = temp;
 		temp->next = new;
 	}
 	else
@@ -45,7 +57,7 @@ t_template	*new_template(void *content)
 		return (NULL);
 	index->content = content;
 	index->next = NULL;
-    index->prev = NULL;
+	index->prev = NULL;
 	return (index);
 }
 
