@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:26:31 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:39:29 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,9 +165,10 @@ void			detect_dolar(t_dolar *var);
 void			if_dolar_in_env(char *data, t_dolar *var);
 int				all_builtins(char **c, int pipe_exist, int fd);
 void			duplicate(int *fd_der, int lastfd, t_template *lst, int *fd);
-void			close_parent(t_pipeline var, int *lastfd, t_template *lst);
+void			close_parent(t_pipeline *var, int *lastfd, t_template *lst);
 void			path_finder(char **path, char **c, char **envp);
-int				pipeline(t_template *lst, t_pmlist *pmlist_var);
+int				pipeline(t_template *lst, t_pmlist *pmlist_var,
+					t_pipeline *var);
 char			**creat_table(t_template *lst);
 int				heredoc(char *file, int *error);
 int				main(int argc, char **argv, char **envp);
@@ -191,14 +192,19 @@ int				args_error(char *c, int false, char *name);
 void			free_tree(t_template *lst);
 void			signal_callback_handler(int sig);
 char			**creat_table(t_template *lst);
-void			generate_rederaction(int type, t_template *lst);
-void			fd_of_redir(t_template	*tmp, int *fd, int *interpted);
+void			generate_rederaction(int type, t_template *lst, int *error);
+void			fd_of_redir(t_template	*tmp, int *fd,
+					int *interpted, int *error);
 int				agr_in_next_token(t_lexer *lexer);
 void			qeuat_detect(char *quat, int *type, char c, int *ii);
 void			string_join(t_lexer *lexer, char **text, int *type);
-void			if_type_def_left_redirection(int type, t_derections	*temp);
+void			if_type_def_left_redirection_and_dr(int type,
+					t_derections	*temp, int *error);
 char			*redir_type(t_template *lst);
-void			ambiguous_redir(int *fd, char *file);
+int				ambiguous_redir(int *fd, char *file);
 int				qaut_detect_and_break_in_other(t_lexer *lexer, char **text,
 					int *type, char quat);
+void			print_error_of_rtext(void);
+void			print_error_of_generate_rederaction(t_derections *temp,
+					int *error);
 #endif

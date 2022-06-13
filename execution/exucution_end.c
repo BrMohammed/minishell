@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:41:04 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 00:48:24 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,18 @@ void	duplicate(int *fd_der, int lastfd, t_template *lst, int *fd)
 	}
 }
 
-void	close_parent(t_pipeline var, int *lastfd, t_template *lst)
+void	close_parent(t_pipeline *var, int *lastfd, t_template *lst)
 {
-	((t_Mlist *)lst->content)->pid = var.id;
+	((t_Mlist *)lst->content)->pid = var->id;
 	if (*lastfd != -1)
 		close(*lastfd);
-	*lastfd = var.fd[0];
+	*lastfd = var->fd[0];
 	if (lst->next != NULL)
-		close(var.fd[1]);
-	if (var.fd_der[1] > 0)
-		close(var.fd_der[1]);
-	if (var.fd_der[0] > 0)
-		close(var.fd_der[0]);
+		close(var->fd[1]);
+	if (var->fd_der[1] > 0)
+		close(var->fd_der[1]);
+	if (var->fd_der[0] > 0)
+		close(var->fd_der[0]);
 }
 
 int	all_builtins01(char **c, int pipe_exist, int fd)

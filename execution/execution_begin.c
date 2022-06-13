@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:55:22 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 22:41:04 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:21:18 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,20 @@ void	while_on_wait(t_template *tmp, t_pmlist pmlist_var)
 	}
 }
 
+void	variable_init(t_pipeline *var, t_pmlist	*pmlist_var)
+{
+	pmlist_var->lastfd = -1;
+	var->interpted = 0;
+}
+
 void	pmlist(t_template *lst)
 {
 	t_pmlist	pmlist_var;
 	t_template	*tmp;
+	t_pipeline	var;
 
+	variable_init(&var, &pmlist_var);
 	tmp = lst;
-	pmlist_var.lastfd = -1;
 	while (lst)
 	{
 		pmlist_var.c = NULL;
@@ -76,7 +83,7 @@ void	pmlist(t_template *lst)
 			pmlist_var.c = ptext(((t_Mlist *)lst->content)->text);
 			if (pmlist_var.c != NULL)
 				path_finder(&pmlist_var.path, pmlist_var.c, g_global->envp);
-			pmlist_var.lastfd = pipeline(lst, &pmlist_var);
+			pmlist_var.lastfd = pipeline(lst, &pmlist_var, &var);
 			if (pmlist_var.path != NULL)
 				free(pmlist_var.path);
 			if (pmlist_var.c != NULL)

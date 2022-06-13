@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:13 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 05:27:46 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 23:44:29 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void	while_on_her(int *fd_herd, char *file)
 	error = 1;
 	signal(SIGINT, handler);
 	close(fd_herd[0]);
-	while (ft_strcmp(file, r) != -10 && error != 0)
+	while (ft_strcmp(file, r) != 0 && error != 0)
 	{
 		inputs = ft_strjoin(inputs, r);
 		write(1, "> ", 2);
 		error = read(0, r, 10240);
-		r[error] = '\0';
+		r[error - 1] = '\0';
 	}
 	ft_putstr_fd(inputs, fd_herd[1]);
 	free(inputs);

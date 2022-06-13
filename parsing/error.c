@@ -6,21 +6,20 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:21:51 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:49:41 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	rtext(t_template *lst)
+int	rtext(t_template *lst, t_template *lst2)
 {
 	while (lst)
 	{
 		if ((((t_text *)lst->content)->data[0] == '|'
 				&& ((t_text *)lst->content)->order == 1))
 		{
-			printf("minishael :syntax error near unexpected token '%s'\n", "|");
-			g_global->g_flags = 258;
+			print_error_of_rtext();
 			return (1);
 		}
 		if (((t_text *)lst->content)->type == TYPE_ERROR)
@@ -29,10 +28,10 @@ int	rtext(t_template *lst)
 			g_global->g_flags = 1;
 			return (1);
 		}
-		if ((((t_text *)lst->content)->data[0] == '|' && lst->next == NULL))
+		if (((t_text *)lst->content)->data[0] == '|' && lst->next == NULL
+			&& ((t_derections *)lst2->content)->file == NULL)
 		{
-			printf("minishael :syntax error near unexpected token '%s'\n", "|");
-			g_global->g_flags = 258;
+			print_error_of_rtext();
 			return (2);
 		}
 		make_key_of_dolar(((t_text *)lst->content)->data, &lst, TEXT);
@@ -41,38 +40,32 @@ int	rtext(t_template *lst)
 	return (0);
 }
 
-void	ambiguous_redir(int *fd, char *file)
+int	ambiguous_redir(int *fd, char *file)
 {
 	printf("minishell: %s: ambiguous redirect\n", file);
 	*fd = -1;
+	return (1);
 }
 
 /*TYPE_DRredirection => out >>*/
-void	generate_rederaction(int type, t_template *lst)
+void	generate_rederaction(int type, t_template *lst, int *error)
 {
 	t_derections	*temp;
 
 	temp = (t_derections *)lst->content;
-	if (type == TYPE_Rredirection)
+	if (type == TYPE_Rredirection && *error != 1)
 	{
 		if (temp->expand->next != NULL
 			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
-			ambiguous_redir(&(temp)->fd,
-				(temp)->file);
+			*error = ambiguous_redir(&(temp)->fd,
+					(temp)->file);
+		else if (ft_strcmp(temp->file, ".") == 0)
+			print_error_of_generate_rederaction(temp, error);
 		else
 			(temp)->fd = open(((t_expand_data *)temp->expand->content)
 					->expan_data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	}
-	if (type == TYPE_DRredirection)
-	{
-		if (temp->expand->next != NULL
-			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
-			ambiguous_redir(&temp->fd, temp->file);
-		else
-			temp->fd = open(((t_expand_data *)temp->expand->content)
-					->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	}
-	if_type_def_left_redirection(type, temp);
+	if_type_def_left_redirection_and_dr(type, temp, error);
 }
 
 int	rderections(t_template *lst)
@@ -109,7 +102,8 @@ int	rmlist(t_template *lst)
 		r = 0;
 		r2 = 0;
 		if (((t_Mlist *)lst->content)->text)
-			r = rtext(((t_Mlist *)lst->content)->text);
+			r = rtext(((t_Mlist *)lst->content)->text,
+					((t_Mlist *)lst->content)->derections);
 		if (((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
 			r2 = rderections(((t_Mlist *)lst->content)->derections);
 		if (r == 2 & r2 == 0)

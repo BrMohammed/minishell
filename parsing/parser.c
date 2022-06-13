@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:34:20 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:27:30 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:32:07 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	makelist(t_lexer *lexer, t_template **list)
 	t_makelist	var;
 
 	var.token = get_next_token(lexer);
+	var.i = 0;
 	if (var.token->e_type == TYPE_EOF)
 		free(var.token);
 	while (var.token->e_type != TYPE_EOF || var.token->value != NULL)

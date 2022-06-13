@@ -6,19 +6,31 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 23:21:15 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:21:55 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:40:43 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	if_type_def_left_redirection(int type, t_derections	*temp)
+void	if_type_def_left_redirection_and_dr(int type,
+			t_derections	*temp, int *error)
 {
-	if (type == TYPE_Lredirection)
+	if (type == TYPE_DRredirection && *error != 1)
 	{
 		if (temp->expand->next != NULL
 			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
-			ambiguous_redir(&temp->fd, temp->file);
+			*error = ambiguous_redir(&temp->fd, temp->file);
+		else if (ft_strcmp(temp->file, ".") == 0)
+			print_error_of_generate_rederaction(temp, error);
+		else
+			temp->fd = open(((t_expand_data *)temp->expand->content)
+					->expan_data, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	}
+	if (type == TYPE_Lredirection && *error != 1)
+	{
+		if (temp->expand->next != NULL
+			|| ((t_expand_data *)temp->expand->content)->expan_data[0] == '\0')
+			*error = ambiguous_redir(&temp->fd, temp->file);
 		else
 		{
 			temp->fd = open(temp->file, O_RDONLY);
@@ -41,4 +53,17 @@ char	*redir_type(t_template *lst)
 	if (((t_derections *)lst->content)->type == TYPE_DRredirection)
 		t_temp = ">>";
 	return (t_temp);
+}
+
+void	print_error_of_rtext(void)
+{
+	printf("minishael :syntax error near unexpected token '%s'\n", "|");
+	g_global->g_flags = 258;
+}
+
+void	print_error_of_generate_rederaction(t_derections	*temp, int *error)
+{
+	printf("minishell: .: Is a directory\n");
+	(temp)->fd = -1;
+	*error = 1;
 }

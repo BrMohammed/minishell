@@ -6,13 +6,13 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 21:39:49 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:10:27 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/12 23:56:08 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	skip_redir(t_lexer *lexer, int *type, char **text, char **Temp_Char)
+void	skip_redir_r(t_lexer *lexer, int *type, char **text, char **Temp_Char)
 {
 	*text[0] = lexer->c;
 	agr_in_next_token(lexer);
@@ -22,12 +22,22 @@ void	skip_redir(t_lexer *lexer, int *type, char **text, char **Temp_Char)
 	agr_in_next_token(lexer);
 }
 
+void	skip_redir_l(t_lexer *lexer, int *type, char **text, char **Temp_Char)
+{
+	*text[0] = lexer->c;
+	agr_in_next_token(lexer);
+	*Temp_Char[0] = lexer->c;
+	*text = ft_strjoin(*text,*Temp_Char);
+	*type = TYPE_DRredirection;
+	agr_in_next_token(lexer);
+}
+
 void	give_the_type(t_lexer *lexer, int *type, char **text, char **Temp_Char)
 {
 	if (lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
-		skip_redir(lexer, type, text, Temp_Char);
+		skip_redir_r(lexer, type, text, Temp_Char);
 	else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
-		skip_redir(lexer, type, text, Temp_Char);
+		skip_redir_l(lexer, type, text, Temp_Char);
 	else if (lexer->c == '|')
 		*type = TYPE_PIPE;
 	else if (lexer->c == '<')
