@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   exit01.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/05 14:59:44 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 23:34:21 by brmohamm         ###   ########.fr       */
+/*   Created: 2022/06/13 23:56:46 by brmohamm          #+#    #+#             */
+/*   Updated: 2022/06/14 00:18:50 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-int	ft_isdigit(char *c)
+int	is_d(int c)
+{
+	if (c >= '0' && c <= '9')
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int	lop_onarg(char *c)
 {
 	int	i;
 
 	i = 0;
 	while (c[i])
 	{
-		if (c[i] < '0' && c[i] > '9')
-			return (1);
+		if (is_d(c[i]) == 0)
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }

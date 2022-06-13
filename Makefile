@@ -4,7 +4,7 @@ SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsi
 		parsing/path_finder.c parsing/free_tree.c parsing/struct_tool01.c parsing/handling_data.c parsing/handling_data01.c\
 		parsing/handling_data02.c\
 		execution/execution.c  execution/execution2.c execution/here_doc.c execution/execution_begin.c execution/exucution_end.c\
-		builtins/export.c builtins/export01.c builtins/unset.c builtins/exit_pwd.c builtins/echo.c builtins/cd.c\
+		builtins/export.c builtins/export01.c builtins/unset.c builtins/exit_pwd.c builtins/exit01.c builtins/echo.c builtins/cd.c\
 		builtins/env.c\
 		main.c
 
@@ -12,7 +12,7 @@ CC = @gcc
 
 RDLINE		:= -lreadline -L/goinfre/brmohamm/.brew/opt/readline/lib 
 
-CFLAGS = -lreadline -Wall -Wextra -Werror -I/goinfre/brmohamm/.brew/opt/readline/include  #-fsanitize=address -g
+CFLAGS = -lreadline -Wall -Wextra -Werror -I/goinfre/brmohamm/.brew/opt/readline/include
 
 
 LIBFT = libft/libft.a
@@ -60,8 +60,10 @@ re:			fclean all
 #? <<k <<L <<i ls | echo hello  // <You need to quit all the heredocs>
 #? echo hello | ls >. // <print error>
 #? echo hello >. >test1 <asdjkhakshd >hi >hello  // <test1 should not be created>
+#? exit 0 1 5 3
 
-#! ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
+#! cd , export fdf=dv fdssf=dfsf leak
+## ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
 ## cd ~- // or cd - => switch betwin home and old dir
 
 

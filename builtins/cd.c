@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:05:32 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 21:57:01 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 00:10:20 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	**error_handel(char *c, char **old)
 		g_global->g_flags = 1;
 		return (NULL);
 	}
+	closedir(dir);
 	temp = (char **)malloc(sizeof(char *) * 3);
 	temp[2] = NULL;
 	*old = ft_strdup("OLDPWD=");

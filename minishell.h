@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 01:39:29 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 00:13:59 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,4 +207,5 @@ int				qaut_detect_and_break_in_other(t_lexer *lexer, char **text,
 void			print_error_of_rtext(void);
 void			print_error_of_generate_rederaction(t_derections *temp,
 					int *error);
+int				lop_onarg(char *c);
 #endif
