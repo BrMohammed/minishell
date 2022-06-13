@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:39:11 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 04:48:24 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 21:59:43 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	serch_on_env(char *c, int *error)
 		i = 0;
 		while (g_global->envp[i] && ft_strcmp(g_global->envp[i], c) != 0)
 			i++;
-		if (g_global->envp[i] != '\0')
+		if (g_global->envp[i] != NULL)
 			return (1);
 	}
 	else

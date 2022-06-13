@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 21:05:21 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 21:18:00 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 21:56:24 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 void	expand_data(char *e, t_template **expand, int branch, t_template **text)
 {
-	int			i;
 	t_template	*temp00;
 
-	i = 0;
 	temp00 = NULL;
 	if (e[0] != '\0')
 	{

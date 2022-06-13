@@ -61,7 +61,7 @@ re:			fclean all
 #? echo hello | ls >. // <print error>
 #? echo hello >. >test1 <asdjkhakshd >hi >hello  // <test1 should not be created>
 
-# ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
+#! ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
 ## cd ~- // or cd - => switch betwin home and old dir
 
 

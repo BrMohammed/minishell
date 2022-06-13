@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:05:32 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 23:02:32 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 21:57:01 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,8 @@ int	move_to_dir(char *c)
 
 void	cd(char **c, int false)
 {
-	int	i;
 	int	error;
 
-	i = 0;
 	error = 0;
 	if (c[1] != NULL)
 		error = move_to_dir(c[1]);
