@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 01:49:41 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/13 05:03:27 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	rtext(t_template *lst, t_template *lst2)
 			return (1);
 		}
 		if (((t_text *)lst->content)->data[0] == '|' && lst->next == NULL
-			&& ((t_derections *)lst2->content)->file == NULL)
+			&& (!lst2))
 		{
 			print_error_of_rtext();
 			return (2);
