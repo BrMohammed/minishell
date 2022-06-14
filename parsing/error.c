@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 22:25:47 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:03:56 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	rderections(t_template *lst)
 	int		interapted;
 
 	error = 0;
-	interapted = 0;
+	interapted = while_on_doc(lst);
 	while (lst)
 	{
 		t_temp = redir_type(lst);
@@ -90,7 +90,7 @@ int	rderections(t_template *lst)
 		}
 		make_key_of_dolar(((t_derections *)lst->content)->file,
 			&lst, DERECYION);
-		fd_of_redir(lst, &error, &interapted);
+		generate_rederaction(((t_derections *)lst->content)->type, lst, &error);
 		if (error == 1 || interapted == 1)
 			return (1);
 		lst = lst->next;

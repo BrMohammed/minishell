@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:34:20 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 23:27:47 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:47:09 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ void	type_redir(t_makelist *var, t_lexer *lexer)
 	var->token = get_next_token(lexer);
 	if (var->token->e_type != TYPE_EOF)
 		var->temp2 = ft_strdup(var->token->value);
-	free_token(var);
 	if (var->token->e_type == TYPE_EOF)
 	{
 		var->temp2 = malloc(1);
 		var->temp2[0] = '\0';
 	}
+	free_token(var);
 	lstadd_back(&var->derections, new_template((void *)new_derections(
 				var->temp2, var->temp, var->i)));
 	free(var->temp2);

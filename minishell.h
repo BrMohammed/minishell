@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 22:25:41 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:03:48 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,8 +193,7 @@ void			free_tree(t_template *lst);
 void			signal_callback_handler(int sig);
 char			**creat_table(t_template *lst);
 void			generate_rederaction(int type, t_template *lst, int *error);
-void			fd_of_redir(t_template	*tmp,
-					int *error, int *interpted);
+int				while_on_doc(t_template	*lst);
 int				agr_in_next_token(t_lexer *lexer);
 void			qeuat_detect(char *quat, int *type, char c, int *ii);
 void			string_join(t_lexer *lexer, char **text, int *type);

@@ -8,7 +8,7 @@ SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsi
 		builtins/env.c\
 		main.c
 
-CC = @gcc  # -fsanitize=address -g3 
+CC = @gcc   #-fsanitize=address -g3 
 
 RDLINE		:= -lreadline -L/Users/brmohamm/.brew/opt/readline/lib 
 
