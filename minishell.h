@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 00:13:59 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 01:20:33 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void			make_key_of_dolar(char *data, t_template **text, int branch);
 void			begin_dolar(char *data, t_dolar *var);
 void			detect_dolar(t_dolar *var);
 void			if_dolar_in_env(char *data, t_dolar *var);
-int				all_builtins(char **c, int pipe_exist, int fd);
+int				all_builtins(char **c, int pipe_exist, int fd, t_pipeline *var);
 void			duplicate(int *fd_der, int lastfd, t_template *lst, int *fd);
 void			close_parent(t_pipeline *var, int *lastfd, t_template *lst);
 void			path_finder(char **path, char **c, char **envp);
@@ -179,7 +179,7 @@ void			unset(char **c, int false);
 void			exitm(char **c);
 void			envm(char **c, int fd, int false);
 void			pwd(char **c, int fd, int false);
-void			echo(char **c, int fd, int false);
+void			echo(char **c, int fd, int false, t_pipeline *var);
 void			cd(char **c, int false);
 int				serch_on_env(char *c, int *error);
 void			copie_table(char **cp);

@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:30:46 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:31:02 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:20:10 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ void	nl_not_exist(int *nl_exist, char **c, int *i)
 	}
 }
 
-void	nl__exist(int nl_exist, int *skip, char *c)
+void	nl__exist(int nl_exist, int *skip, char *c, t_pipeline *var)
 {
 	int	y;
 
+	dprintf(2, "{%d}\n", var->fd_der[1]);
 	if (c != NULL)
 	{
 		if (nl_exist == 0)
@@ -48,33 +49,44 @@ void	nl__exist(int nl_exist, int *skip, char *c)
 			else
 				skip = 0;
 			if (skip == 0 && c != NULL)
-				printf("%s ", c);
+				write(var->fd_der[1], c, ft_strlen(c));
 		}
 		else
-			printf("%s ", c);
+			write(var->fd_der[1], c, ft_strlen(c));
 	}
 }
 
-void	echo(char **c, int fd, int false)
+void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	i;
 	int	nl_exist;
 	int	skip;
 
 	i = 0;
+	(void)fd;
 	nl_exist = 1;
 	skip = 1;
-	if (false == 1)
+	
+	if(pipe_exist == 1 && var->fd_der[1] != 0)
+	{
+		dup2(var->fd_der[1], 1);
+		var->fd_der[1] = 1;
+	}
+	else if (var->fd_der[1] == 0)
+		var->fd_der[1] = 1;
+	else if (pipe_exist == 1)
 		dup2(fd, 1);
 	while (c[i + 1])
 	{
 		nl_not_exist(&nl_exist, c, &i);
-		nl__exist(nl_exist, &skip, c[i + 1]);
+		nl__exist(nl_exist, &skip, c[i + 1], var);
 		i++;
+		if (c[i + 1])
+			write(var->fd_der[1], " ", 1);
 	}
 	if (nl_exist == 1)
-		printf("\n");
-	if (false == 1)
+		write(var->fd_der[1], "\n", 1);
+	if (pipe_exist == 1)
 	{
 		g_global->g_flags = 0;
 		exit(0);

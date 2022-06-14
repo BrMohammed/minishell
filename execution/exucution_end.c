@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 00:48:24 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 01:37:19 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	duplicate(int *fd_der, int lastfd, t_template *lst, int *fd)
 {
 	if (fd_der[0] == -1 || fd_der[1] == -1)
 		exit(1);
-	if (fd_der[0] > 0)
+	if (fd_der[0] > 1)
 	{
 		dup2(fd_der[0], 0);
 		close(fd_der[0]);
@@ -54,7 +54,7 @@ void	duplicate(int *fd_der, int lastfd, t_template *lst, int *fd)
 		dup2(lastfd, 0);
 		close(lastfd);
 	}
-	if (fd_der[1] > 0)
+	if (fd_der[1] > 1)
 	{
 		dup2(fd_der[1], 1);
 		close(fd_der[1]);
@@ -75,9 +75,9 @@ void	close_parent(t_pipeline *var, int *lastfd, t_template *lst)
 	*lastfd = var->fd[0];
 	if (lst->next != NULL)
 		close(var->fd[1]);
-	if (var->fd_der[1] > 0)
+	if (var->fd_der[1] > 1)
 		close(var->fd_der[1]);
-	if (var->fd_der[0] > 0)
+	if (var->fd_der[0] > 1)
 		close(var->fd_der[0]);
 }
 
@@ -106,9 +106,11 @@ int	all_builtins01(char **c, int pipe_exist, int fd)
 	return (0);
 }
 
-int	all_builtins(char **c, int pipe_exist, int fd)
+int	all_builtins(char **c, int pipe_exist, int fd, t_pipeline *var)
 {
 	char	*temp;
+
+	//dprintf(2,"{%d}\n",var->fd_der[1]);
 
 	if (all_builtins01(c, pipe_exist, fd) == 1)
 		return (1);
@@ -120,7 +122,7 @@ int	all_builtins(char **c, int pipe_exist, int fd)
 	temp = ft_tolower(c[0]);
 	if (ft_strcmp(temp, "echo") == 0)
 	{
-		echo(c, fd, pipe_exist);
+		echo(c, fd, pipe_exist, var);
 		free(temp);
 		return (1);
 	}

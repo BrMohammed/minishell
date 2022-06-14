@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:12:09 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 04:59:42 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 01:18:00 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	piepe_exist_ans_der(int *pipe_exist, t_pipeline *var,
 	if (*pipe_exist == 0 && pmlist_var->c != NULL && var->fd_der[1] != -1
 		&& var->fd_der[0] != -1 && var->interpted != 1)
 		pmlist_var->enter_built = all_builtins(pmlist_var->c,
-				*pipe_exist, var->fd[1]);
+				*pipe_exist, var->fd[1], var);
 }
 
 void	in_childe(t_template *lst, t_pmlist *pmlist_var,
@@ -83,7 +83,7 @@ void	in_childe(t_template *lst, t_pmlist *pmlist_var,
 	duplicate(var->fd_der, pmlist_var->lastfd, lst, var->fd);
 	if (*pipe_exist == 1 && pmlist_var->c != NULL && var->interpted != 1)
 		pmlist_var->enter_built = all_builtins(pmlist_var->c,
-				*pipe_exist, var->fd[1]);
+				*pipe_exist, var->fd[1], var);
 	if (pmlist_var->enter_built == 0 && var->interpted != 1)
 	{
 		if (execve(pmlist_var->path, &pmlist_var->c[0], g_global->envp) == -1
