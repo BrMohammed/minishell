@@ -40,40 +40,6 @@ re:			fclean all
 #  github bigin   # lsof -c minishell
 # git pull --rebase origin main
 
-#TODO:
-#?	ls -la < adf  > ssaaa // dont create second file out if file one has error
-#?	ls << aaaa > asdadaasdasdadas  //  ls > asdadaasdasdadas << asaa // dont create file if herdoc is interpted ctrl + c
-#?	echo -n // segfault
-#?	<<< this is syntax error dont show heredoc
-#?	asdasd |  | asdasd // syntax error
-#?	asdasd |  | asdasd | // syntax error too
-#?	syntax error exit code 258
-#?	|<s Dont show opening file errors after syntax parsing error
-#?	unset path => ls // segfault after unsetting the PATH
-#?	export dsaasd => unset dsadas // Leaks whene running any buildin cmd (cd / pwd) too echo is not leaking
-#?	cd not working alone should gp to home or if home is not in env show home is not set show  cd ~ should go to home no matter if its unset
-#?	cd .. or cd . // segfault // cd not working cd / segfault
-#?	export d="    ls    -la   " => $d // segfault and the value is empty
-#? echo ls | bash // segfault
-#? dfsa|asff
-#? ls | cat | <<k
-#? <<k <<L <<i ls | echo hello  // <You need to quit all the heredocs>
-#? echo hello | ls >. // <print error>
-#? echo hello >. >test1 <asdjkhakshd >hi >hello  // <test1 should not be created>
-#? exit 0 1 5 3
-
-#! cd , export fdf=dv fdssf=dfsf leak
-## ls | cat | <<k <> // <OPEN ALL THE HEREDOC IN SYTAX ERROR>
-## cd ~- // or cd - => switch betwin home and old dir
-
-
-# minishell? < hn
-# minishell: hn: No such file or directory
-# minishell? $?
-# minishell:0: command not found
-# minishell? 
-
-
 ADD = git add .
 
 read :=		@read -p "-> " enter \

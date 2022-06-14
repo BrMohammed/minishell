@@ -6,11 +6,18 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 23:21:15 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 05:59:33 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 06:20:16 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	print_of_no_der(char *file, int *error)
+{
+	printf("minishell: %s: No such file or directory\n", file);
+	g_global->g_flags = 1;
+	*error = 1;
+}
 
 void	if_type_def_left_redirection_and_dr(int type,
 			t_derections	*temp, int *error)
@@ -35,11 +42,7 @@ void	if_type_def_left_redirection_and_dr(int type,
 		{
 			temp->fd = open(temp->file, O_RDONLY);
 			if (temp->fd == -1)
-			{
-				printf("minishell: %s: No such file or directory\n", temp->file);
-				dprintf(2, "hi\n");
-				g_global->g_flags = 1;
-			}
+				print_of_no_der(temp->file, error);
 		}
 	}
 }

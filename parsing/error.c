@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 05:03:27 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 06:16:02 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	ambiguous_redir(int *fd, char *file)
 {
 	printf("minishell: %s: ambiguous redirect\n", file);
 	*fd = -1;
+	g_global->g_flags = 1;
 	return (1);
 }
 
@@ -71,7 +72,9 @@ void	generate_rederaction(int type, t_template *lst, int *error)
 int	rderections(t_template *lst)
 {
 	char	*t_temp;
+	int		error;
 
+	error = 0;
 	while (lst)
 	{
 		t_temp = redir_type(lst);
@@ -87,6 +90,9 @@ int	rderections(t_template *lst)
 		}
 		make_key_of_dolar(((t_derections *)lst->content)->file,
 			&lst, DERECYION);
+		fd_of_redir(lst, &((t_derections *)lst->content)->fd, &error);
+		if (error == 1)
+			return (1);
 		lst = lst->next;
 	}
 	return (3);
