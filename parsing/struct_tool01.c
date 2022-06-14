@@ -18,7 +18,10 @@ t_token	*init_token(char *value, int type)
 
 	token = NULL;
 	token = malloc(sizeof(t_token));
-	token->value = value;
+	if (!value)
+		token->value = NULL;
+	else
+		token->value = ft_strdup(value);
 	token->e_type = type;
 	return (token);
 }

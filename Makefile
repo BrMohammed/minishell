@@ -8,11 +8,11 @@ SRC_P = parsing/lexer.c parsing/lexer01.c parsing/parser.c parsing/error.c parsi
 		builtins/env.c\
 		main.c
 
-CC = @gcc 
+CC = @gcc  # -fsanitize=address -g3 
 
-RDLINE		:= -lreadline -L/goinfre/brmohamm/.brew/opt/readline/lib 
+RDLINE		:= -lreadline -L/Users/brmohamm/.brew/opt/readline/lib 
 
-CFLAGS = -lreadline -Wall -Wextra -Werror -I/goinfre/brmohamm/.brew/opt/readline/include
+CFLAGS = -lreadline -Wall -Wextra -Werror -I/Users/brmohamm/.brew/opt/readline/include
 
 
 LIBFT = libft/libft.a

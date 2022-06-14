@@ -6,21 +6,28 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:34:20 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 01:32:07 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:27:47 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	free_token(t_makelist *var)
+{
+	if (var->token->value != NULL)
+		free(var->token->value);
+	free(var->token);
+}
+
 void	type_redir(t_makelist *var, t_lexer *lexer)
 {
 	var->i++;
 	var->temp = var->token->e_type;
-	free(var->token);
+	free_token(var);
 	var->token = get_next_token(lexer);
 	if (var->token->e_type != TYPE_EOF)
 		var->temp2 = ft_strdup(var->token->value);
-	free(var->token);
+	free_token(var);
 	if (var->token->e_type == TYPE_EOF)
 	{
 		var->temp2 = malloc(1);
@@ -40,7 +47,7 @@ void	der_or_text(t_makelist *var, t_lexer *lexer)
 		var->i++;
 		lstadd_back(&var->text, new_template((void *)new_text(var->token->value,
 					var->token->e_type, var->i)));
-		free(var->token);
+		free_token(var);
 		var->token = get_next_token(lexer);
 	}
 	else if (var->token->e_type == TYPE_DLredirection
@@ -59,7 +66,7 @@ void	makelist(t_lexer *lexer, t_template **list)
 	var.token = get_next_token(lexer);
 	var.i = 0;
 	if (var.token->e_type == TYPE_EOF)
-		free(var.token);
+		return (free_token(&var));
 	while (var.token->e_type != TYPE_EOF || var.token->value != NULL)
 	{
 		var.text = NULL;
@@ -69,7 +76,7 @@ void	makelist(t_lexer *lexer, t_template **list)
 			var.i++;
 			lstadd_back(&var.text, new_template((void *)new_text(
 						var.token->value, var.token->e_type, var.i)));
-			free(var.token);
+			free_token(&var);
 			var.token = get_next_token(lexer);
 		}
 		while (var.token->e_type != TYPE_PIPE && var.token->e_type != TYPE_EOF)
@@ -78,7 +85,7 @@ void	makelist(t_lexer *lexer, t_template **list)
 					var.text, var.derections, var.i2)));
 		var.i2++;
 	}
-	free(var.token);
+	free_token(&var);
 }
 
 void	*minishell(char	*all)
