@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 01:37:19 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:35:18 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ void	close_parent(t_pipeline *var, int *lastfd, t_template *lst)
 		close(var->fd_der[0]);
 }
 
-int	all_builtins01(char **c, int pipe_exist, int fd)
+int	all_builtins01(char **c, int pipe_exist, int fd, t_pipeline *var)
 {
 	if (ft_strcmp(c[0], "export") == 0)
 	{
-		export(c, fd, pipe_exist);
+		export(c, fd, pipe_exist, var);
 		return (1);
 	}
 	if (ft_strcmp(c[0], "unset") == 0)
@@ -100,7 +100,7 @@ int	all_builtins01(char **c, int pipe_exist, int fd)
 	}
 	if (ft_strcmp(c[0], "env") == 0)
 	{
-		envm(c, fd, pipe_exist);
+		envm(c, fd, pipe_exist, var);
 		return (1);
 	}
 	return (0);
@@ -110,13 +110,11 @@ int	all_builtins(char **c, int pipe_exist, int fd, t_pipeline *var)
 {
 	char	*temp;
 
-	//dprintf(2,"{%d}\n",var->fd_der[1]);
-
-	if (all_builtins01(c, pipe_exist, fd) == 1)
+	if (all_builtins01(c, pipe_exist, fd, var) == 1)
 		return (1);
 	if (ft_strcmp(c[0], "pwd") == 0)
 	{
-		pwd (c, fd, pipe_exist);
+		pwd (c, fd, pipe_exist, var);
 		return (1);
 	}
 	temp = ft_tolower(c[0]);

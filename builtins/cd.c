@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:05:32 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 00:10:20 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:45:26 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**error_handel(char *c, char **old)
 	return (temp);
 }
 
-int	move_to_dir(char *c)
+int	move_to_dir(char *c, t_pipeline *var)
 {
 	char	cwd[256];
 	char	*old;
@@ -46,7 +46,7 @@ int	move_to_dir(char *c)
 	getcwd(cwd, sizeof(cwd));
 	old = ft_strjoin(old, cwd);
 	temp[1] = ft_strdup(old);
-	export(temp, 0, 0);
+	export(temp, 0, 0, var);
 	free(old);
 	free(temp[1]);
 	chdir(c);
@@ -54,7 +54,7 @@ int	move_to_dir(char *c)
 	getcwd(cwd, sizeof(cwd));
 	old = ft_strjoin(old, cwd);
 	temp[1] = ft_strdup(old);
-	export(temp, 0, 0);
+	export(temp, 0, 0, var);
 	free_table(temp);
 	temp = NULL;
 	free(old);
@@ -64,13 +64,14 @@ int	move_to_dir(char *c)
 
 void	cd(char **c, int false)
 {
-	int	error;
+	t_pipeline		var;
+	int				error;
 
 	error = 0;
 	if (c[1] != NULL)
-		error = move_to_dir(c[1]);
+		error = move_to_dir(c[1], &var);
 	else if (c[1] == NULL)
-		error = move_to_dir(getenv("HOME"));
+		error = move_to_dir(getenv("HOME"), &var);
 	if (false == 1)
 	{
 		if (error == 0)

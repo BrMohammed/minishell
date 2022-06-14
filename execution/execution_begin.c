@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:55:22 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 01:34:08 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:27:10 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,5 @@ void	pmlist(t_template *lst)
 		}
 		lst = lst->next;
 	}
-	dprintf(2,"hi\n");
 	while_on_wait(tmp, pmlist_var);
 }

@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:36:03 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 00:17:08 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 04:13:31 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	exitm(char **c)
 
 /*************** --  pwd -- ******************/
 
-void	shearch_and_print(void)
+void	shearch_and_print(t_pipeline *var)
 {
 	int	y;
 	int	i;
@@ -86,15 +86,15 @@ void	shearch_and_print(void)
 		{
 			while (g_global->envp[y][i + 1])
 			{
-				printf("%c", g_global->envp[y][i + 1]);
+				write(var->fd_der[1], &g_global->envp[y][i + 1], 1);
 				i++;
 			}
 		}
-		printf("\n");
+		write(var->fd_der[1], "\n", 1);
 	}
 }
 
-void	pwd(char **c, int fd, int false)
+void	pwd(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	error;
 
@@ -103,11 +103,10 @@ void	pwd(char **c, int fd, int false)
 		error = args_error(c[1], 0, "pwd");
 	if (error == 0)
 	{
-		if (false == 1)
-			dup2(fd, 1);
-		shearch_and_print();
+		redir_or_pipe(pipe_exist, fd, var);
+		shearch_and_print(var);
 	}
-	if (false == 1)
+	if (pipe_exist == 1)
 	{
 		if (error == 0)
 			g_global->g_flags = 0;

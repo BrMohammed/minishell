@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:30:46 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 02:20:10 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 04:05:23 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	nl__exist(int nl_exist, int *skip, char *c, t_pipeline *var)
 {
 	int	y;
 
-	dprintf(2, "{%d}\n", var->fd_der[1]);
 	if (c != NULL)
 	{
 		if (nl_exist == 0)
@@ -56,18 +55,9 @@ void	nl__exist(int nl_exist, int *skip, char *c, t_pipeline *var)
 	}
 }
 
-void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
+void	redir_or_pipe(int pipe_exist, int fd, t_pipeline *var)
 {
-	int	i;
-	int	nl_exist;
-	int	skip;
-
-	i = 0;
-	(void)fd;
-	nl_exist = 1;
-	skip = 1;
-	
-	if(pipe_exist == 1 && var->fd_der[1] != 0)
+	if (pipe_exist == 1 && var->fd_der[1] != 0)
 	{
 		dup2(var->fd_der[1], 1);
 		var->fd_der[1] = 1;
@@ -76,6 +66,18 @@ void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
 		var->fd_der[1] = 1;
 	else if (pipe_exist == 1)
 		dup2(fd, 1);
+}
+
+void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
+{
+	int	i;
+	int	nl_exist;
+	int	skip;
+
+	i = 0;
+	nl_exist = 1;
+	skip = 1;
+	redir_or_pipe(pipe_exist, fd, var);
 	while (c[i + 1])
 	{
 		nl_not_exist(&nl_exist, c, &i);

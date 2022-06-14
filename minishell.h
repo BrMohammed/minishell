@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 01:20:33 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 04:05:15 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,18 +174,18 @@ int				heredoc(char *file, int *error);
 int				main(int argc, char **argv, char **envp);
 int				*allocation_for_fd(void);
 int				*out_derections(t_template *lst, int *interpted);
-void			export(char **c, int fd, int false);
+void			export(char **c, int fd, int false, t_pipeline *var);
+void			print_export(char *c, t_pipeline *var);
 void			unset(char **c, int false);
 void			exitm(char **c);
-void			envm(char **c, int fd, int false);
-void			pwd(char **c, int fd, int false);
+void			envm(char **c, int fd, int false, t_pipeline *var);
+void			pwd(char **c, int fd, int false, t_pipeline *var);
 void			echo(char **c, int fd, int false, t_pipeline *var);
 void			cd(char **c, int false);
 int				serch_on_env(char *c, int *error);
 void			copie_table(char **cp);
 void			free_table(char **c);
 int				errorin_args(char *c, int error, int i);
-void			print_export(char *c);
 int				replace(int i, char *c);
 int				input_error(char *c);
 int				args_error(char *c, int false, char *name);
@@ -208,4 +208,5 @@ void			print_error_of_rtext(void);
 void			print_error_of_generate_rederaction(t_derections *temp,
 					int *error);
 int				lop_onarg(char *c);
+void			redir_or_pipe(int pipe_exist, int fd, t_pipeline *var);
 #endif

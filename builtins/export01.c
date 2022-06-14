@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:44:39 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 04:48:33 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:51:47 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	replace(int i, char *c)
 	return (0);
 }
 
-void	print_export(char *c)
+void	print_export(char *c, t_pipeline *var)
 {
 	int	equal_exist;
 	int	y;
@@ -109,20 +109,20 @@ void	print_export(char *c)
 	while (c[y])
 	{
 		if (y == 0)
-			printf("declare -x ");
-		printf("%c", c[y]);
+			write(var->fd_der[1], "declare -x ", 11);
+		write(var->fd_der[1], &c[y], 1);
 		if (c[y] == '=')
 		{
-			printf("%c", '"');
+			write(var->fd_der[1], "\"", 1);
 			equal_exist = 1;
 		}
 		y++;
 		if (c[y] == '\0' && equal_exist == 1)
 		{
-			printf("%c", '"');
+			write(var->fd_der[1], "\"", 1);
 			equal_exist = 0;
 		}
 		if (c[y] == '\0')
-			printf("\n");
+			write(var->fd_der[1], "\n", 1);
 	}
 }

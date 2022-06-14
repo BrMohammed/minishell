@@ -6,13 +6,23 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:31:14 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/12 02:35:47 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 04:13:00 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	print_env(void)
+void	if_equal_exist(int equal_exist, t_pipeline *var, int i)
+{
+	if (equal_exist == 1)
+	{
+		write(var->fd_der[1], g_global->envp[i],
+			ft_strlen(g_global->envp[i]));
+		write(var->fd_der[1], "\n", 1);
+	}
+}
+
+void	print_env(t_pipeline *var)
 {
 	int	i;
 	int	y;
@@ -26,20 +36,19 @@ void	print_env(void)
 		equal_exist = 0;
 		while (g_global->envp[i][y])
 		{
-			if (g_global->envp[i][y] == '=')
+			if (g_global->envp[i][y] == '=' && g_global->envp[i][y + 1])
 			{
 				equal_exist = 1;
 				break ;
 			}
 			y++;
 		}
-		if (equal_exist == 1)
-			printf("%s\n", g_global->envp[i]);
+		if_equal_exist(equal_exist, var, i);
 		i++;
 	}
 }
 
-void	envm(char **c, int fd, int false)
+void	envm(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	error;
 
@@ -48,11 +57,10 @@ void	envm(char **c, int fd, int false)
 		error = args_error(c[1], 1, "env");
 	if (error == 0)
 	{
-		if (false == 1)
-			dup2(fd, 1);
-		print_env();
+		redir_or_pipe(pipe_exist, fd, var);
+		print_env(var);
 	}
-	if (false == 1)
+	if (pipe_exist == 1)
 	{
 		if (error == 0)
 			g_global->g_flags = 0;

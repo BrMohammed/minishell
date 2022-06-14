@@ -6,22 +6,29 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:39:11 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 21:59:43 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 02:49:52 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	just_export(int fd, int false)
+void	just_export(int fd, int pipe_exist, t_pipeline *var)
 {
 	int	i;
 
 	i = 0;
-	if (false == 1)
+	if (pipe_exist == 1 && var->fd_der[1] != 0)
+	{
+		dup2(var->fd_der[1], 1);
+		var->fd_der[1] = 1;
+	}
+	else if (var->fd_der[1] == 0)
+		var->fd_der[1] = 1;
+	else if (pipe_exist == 1)
 		dup2(fd, 1);
 	while (g_global->envp[i])
 	{
-		print_export(g_global->envp[i]);
+		print_export(g_global->envp[i], var);
 		i++;
 	}
 }
@@ -100,16 +107,16 @@ void	add_in_export(char **c, int *error_out)
 	}
 }
 
-void	export(char **c, int fd, int false)
+void	export(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	error;
 
 	error = 0;
 	if (c[1] == '\0')
-		just_export(fd, false);
+		just_export(fd, pipe_exist, var);
 	else
 		add_in_export(c, &error);
-	if (false == 1)
+	if (pipe_exist == 1)
 	{
 		if (error == 0)
 			g_global->g_flags = 0;
