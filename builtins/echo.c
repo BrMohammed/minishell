@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:30:46 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 04:05:23 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 05:56:52 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,32 +29,6 @@ void	nl_not_exist(int *nl_exist, char **c, int *i)
 	}
 }
 
-void	nl__exist(int nl_exist, int *skip, char *c, t_pipeline *var)
-{
-	int	y;
-
-	if (c != NULL)
-	{
-		if (nl_exist == 0)
-		{
-			if (c[0] == '-' && *skip == 1)
-			{
-				y = 1;
-				while (c[y] && c[y] == 'n')
-					y++;
-				if (c[y] != '\0')
-					skip = 0;
-			}
-			else
-				skip = 0;
-			if (skip == 0 && c != NULL)
-				write(var->fd_der[1], c, ft_strlen(c));
-		}
-		else
-			write(var->fd_der[1], c, ft_strlen(c));
-	}
-}
-
 void	redir_or_pipe(int pipe_exist, int fd, t_pipeline *var)
 {
 	if (pipe_exist == 1 && var->fd_der[1] != 0)
@@ -72,16 +46,15 @@ void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	i;
 	int	nl_exist;
-	int	skip;
 
 	i = 0;
 	nl_exist = 1;
-	skip = 1;
 	redir_or_pipe(pipe_exist, fd, var);
+	nl_not_exist(&nl_exist, c, &i);
 	while (c[i + 1])
 	{
-		nl_not_exist(&nl_exist, c, &i);
-		nl__exist(nl_exist, &skip, c[i + 1], var);
+		if (c[i + 1] != NULL)
+			write(var->fd_der[1], c[i + 1], ft_strlen(c[i + 1]));
 		i++;
 		if (c[i + 1])
 			write(var->fd_der[1], " ", 1);

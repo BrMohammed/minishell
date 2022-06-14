@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 23:21:15 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/13 01:40:43 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 05:59:33 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ void	if_type_def_left_redirection_and_dr(int type,
 		{
 			temp->fd = open(temp->file, O_RDONLY);
 			if (temp->fd == -1)
+			{
 				printf("minishell: %s: No such file or directory\n", temp->file);
+				dprintf(2, "hi\n");
+				g_global->g_flags = 1;
+			}
 		}
 	}
 }

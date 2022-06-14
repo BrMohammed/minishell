@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:55:22 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 02:27:10 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 05:48:58 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,30 +65,41 @@ void	variable_init(t_pipeline *var, t_pmlist	*pmlist_var)
 	var->interpted = 0;
 }
 
+void	enter(t_template *lst, t_pmlist	*pmlist_var,
+			t_pipeline	*var, int pipe_exist)
+{
+	if (((t_Mlist *)lst->content)->text
+		|| ((t_Mlist *)lst->content)->derections)
+	{
+		pmlist_var->c = ptext(((t_Mlist *)lst->content)->text);
+		if (pmlist_var->c != NULL)
+			path_finder(&pmlist_var->path, pmlist_var->c, g_global->envp);
+		pmlist_var->lastfd = pipeline(lst, pmlist_var, var, pipe_exist);
+		if (pmlist_var->path != NULL)
+			free(pmlist_var->path);
+		if (pmlist_var->c != NULL)
+			free_table(pmlist_var->c);
+	}
+}
+
 void	pmlist(t_template *lst)
 {
 	t_pmlist	pmlist_var;
 	t_template	*tmp;
 	t_pipeline	var;
+	int			pipe_exist;
 
 	variable_init(&var, &pmlist_var);
 	tmp = lst;
+	if (lst->next != NULL)
+		pipe_exist = 1;
+	else
+		pipe_exist = 0;
 	while (lst)
 	{
 		pmlist_var.c = NULL;
 		pmlist_var.path = NULL;
-		if (((t_Mlist *)lst->content)->text
-			|| ((t_Mlist *)lst->content)->derections)
-		{
-			pmlist_var.c = ptext(((t_Mlist *)lst->content)->text);
-			if (pmlist_var.c != NULL)
-				path_finder(&pmlist_var.path, pmlist_var.c, g_global->envp);
-			pmlist_var.lastfd = pipeline(lst, &pmlist_var, &var);
-			if (pmlist_var.path != NULL)
-				free(pmlist_var.path);
-			if (pmlist_var.c != NULL)
-				free_table(pmlist_var.c);
-		}
+		enter(lst, &pmlist_var, &var, pipe_exist);
 		lst = lst->next;
 	}
 	while_on_wait(tmp, pmlist_var);

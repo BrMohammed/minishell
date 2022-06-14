@@ -67,6 +67,12 @@ re:			fclean all
 ## cd ~- // or cd - => switch betwin home and old dir
 
 
+# minishell? < hn
+# minishell: hn: No such file or directory
+# minishell? $?
+# minishell:0: command not found
+# minishell? 
+
 
 ADD = git add .
 

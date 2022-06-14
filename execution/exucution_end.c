@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 02:35:18 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 05:28:01 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,13 @@ int	all_builtins(char **c, int pipe_exist, int fd, t_pipeline *var)
 
 	if (all_builtins01(c, pipe_exist, fd, var) == 1)
 		return (1);
-	if (ft_strcmp(c[0], "pwd") == 0)
+		temp = ft_tolower(c[0]);
+	if (ft_strcmp(temp, "pwd") == 0)
 	{
 		pwd (c, fd, pipe_exist, var);
+		free(temp);
 		return (1);
 	}
-	temp = ft_tolower(c[0]);
 	if (ft_strcmp(temp, "echo") == 0)
 	{
 		echo(c, fd, pipe_exist, var);

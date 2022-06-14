@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 04:05:15 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 05:39:23 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void			duplicate(int *fd_der, int lastfd, t_template *lst, int *fd);
 void			close_parent(t_pipeline *var, int *lastfd, t_template *lst);
 void			path_finder(char **path, char **c, char **envp);
 int				pipeline(t_template *lst, t_pmlist *pmlist_var,
-					t_pipeline *var);
+					t_pipeline *var, int pipe_exist);
 char			**creat_table(t_template *lst);
 int				heredoc(char *file, int *error);
 int				main(int argc, char **argv, char **envp);
