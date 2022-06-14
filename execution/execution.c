@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:12:09 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 06:16:38 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:53:18 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	*out_derections(t_template *lst, int *interpted)
 			fd[0] = heredoc(((t_derections *)lst->content)->file, interpted);
 		lst = lst->next;
 	}
+	
 	return (fd);
 }
 

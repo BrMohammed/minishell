@@ -6,27 +6,29 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:30:46 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 05:56:52 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:02:10 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	nl_not_exist(int *nl_exist, char **c, int *i)
+int	nl_not_exist(int *nl_exist, char *c, int *i)
 {
 	int	y;
 
-	if (c[1][0] == '-' && *nl_exist == 1)
+	if (c[0] == '-')
 	{
 		y = 1;
-		while (c[1][y] && c[1][y] == 'n')
+		while (c[y] && c[y] == 'n')
 			y++;
-		if (c[1][y] == '\0' && c[1][1] == 'n')
+		if (c[y] == '\0')
 		{
 			*nl_exist = 0;
 			*i = *i + 1;
+			return (0);
 		}
 	}
+	return (1);
 }
 
 void	redir_or_pipe(int pipe_exist, int fd, t_pipeline *var)
@@ -42,6 +44,15 @@ void	redir_or_pipe(int pipe_exist, int fd, t_pipeline *var)
 		dup2(fd, 1);
 }
 
+void	while_on_newlin(char **c, int *nl_exist, int *i)
+{
+	while (c[*i + 1])
+	{
+		if (nl_not_exist(nl_exist, c[*i + 1], i) == 1)
+			break ;
+	}
+}
+
 void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
 {
 	int	i;
@@ -50,7 +61,7 @@ void	echo(char **c, int fd, int pipe_exist, t_pipeline *var)
 	i = 0;
 	nl_exist = 1;
 	redir_or_pipe(pipe_exist, fd, var);
-	nl_not_exist(&nl_exist, c, &i);
+	while_on_newlin(c, &nl_exist, &i);
 	while (c[i + 1])
 	{
 		if (c[i + 1] != NULL)
