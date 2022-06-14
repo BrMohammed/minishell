@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 21:51:50 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:25:47 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ int	rderections(t_template *lst)
 {
 	char	*t_temp;
 	int		error;
+	int		interapted;
 
 	error = 0;
+	interapted = 0;
 	while (lst)
 	{
 		t_temp = redir_type(lst);
@@ -83,15 +85,13 @@ int	rderections(t_template *lst)
 			|| ft_strncmp(((t_derections *)lst->content)->file, ">", 1) == 0
 			|| ft_strncmp(((t_derections *)lst->content)->file, "<", 1) == 0)
 		{
-			printf("minishael :syntax error near unexpected token '%s'\n",
-				t_temp);
-			g_global->g_flags = 258;
+			print_syntax_error(t_temp);
 			return (1);
 		}
 		make_key_of_dolar(((t_derections *)lst->content)->file,
 			&lst, DERECYION);
-		fd_of_redir(lst, &((t_derections *)lst->content)->fd, &error);
-		if (error == 1)
+		fd_of_redir(lst, &error, &interapted);
+		if (error == 1 || interapted == 1)
 			return (1);
 		lst = lst->next;
 	}
