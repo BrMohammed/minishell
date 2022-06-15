@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:44:39 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 02:51:47 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 03:35:22 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_error_of_equal(char *c, int *error)
 	if (c[0] == '=')
 	{
 		*error = 1;
-		write(2, "minishel: export: `", 19);
+		write(2, "minishell: export: `", 20);
 		write(2, c, ft_strlen(c));
 		write(2, "': not a valid identifier\n", 26);
 		g_global->g_flags = 1;
