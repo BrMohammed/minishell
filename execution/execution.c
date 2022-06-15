@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:12:09 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 22:21:19 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 01:03:42 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ int	*out_derections(t_template *lst, int *interpted)
 	i = 0;
 	fd = allocation_for_fd();
 	tmp = lst;
-	while (lst && *interpted != 1)
+	while (tmp && *interpted != 1)
 	{
 		if (((t_derections *)tmp->content)->file != NULL
 			&& (((t_derections *)tmp->content)->type == TYPE_Lredirection
 				|| ((t_derections *)tmp->content)->type == TYPE_DLredirection))
-		fd[0] = ((t_derections *)tmp->content)->fd;
+				fd[0] = ((t_derections *)tmp->content)->fd;
 		if (((t_derections *)tmp->content)->file != NULL
 			&& (((t_derections *)tmp->content)->type == TYPE_Rredirection
 				|| ((t_derections *)tmp->content)->type == TYPE_DRredirection))
-		fd[1] = ((t_derections *)tmp->content)->fd;
-		lst = lst->next;
+				fd[1] = ((t_derections *)tmp->content)->fd;
+		tmp = tmp->next;
 	}
 	return (fd);
 }

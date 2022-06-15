@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:55:22 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 05:48:58 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 01:05:57 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,12 @@ void	pmlist(t_template *lst)
 		pipe_exist = 0;
 	while (lst)
 	{
-		pmlist_var.c = NULL;
-		pmlist_var.path = NULL;
-		enter(lst, &pmlist_var, &var, pipe_exist);
+		if (rmlist(lst) != 1)
+		{		
+			pmlist_var.c = NULL;
+			pmlist_var.path = NULL;
+			enter(lst, &pmlist_var, &var, pipe_exist);
+		}
 		lst = lst->next;
 	}
 	while_on_wait(tmp, pmlist_var);

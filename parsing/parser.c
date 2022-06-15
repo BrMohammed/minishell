@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:34:20 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/14 23:47:09 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:33:36 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,21 +92,11 @@ void	*minishell(char	*all)
 {
 	t_lexer		*lexer;
 	t_template	*list;
-	t_template	*error;
 
 	list = NULL;
 	lexer = init_lexer(all);
 	makelist(lexer, &list);
 	free(lexer);
-	error = list;
-	if (error)
-	{
-		if (rmlist(error) == 1)
-		{		
-			free_tree(list);
-			return (0);
-		}
-	}
 	if (list)
 		pmlist(list);
 	free_tree(list);

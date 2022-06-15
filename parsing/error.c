@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 20:38:58 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/15 00:03:56 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 01:01:15 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,20 +103,16 @@ int	rmlist(t_template *lst)
 	int	r;
 	int	r2;
 
-	while (lst)
-	{
-		r = 0;
-		r2 = 0;
-		if (((t_Mlist *)lst->content)->text)
-			r = rtext(((t_Mlist *)lst->content)->text,
-					((t_Mlist *)lst->content)->derections);
-		if (((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
-			r2 = rderections(((t_Mlist *)lst->content)->derections);
-		if (r == 2 & r2 == 0)
-			return (1);
-		lst = lst->next;
-		if (r == 1 || r2 == 1)
-			return (1);
-	}
+	r = 0;
+	r2 = 0;
+	if (((t_Mlist *)lst->content)->text)
+		r = rtext(((t_Mlist *)lst->content)->text,
+				((t_Mlist *)lst->content)->derections);
+	if (((t_Mlist *)lst->content)->derections && r != 1 && r != 2)
+		r2 = rderections(((t_Mlist *)lst->content)->derections);
+	if (r == 2 & r2 == 0)
+		return (1);
+	if (r == 1 || r2 == 1)
+		return (1);
 	return (0);
 }

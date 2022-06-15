@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 22:38:48 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/15 00:03:48 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/15 01:06:10 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,4 +209,5 @@ void			print_error_of_generate_rederaction(t_derections *temp,
 int				lop_onarg(char *c);
 void			redir_or_pipe(int pipe_exist, int fd, t_pipeline *var);
 void			print_syntax_error(char *t_temp);
+int				erro_on_der_flag(t_template *lst);
 #endif
