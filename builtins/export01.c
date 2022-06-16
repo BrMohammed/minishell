@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 02:44:39 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/15 03:35:22 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/16 11:18:49 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	print_export(char *c, t_pipeline *var)
 		if (y == 0)
 			write(var->fd_der[1], "declare -x ", 11);
 		write(var->fd_der[1], &c[y], 1);
-		if (c[y] == '=')
+		if (c[y] == '=' && equal_exist != 1)
 		{
 			write(var->fd_der[1], "\"", 1);
 			equal_exist = 1;
