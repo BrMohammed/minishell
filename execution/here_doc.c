@@ -6,20 +6,20 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:27:13 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/16 11:18:55 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:02:41 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handler(int sig)
-{
-	(void)sig;
-	rl_replace_line("", 0);
-	ft_putchar_fd('\n', 1);
-	rl_on_new_line();
-	exit(1);
-}
+// void	handler(int sig)
+// {
+// 	(void)sig;
+// 	rl_replace_line("", 0);
+// 	ft_putchar_fd('\n', 1);
+// 	rl_on_new_line();
+// 	exit(1);
+// }
 
 void	while_on_her(int *fd_herd, char *file)
 {
@@ -31,7 +31,7 @@ void	while_on_her(int *fd_herd, char *file)
 	inputs[0] = '\0';
 	r[0] = '\0';
 	error = 1;
-	signal(SIGINT, handler);
+	//signal(SIGINT, handler);
 	close(fd_herd[0]);
 	while (ft_strcmp(file, r) != -10 && error != 0)
 	{

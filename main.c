@@ -6,7 +6,7 @@
 /*   By: brmohamm <brmohamm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 05:31:11 by brmohamm          #+#    #+#             */
-/*   Updated: 2022/06/16 11:18:58 by brmohamm         ###   ########.fr       */
+/*   Updated: 2022/08/17 20:53:26 by brmohamm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ void	copie_env(char **envp)
 	g_global->g_flags = 0;
 }
 
-void	signal_handler2(int sig)
-{
-	if (sig == SIGINT)
-	{
-		rl_replace_line("", 0);
-		ft_putchar_fd('\n', 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
+// void	signal_handler2(int sig)
+// {
+// 	if (sig == SIGINT)
+// 	{
+// 		rl_replace_line("", 0);
+// 		ft_putchar_fd('\n', 1);
+// 		rl_on_new_line();
+// 		rl_redisplay();
+// 	}
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -54,8 +54,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		while (1 && all != NULL)
 		{
-			signal(SIGQUIT, SIG_IGN);
-			signal(SIGINT, signal_handler2);
+			// signal(SIGQUIT, SIG_IGN);
+			// signal(SIGINT, signal_handler2);
 			free(all);
 			g_global->error_her = 0;
 			all = readline("minishell? ");
